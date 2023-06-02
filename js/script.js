@@ -11,6 +11,8 @@ function imprimirMenuCalculadora() {
     console.log(" 1- Suma \n 2- Resta \n 3- Multiplicación \n 4- División \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
 
+//FUNCION DE INGRESO DE NUMBER
+
 //FUNCIONES DE CALCULADORA
 
 function suma(numero1, numero2) {
@@ -34,7 +36,7 @@ imprimirMenuPrincipal();
 let opcionPrincipal = parseInt(prompt("Ingrese su opción:"));
 let numeroOk = false;
 if (opcionPrincipal == 0) {
-    console.log("Eligió SALIR, hasta la proxima!");
+    console.log("Eligió SALIR, hasta la proxima! Pulse F5 para volver a ejecutar...");
 }
 else {
     while (opcionPrincipal != 0) {
@@ -42,11 +44,11 @@ else {
             case 1:
                 imprimirMenuCalculadora();
                 let opcionSecundaria = parseInt(prompt("Ingrese la operación a ejecutar:"));
-                if (opcionSecundaria != 0) {
+                while (opcionSecundaria != 0) {
                     switch (opcionSecundaria) {
                         case 1:
                             let sumando1, sumando2;
-                            console.log("-- Suma --");
+                            console.log("-- Suma (1er sumando + 2do sumando) --");
                             numeroOk = false;
                             while (!numeroOk) {
                                 sumando1 = parseInt(prompt("Ingrese el primer sumando:"));
@@ -72,7 +74,7 @@ else {
 
                         case 2:
                             let minuendo, sustraendo;
-                            console.log("-- Resta --");
+                            console.log("-- Resta (minuendo - sustraendo) --");
                             numeroOk = false;
                             while (!numeroOk) {
                                 minuendo = parseInt(prompt("Ingrese el minuendo:"));
@@ -98,7 +100,7 @@ else {
 
                         case 3:
                             let factor1, factor2;
-                            console.log("-- Multiplicación --");
+                            console.log("-- Multiplicación (factor #1 x factor #2) --");
                             numeroOk = false;
                             while (!numeroOk) {
                                 factor1 = parseInt(prompt("Ingrese el factor #1:"));
@@ -122,10 +124,38 @@ else {
                             console.log("Resultado: " + factor1 + " x  " + factor2 + " = " + multiplica(factor1, factor2));
                             break;
 
+                        case 4:
+                            let divisor, dividendo;
+                            console.log("-- División (divisor / dividendo) --");
+                            numeroOk = false;
+                            while (!numeroOk) {
+                                divisor = parseInt(prompt("Ingrese el divisor:"));
+                                if (isNaN(divisor)) {
+                                    console.log("Valor ingresado no es válido \n");
+                                }
+                                else {
+                                    numeroOk = true;
+                                }
+                            }
+                            numeroOk = false;
+                            while (!numeroOk) {
+                                dividendo = parseInt(prompt("Ingrese el dividendo:"));
+                                if (isNaN(dividendo)) {
+                                    console.log("Valor ingresado no es válido \n");
+                                }
+                                else {
+                                    numeroOk = true;
+                                }
+                            }
+                            console.log("Resultado: " + divisor + " x  " + dividendo + " = " + divide(divisor, dividendo));
+                            break;
+
                         default:
                             console.log("Opción ingresada no es valida, elija otra por favor");
                             break;
                     }
+                    imprimirMenuCalculadora();
+                    opcionSecundaria = parseInt(prompt("Ingrese la operación a ejecutar:"));
                 }
                 break;
             case 2:
@@ -152,8 +182,8 @@ else {
                 let cantidadOk = false;
                 while (!cantidadOk) {
                     let cantidadNumeros = parseInt(prompt("Ingrese la cantidad de números a calcular (menor a 50): "));
-                    //AQUÍ SE PODRÍA USAR OTRA CONDICIÓN CON OR (||) PARA CONTROLAR SI SUPERA 50, PERO PREFERI HACERLO
-                    //APARTE PARA USAR EL ELSE IF Y SER MAS ESPECIFICO EN LA DEVOLUCIÓN EN PANTALLA
+                    /*AQUÍ SE PODRÍA USAR OTRA CONDICIÓN CON OR (||) PARA CONTROLAR SI SUPERA 50, PERO PREFERI HACERLO
+                    APARTE PARA USAR EL ELSE IF Y SER MAS ESPECIFICO EN LA DEVOLUCIÓN EN PANTALLA*/
                     if (isNaN(cantidadNumeros)) {
                         console.log("Cantidad ingresada no es válida");
                     }
@@ -167,29 +197,42 @@ else {
                         cantidadOk = true;
                         let promedio = 0;
                         const sumatoria = [];
+                        const sumatoriaInt = [];
                         //SE INGRESA CADA NUMERO DE LA CANTIDAD ELEGIDA MENOR A 50 Y SE SUMAN
+                        let volver = false;
                         for (let i = 1; i <= cantidadNumeros; i++) {
                             //CONTROLO EL VALOR INGRESADO
                             let ingresoOk = false;
                             while (!ingresoOk) {
-                                sumatoria[i] = parseInt(prompt("Ingrese el valor número " + i + ":"));
-                                if (isNaN(sumatoria[i])) {
+                                sumatoria[i] = prompt("Ingrese el valor número " + i + " ('S' para Salir):");
+                                sumatoriaInt[i] = parseInt(sumatoria[i]);
+                                if (isNaN(sumatoriaInt[i]) && sumatoria[i] != "S" && sumatoria[i] != "s") {
                                     console.log("Valor ingresado no válido");
                                 }
+                                else if (sumatoria[i] == "S" || sumatoria[i] == "s") {
+                                    volver = true;
+                                    ingresoOk = true;
+                                    console.log("Volviendo al menú principal...");
+                                }
                                 else {
-                                    promedio = promedio + sumatoria[i];
+                                    promedio = promedio + sumatoriaInt[i];
                                     ingresoOk = true;
                                 }
                             }
+                            if (sumatoria[i] == "S" || sumatoria[i] == "s") {
+                                break;
+                            }
                         }
-                        //SE IMPRIMEN EN PANTALLA LOS NUMEROS INGRESADOS PARA QUE EL USUARIO VERIFIQUE SI SON CORRECTOS
-                        console.log("Los números ingresados fueron: \n");
-                        for (let i = 1; i <= cantidadNumeros; i++) {
-                            console.log("Valor #" + i + ": " + sumatoria[i]);
+                        if (!volver) {
+                            //SE IMPRIMEN EN PANTALLA LOS NUMEROS INGRESADOS PARA QUE EL USUARIO VERIFIQUE SI SON CORRECTOS
+                            console.log("Los números ingresados fueron: \n");
+                            for (let i = 1; i <= cantidadNumeros; i++) {
+                                console.log("Valor #" + i + ": " + sumatoriaInt[i]);
+                            }
+                            //SE CALCULA EL PROMEDIO (SUMATORIA DE LOS NUMEROS INGRESADOS / CANTIDAD DE NUMEROS INGRESADOS)
+                            promedio = promedio / cantidadNumeros;
+                            console.log("El promedio de los números ingresados es de: " + promedio);
                         }
-                        //SE CALCULA EL PROMEDIO (SUMATORIA DE LOS NUMEROS INGRESADOS / CANTIDAD DE NUMEROS INGRESADOS)
-                        promedio = promedio / cantidadNumeros;
-                        console.log("El promedio de los números ingresados es de: " + promedio);
                     }
                 }
                 break;
@@ -201,7 +244,7 @@ else {
         imprimirMenuPrincipal();
         opcionPrincipal = parseInt(prompt("Ingrese su opción:"));
         if (opcionPrincipal == 0) {
-            console.log("Eligió SALIR, hasta la proxima!");
+            console.log("Eligió SALIR, hasta la proxima! Pulse F5 para volver a ejecutar...");
         }
     }
 }

@@ -1,0 +1,241 @@
+[33mcommit 2098109dfb42ab796ec84c37160ea3a222c22397[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Joaquin Kulik <joaquink@gmail.com>
+Date:   Fri Jun 2 01:36:24 2023 -0300
+
+    Primer commit de mi pre-entrega1 de JavaScript
+
+[1mdiff --git a/index.html b/index.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..70c7588[m
+[1m--- /dev/null[m
+[1m+++ b/index.html[m
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32m    <!DOCTYPE html>[m
+[32m+[m[32m    <html lang="en">[m
+[32m+[m[32m    <head>[m
+[32m+[m[32m        <meta charset="UTF-8">[m
+[32m+[m[32m        <meta http-equiv="X-UA-Compatible" content="IE=edge">[m
+[32m+[m[32m        <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m        <title>PreEntrega1 Joaquin Kulik</title>[m
+[32m+[m
+[32m+[m[32m    </head>[m
+[32m+[m[32m    <body>[m
+[32m+[m[32m        <p>Pulse F12 y elija el tab "Consola", por favor.</p>[m
+[32m+[m[32m        <script src="./script.js"></script>[m
+[32m+[m[32m    </body>[m
+[32m+[m[32m    </html>[m
+\ No newline at end of file[m
+[1mdiff --git a/script.js b/script.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..ada5dd3[m
+[1m--- /dev/null[m
+[1m+++ b/script.js[m
+[36m@@ -0,0 +1,207 @@[m
+[32m+[m[32m//ARCHIVO JS DE PRE-ENTREGA 1 - JOAQUIN KULIK[m
+[32m+[m
+[32m+[m[32m//FUNCIONES DE IMPRESION DE MENU[m
+[32m+[m[32mfunction imprimirMenuPrincipal() {[m
+[32m+[m[32m    console.log("-- Bienvenid@ al Menú Principal -- \n\n");[m
+[32m+[m[32m    console.log(" 1- Calculadora \n 2- Tabla de X \n 3- Promedio de N números \n \n 0- Salir \n \n Elija su opcion, por favor: ");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction imprimirMenuCalculadora() {[m
+[32m+[m[32m    console.log("-- Calculadora -- \n\n");[m
+[32m+[m[32m    console.log(" 1- Suma \n 2- Resta \n 3- Multiplicación \n 4- División \n \n 0- Volver \n \n Elija su opcion, por favor: ");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m//FUNCIONES DE CALCULADORA[m
+[32m+[m
+[32m+[m[32mfunction suma(numero1, numero2) {[m
+[32m+[m[32m    return numero1 + numero2;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction resta(numero1, numero2) {[m
+[32m+[m[32m    return numero1 - numero2;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction multiplica(numero1, numero2) {[m
+[32m+[m[32m    return numero1 * numero2;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction divide(numero1, numero2) {[m
+[32m+[m[32m    return numero1 / numero2;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m//MENU PRINCIPAL[m
+[32m+[m[32mimprimirMenuPrincipal();[m
+[32m+[m[32mlet opcionPrincipal = parseInt(prompt("Ingrese su opción:"));[m
+[32m+[m[32mlet numeroOk = false;[m
+[32m+[m[32mif (opcionPrincipal == 0) {[m
+[32m+[m[32m    console.log("Eligió SALIR, hasta la proxima!");[m
+[32m+[m[32m}[m
+[32m+[m[32melse {[m
+[32m+[m[32m    while (opcionPrincipal != 0) {[m
+[32m+[m[32m        switch (opcionPrincipal) {[m
+[32m+[m[32m            case 1:[m
+[32m+[m[32m                imprimirMenuCalculadora();[m
+[32m+[m[32m                let opcionSecundaria = parseInt(prompt("Ingrese la operación a ejecutar:"));[m
+[32m+[m[32m                if (opcionSecundaria != 0) {[m
+[32m+[m[32m                    switch (opcionSecundaria) {[m
+[32m+[m[32m                        case 1:[m
+[32m+[m[32m                            let sumando1, sumando2;[m
+[32m+[m[32m                            console.log("-- Suma --");[m
+[32m+[m[32m                            numeroOk = false;[m
+[32m+[m[32m                            while (!numeroOk) {[m
+[32m+[m[32m                                sumando1 = parseInt(prompt("Ingrese el primer sumando:"));[m
+[32m+[m[32m                                if (isNaN(sumando1)) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    numeroOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            numeroOk = false;[m
+[32m+[m[32m                            while (!numeroOk) {[m
+[32m+[m[32m                                sumando2 = parseInt(prompt("Ingrese el segundo sumando:"));[m
+[32m+[m[32m                                if (isNaN(sumando2)) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    numeroOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            console.log("Resultado: " + sumando1 + " + " + sumando2 + " = " + suma(sumando1, sumando2));[m
+[32m+[m[32m                            break;[m
+[32m+[m
+[32m+[m[32m                        case 2:[m
+[32m+[m[32m                            let minuendo, sustraendo;[m
+[32m+[m[32m                            console.log("-- Resta --");[m
+[32m+[m[32m                            numeroOk = false;[m
+[32m+[m[32m                            while (!numeroOk) {[m
+[32m+[m[32m                                minuendo = parseInt(prompt("Ingrese el minuendo:"));[m
+[32m+[m[32m                                if (isNaN(minuendo)) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    numeroOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            numeroOk = false;[m
+[32m+[m[32m                            while (!numeroOk) {[m
+[32m+[m[32m                                sustraendo = parseInt(prompt("Ingrese el sustraendo:"));[m
+[32m+[m[32m                                if (isNaN(sustraendo)) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    numeroOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            console.log("Resultado: " + minuendo + " - " + sustraendo + " = " + resta(minuendo, sustraendo));[m
+[32m+[m[32m                            break;[m
+[32m+[m
+[32m+[m[32m                        case 3:[m
+[32m+[m[32m                            let factor1, factor2;[m
+[32m+[m[32m                            console.log("-- Multiplicación --");[m
+[32m+[m[32m                            numeroOk = false;[m
+[32m+[m[32m                            while (!numeroOk) {[m
+[32m+[m[32m                                factor1 = parseInt(prompt("Ingrese el factor #1:"));[m
+[32m+[m[32m                                if (isNaN(factor1)) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    numeroOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            numeroOk = false;[m
+[32m+[m[32m                            while (!numeroOk) {[m
+[32m+[m[32m                                factor2 = parseInt(prompt("Ingrese el factor #2:"));[m
+[32m+[m[32m                                if (isNaN(factor2)) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    numeroOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                            console.log("Resultado: " + factor1 + " x  " + factor2 + " = " + multiplica(factor1, factor2));[m
+[32m+[m[32m                            break;[m
+[32m+[m
+[32m+[m[32m                        default:[m
+[32m+[m[32m                            console.log("Opción ingresada no es valida, elija otra por favor");[m
+[32m+[m[32m                            break;[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                }[m
+[32m+[m[32m                break;[m
+[32m+[m[32m            case 2:[m
+[32m+[m[32m                //OPCION DE CALCULO DE TABLA, SE SOLICITA EL NUMERO Y SE CALCULA LA TABLA HASTA EL 10[m
+[32m+[m[32m                numeroOk = false;[m
+[32m+[m[32m                while (!numeroOk) {[m
+[32m+[m[32m                    let numeroX = parseInt(prompt("Ingrese un número para calcular su tabla: "));[m
+[32m+[m[32m                    if (isNaN(numeroX)) {[m
+[32m+[m[32m                        console.log("Valor ingresado no es válido \n");[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                    else {[m
+[32m+[m[32m                        numeroOk = true;[m
+[32m+[m[32m                        console.log("Tabla del " + numeroX + ": \n")[m
+[32m+[m[32m                        for (let i = 1; i <= 10; i++) {[m
+[32m+[m[32m                            console.log(numeroX + " X " + i + " = " + (numeroX * i));[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                }[m
+[32m+[m[32m                break;[m
+[32m+[m
+[32m+[m[32m            case 3:[m
+[32m+[m[32m                //OPCION DE CALCULO DE PROMEDIO[m
+[32m+[m[32m                console.log("-- Calculo de promedio -- \n");[m
+[32m+[m[32m                let cantidadOk = false;[m
+[32m+[m[32m                while (!cantidadOk) {[m
+[32m+[m[32m                    let cantidadNumeros = parseInt(prompt("Ingrese la cantidad de números a calcular (menor a 50): "));[m
+[32m+[m[32m                    //AQUÍ SE PODRÍA USAR OTRA CONDICIÓN CON OR (||) PARA CONTROLAR SI SUPERA 50, PERO PREFERI HACERLO[m
+[32m+[m[32m                    //APARTE PARA USAR EL ELSE IF Y SER MAS ESPECIFICO EN LA DEVOLUCIÓN EN PANTALLA[m
+[32m+[m[32m                    if (isNaN(cantidadNumeros)) {[m
+[32m+[m[32m                        console.log("Cantidad ingresada no es válida");[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                    else if (cantidadNumeros <= 0) {[m
+[32m+[m[32m                        console.log("La cantidad de números no puede ser negativa o cero");[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                    else if (cantidadNumeros > 50) {[m
+[32m+[m[32m                        console.log("Opción excedida, pruebe con valor menor a 50");[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                    else {[m
+[32m+[m[32m                        cantidadOk = true;[m
+[32m+[m[32m                        let promedio = 0;[m
+[32m+[m[32m                        const sumatoria = [];[m
+[32m+[m[32m                        //SE INGRESA CADA NUMERO DE LA CANTIDAD ELEGIDA MENOR A 50 Y SE SUMAN[m
+[32m+[m[32m                        for (let i = 1; i <= cantidadNumeros; i++) {[m
+[32m+[m[32m                            //CONTROLO EL VALOR INGRESADO[m
+[32m+[m[32m                            let ingresoOk = false;[m
+[32m+[m[32m                            while (!ingresoOk) {[m
+[32m+[m[32m                                sumatoria[i] = parseInt(prompt("Ingrese el valor número " + i + ":"));[m
+[32m+[m[32m                                if (isNaN(sumatoria[i])) {[m
+[32m+[m[32m                                    console.log("Valor ingresado no válido");[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                                else {[m
+[32m+[m[32m                                    promedio = promedio + sumatoria[i];[m
+[32m+[m[32m                                    ingresoOk = true;[m
+[32m+[m[32m                                }[m
+[32m+[m[32m                            }[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                        //SE IMPRIMEN EN PANTALLA LOS NUMEROS INGRESADOS PARA QUE EL USUARIO VERIFIQUE SI SON CORRECTOS[m
+[32m+[m[32m                        console.log("Los números ingresados fueron: \n");[m
+[32m+[m[32m                        for (let i = 1; i <= cantidadNumeros; i++) {[m
+[32m+[m[32m                            console.log("Valor #" + i + ": " + sumatoria[i]);[m
+[32m+[m[32m                        }[m
+[32m+[m[32m                        //SE CALCULA EL PROMEDIO (SUMATORIA DE LOS NUMEROS INGRESADOS / CANTIDAD DE NUMEROS INGRESADOS)[m
+[32m+[m[32m                        promedio = promedio / cantidadNumeros;[m
+[32m+[m[32m                        console.log("El promedio de los números ingresados es de: " + promedio);[m
+[32m+[m[32m                    }[m
+[32m+[m[32m                }[m
+[32m+[m[32m                break;[m
+[32m+[m
+[32m+[m[32m            default:[m
+[32m+[m[32m                console.log("Opción ingresada no es valida, elija otra por favor");[m
+[32m+[m[32m                break;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        imprimirMenuPrincipal();[m
+[32m+[m[32m        opcionPrincipal = parseInt(prompt("Ingrese su opción:"));[m
+[32m+[m[32m        if (opcionPrincipal == 0) {[m
+[32m+[m[32m            console.log("Eligió SALIR, hasta la proxima!");[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m

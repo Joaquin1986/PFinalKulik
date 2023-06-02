@@ -1,0 +1,9 @@
+/*PARA EVITAR PROBLEMAS A LA VISTA CON EL COLOR BLANCO POR DEFECTO DE BACKGROUND*/
+
+body {
+    background-color: black;
+}
+
+p {
+    color: white;
+}
