@@ -47,7 +47,7 @@ function divide(numero1, numero2) {
 
 //MENU PRINCIPAL
 imprimirMenuPrincipal();
-let opcionPrincipal = parseInt(prompt("Ingrese su opción:"));
+let opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
 if (opcionPrincipal == 0) {
     console.log("Eligió SALIR, hasta la proxima! Pulse F5 para volver a ejecutar...");
 }
