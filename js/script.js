@@ -88,7 +88,7 @@ else {
                             console.log("-- División (divisor / dividendo) --");
                             divisor = ingresarNumero("Ingrese el divisor:");
                             dividendo = ingresarNumero("Ingrese el dividendo:");
-                            console.log("Resultado: " + divisor + " x  " + dividendo + " = " + divide(divisor, dividendo));
+                            console.log("Resultado: " + divisor + " ÷ " + dividendo + " = " + divide(divisor, dividendo));
                             break;
 
                         default:
