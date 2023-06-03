@@ -11,7 +11,21 @@ function imprimirMenuCalculadora() {
     console.log(" 1- Suma \n 2- Resta \n 3- Multiplicación \n 4- División \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
 
-//FUNCION DE INGRESO DE NUMBER
+//FUNCION DE CONTROL DE INGRESO DE NUMERO, MUESTRA UN MENSAJE COMO PARÁMETRO DE ENTRADA Y DEVUELVE EL NÚMERO INGRESADO
+function ingresarNumero(mensaje) {
+    let numeroOk = false;
+    let numero;
+    while (!numeroOk) {
+        numero = parseInt(prompt(mensaje));
+        if (isNaN(numero)) {
+            console.log("Valor ingresado no es válido \n");
+        }
+        else {
+            numeroOk = true;
+        }
+    }
+    return numero;
+}
 
 //FUNCIONES DE CALCULADORA
 
@@ -34,7 +48,6 @@ function divide(numero1, numero2) {
 //MENU PRINCIPAL
 imprimirMenuPrincipal();
 let opcionPrincipal = parseInt(prompt("Ingrese su opción:"));
-let numeroOk = false;
 if (opcionPrincipal == 0) {
     console.log("Eligió SALIR, hasta la proxima! Pulse F5 para volver a ejecutar...");
 }
@@ -49,104 +62,32 @@ else {
                         case 1:
                             let sumando1, sumando2;
                             console.log("-- Suma (1er sumando + 2do sumando) --");
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                sumando1 = parseInt(prompt("Ingrese el primer sumando:"));
-                                if (isNaN(sumando1)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                sumando2 = parseInt(prompt("Ingrese el segundo sumando:"));
-                                if (isNaN(sumando2)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
+                            sumando1 = ingresarNumero("Ingrese el primer sumando:");
+                            sumando2 = ingresarNumero("Ingrese el segundo sumando:")
                             console.log("Resultado: " + sumando1 + " + " + sumando2 + " = " + suma(sumando1, sumando2));
                             break;
 
                         case 2:
                             let minuendo, sustraendo;
                             console.log("-- Resta (minuendo - sustraendo) --");
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                minuendo = parseInt(prompt("Ingrese el minuendo:"));
-                                if (isNaN(minuendo)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                sustraendo = parseInt(prompt("Ingrese el sustraendo:"));
-                                if (isNaN(sustraendo)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
+                            minuendo = ingresarNumero("Ingrese el minuendo:");
+                            sustraendo = ingresarNumero("Ingrese el sustraendo:");
                             console.log("Resultado: " + minuendo + " - " + sustraendo + " = " + resta(minuendo, sustraendo));
                             break;
 
                         case 3:
                             let factor1, factor2;
                             console.log("-- Multiplicación (factor #1 x factor #2) --");
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                factor1 = parseInt(prompt("Ingrese el factor #1:"));
-                                if (isNaN(factor1)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                factor2 = parseInt(prompt("Ingrese el factor #2:"));
-                                if (isNaN(factor2)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
+                            factor1 = ingresarNumero("Ingrese el factor #1:");
+                            factor2 = ingresarNumero("Ingrese el factor #2:");
                             console.log("Resultado: " + factor1 + " x  " + factor2 + " = " + multiplica(factor1, factor2));
                             break;
 
                         case 4:
                             let divisor, dividendo;
                             console.log("-- División (divisor / dividendo) --");
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                divisor = parseInt(prompt("Ingrese el divisor:"));
-                                if (isNaN(divisor)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
-                            numeroOk = false;
-                            while (!numeroOk) {
-                                dividendo = parseInt(prompt("Ingrese el dividendo:"));
-                                if (isNaN(dividendo)) {
-                                    console.log("Valor ingresado no es válido \n");
-                                }
-                                else {
-                                    numeroOk = true;
-                                }
-                            }
+                            divisor = ingresarNumero("Ingrese el divisor:");
+                            dividendo = ingresarNumero("Ingrese el dividendo:");
                             console.log("Resultado: " + divisor + " x  " + dividendo + " = " + divide(divisor, dividendo));
                             break;
 
@@ -201,10 +142,10 @@ else {
                         //SE INGRESA CADA NUMERO DE LA CANTIDAD ELEGIDA MENOR A 50 Y SE SUMAN
                         let volver = false;
                         for (let i = 1; i <= cantidadNumeros; i++) {
-                            //CONTROLO EL VALOR INGRESADO
+                            //CONTROLO EL VALOR INGRESADO, PERMITIENDO SALIR CON LA LETRA "S"
                             let ingresoOk = false;
                             while (!ingresoOk) {
-                                sumatoria[i] = prompt("Ingrese el valor número " + i + " ('S' para Salir):");
+                                sumatoria[i] = prompt("Ingrese el valor número " + i + " (\"S\" para Salir):");
                                 sumatoriaInt[i] = parseInt(sumatoria[i]);
                                 if (isNaN(sumatoriaInt[i]) && sumatoria[i] != "S" && sumatoria[i] != "s") {
                                     console.log("Valor ingresado no válido");
