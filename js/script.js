@@ -8,7 +8,7 @@ function imprimirMenuPrincipal() {
 
 function imprimirMenuCalculadora() {
     console.log("-- Calculadora -- \n\n");
-    console.log(" 1- Suma \n 2- Resta \n 3- Multiplicación \n 4- División \n \n 0- Volver \n \n Elija su opcion, por favor: ");
+    console.log(" 1- Suma (+) \n 2- Resta (-) \n 3- Multiplicación (x) \n 4- División (÷) \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
 
 //FUNCION DE CONTROL DE INGRESO DE NUMERO, MUESTRA UN MENSAJE COMO PARÁMETRO DE ENTRADA Y DEVUELVE EL NÚMERO INGRESADO
@@ -27,7 +27,7 @@ function ingresarNumero(mensaje) {
     return numero;
 }
 
-//FUNCIONES DE CALCULADORA
+//FUNCIONES DE CALCULADORA, TOMA LOS NUMEROS DE PARAMETROS Y REALIZA LA OPERACIÓN ARITMÉTICA CORRESPONDIENTE
 
 function suma(numero1, numero2) {
     return numero1 + numero2;
@@ -183,9 +183,9 @@ else {
                 break;
         }
         imprimirMenuPrincipal();
-        opcionPrincipal = parseInt(prompt("Ingrese su opción:"));
+        opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
         if (opcionPrincipal == 0) {
-            console.log("Eligió SALIR, hasta la proxima! Pulse F5 para volver a ejecutar...");
+            console.log("Eligió SALIR, hasta la próxima! Pulse F5 para volver a ejecutar...");
         }
     }
 }
