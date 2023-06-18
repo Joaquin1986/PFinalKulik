@@ -17,7 +17,7 @@ function imprimirMenuCalculadora() {
 
 function imprimirMenuProductos() {
     console.log("-- Productos -- \n\n");
-    console.log(" 1- Ver productos por Categoría \n 2- Alta Producto \n 3- Baja Producto \n 4- Compra de Productos\
+    console.log(" 1- Listado de productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto \n 4- Pedido de Productos\
     \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
 
@@ -69,10 +69,10 @@ class Producto {
         this.precio = precio;
     }
     imprimir() {
-        console.log("\nNombre: " + this.nombre + "\nDescripción: " + this.descripcion + "\nCategoría: " +
+        console.log("ID: " + this.id + "\nNombre: " + this.nombre + "\nDescripción: " + this.descripcion + "\nCategoría: " +
             this.categoria + "\nPrecio sin IVA: " + this.precio + "\nPrecio con IVA: " + this.precioIVA());
     }
-    precioIVA(){
+    precioIVA() {
         return this.precio * 1.20;
     }
 }
@@ -84,6 +84,7 @@ function imprimirCategorias() {
     console.log("Categorías: \n 1- Meditación\n 2- Ayurveda (Medicina y Cocina)\n 3-Vestimenta Hindú");
 }
 
+//FUNCION DE VERIFICACION DE INGRESO DE CATEGORÍA CORRECTA
 function ingresarCategoria() {
     let numeroOk = false;
     let numero, opcionElegida;
@@ -108,6 +109,25 @@ function ingresarCategoria() {
         }
     }
     return opcionElegida;
+}
+
+//IMPRIME LOS PRODUCTOS POR DETERMINADA CATEGORIA
+
+function imprimirProductosPorCategoría(productos, categoria) {
+    let vacio = true;
+    console.log("Categoría: " + categoria + "\n");
+    for (let x = 0; x < productos.length; x++) {
+        if (productos[x].categoria == categoria) {
+            /*DESCONOZCO POR QUÉ DEVUELVE "UNDEFINED" AQUÍ
+            SI SE EJECUTA EL MÉTODO "imprimir()"" POR FUERA DEL "for", NO DEVUELVE EL MISMO RESULTADO
+            DE TODOS MODOS, CREO QUE NO SERÁ PROBLEMA CUANDO LA INTERFAZ SEA WEB EN VEZ DE CONSOLA*/
+            console.log(productos[x].imprimir());
+            vacio = false;
+        }
+    }
+    if (vacio == true) {
+        console.log("\nVACÍA");
+    }
 }
 
 
@@ -208,28 +228,14 @@ else {
                 while (opcionSecundaria != 0) {
                     switch (opcionSecundaria) {
                         case 1:
-                            let vacio;
-                            //VER PRODUCTOS POR CATEGORÍA
+                            //LISTADO DE PRODUCTOS POR CATEGORÍA
                             for (let i = 0; i < 3; i++) {
-                                vacio = true;
-                                console.log("Categoría: " + categorias[i] + "\n");
-                                for (let x = 0; x < productos.length; x++) {
-                                    if (productos[x].categoria == categorias[i]) {
-                                        /*DESCONOZCO POR QUÉ ME TIRA "UNDEFINED AQUÍ,
-                                        SI EJECUTO EL MÉTODO POR FUERA DE ESTE FOR NO ME DEVUELVE EL MISMO RESULTADO
-                                        DE TODOS MODOS, CREO QUE NO SERÁ PROBLEMA CUANDO LA INTERFAZ SEA WEB EN VEZ DE CONSOLA*/
-                                        console.log(productos[x].imprimir());
-                                        vacio = false;
-                                    }
-                                }
-                                if (vacio == true) {
-                                    console.log("\nVACÍA");
-                                }
+                                imprimirProductosPorCategoría(productos, categorias[i]);
                             }
                             break;
 
                         case 2:
-                            //ALTA PRODUCTO
+                            //ALTA DE PRODUCTO
                             console.log("-- Alta de Producto -- \n");
                             nombreProd = prompt("Ingrese el nombre del producto: ");
                             descripcionProd = prompt("Ingrese una descripción del producto: ");
@@ -242,11 +248,31 @@ else {
                             break;
 
                         case 3:
-                            //BAJA PRODUCTO
-                            console.log("-- Baja de Producto -- \n");
+                            //BAJA DE PRODUCTO
+                            console.log("-- Baja de Producto -- \n Seleccione el número de la categoría deseada: ");
                             imprimirCategorias();
                             categoriaProd = ingresarCategoria();
-                            
+                            const encontrado = categorias.find(element => element.categoria === categoriaProd)
+                            if (encontrado === undefined) {
+                                console.log ("La categoría ingresada está VACÍA");
+                            }
+                            else {
+                                imprimirProductosPorCategoría(productos, categoriaProd);
+                                idProd = ingresarNumero("Seleccione el ID del producto que desea ELIMINAR: (0- Volver)");
+                                const prodBaja = productos.find(element => element.id == idProd);
+                                if (prodBaja === undefined) {
+                                    console.log("ID de producto ingresado NO válido!");
+                                }
+                                else {
+                                    if (prodBaja.categoria == categoriaProd) {
+                                        console.log(prodBaja.nombre + " " + prodBaja.categoria);
+                                        productos.splice((prodBaja.id - 1), 1);
+                                    }
+                                    else {
+                                        console.log("ID de producto válido, pero NO coincide con la CATEGORÍA!");
+                                    }
+                                }
+                            }
                             break;
 
                         case 4:
