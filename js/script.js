@@ -389,7 +389,9 @@ else {
                 break;
 
             case 2:
-                //OPCION DE PRODUCTOS (SE IMPLEMENTAN OBJETOS, ARRAYS Y FUNCIONES DE ORDEN SUPERIOR)
+                /*OPCION DE PRODUCTOS (SE IMPLEMENTAN OBJETOS, ARRAYS Y FUNCIONES DE ORDEN SUPERIOR)
+                SE USAN ARRAYS DE PRODUCTOS Y PEDIDOS (SE MODIFICAN DURANTE LA EJECUCIÓN).
+                EL ARRAY DE CATEGORÍAS ES PREDETERMINADO Y FIJO SOLO POR ESTA ENTREGA*/
                 imprimirMenuProductos();
                 let encontrado, idProd, nombreProd, descripcionProd, categoriaProd, precioProd, idPedido, pedidoMostrado;
                 opcionSecundaria = parseInt(prompt("Ingrese su opción (0-Volver):"));
@@ -475,23 +477,30 @@ else {
                                                 //AGREGAR CANTIDAD DEL PRODUCTO
                                                 cantidad = ingresarNumero("Ingrese la cantidad de \"" + prodAgregar.nombre + "\" (0- Volver): ");
                                                 if (cantidad == 0) {
-                                                    console.log("¿Finalizar Pedido? (S)i / (N)o");
-                                                    pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
+                                                    console.log("Cancelar Pedido? (S)i / (N)o");
+                                                    pedidoFinalizado = preguntarFinalizarPedido("Cancelar Pedido? (S)i / (N)o");
+                                                    if (pedidoFinalizado && !pedidoFinalizadoOk){
+                                                        console.log ("Pedido CANCELADO. Volviendo...");
+                                                    }
                                                 }
                                                 else {
                                                     let prod1 = encontrarProductoPorId(idProd, productos);
                                                     let resultadoAlta = agregarProductoAPedido(pedido1, prod1, cantidad);
                                                     console.log(resultadoAlta);
-                                                    //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO
+                                                    //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO O SI SIGUE COMPRANDO
                                                     console.log("¿Finalizar Pedido? (S)i / (N)o");
                                                     pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
                                                     pedidoFinalizadoOk = true;
                                                 }
                                             }
                                             else {
+                                                //PREGUNTAR AL USUARIO SI QUIERE CANCELAR EL PEDIDO O SI SIGUE COMPRANDO
                                                 console.log("ID de producto válido, pero NO coincide con la CATEGORÍA \
-                                                    \n¿Finalizar Pedido? (S)i / (N)o");
-                                                pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
+                                                    \n¿Cancelar Pedido? (S)i / (N)o");
+                                                pedidoFinalizado = preguntarFinalizarPedido("¿Cancelar Pedido? (S)i / (N)o");
+                                                if (pedidoFinalizado && !pedidoFinalizadoOk){
+                                                    console.log ("Pedido CANCELADO. Volviendo...");
+                                                }
                                             }
                                         }
 
