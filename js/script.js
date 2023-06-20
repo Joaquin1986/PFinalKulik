@@ -1,4 +1,6 @@
 //ARCHIVO JS DE PRE-ENTREGA 2 - JOAQUIN KULIK
+//EL "JUGO" ESTÁ EN LA OPCIÓN '2' (GESTIÓN DE PRODUCTOS). ALLÍ SE IMPLEMENTA TODO LO VISTO DESDE LA CLASE 5 HASTA LA 8
+//DE TODOS MODOS, SE MANTIENEN LAS OPCIONES '1' CALCULADORA Y '3' CALCULO DE PROMEDIO, AGREGÁNDOLES FUNCIONES DE ORDEN SUPERIOR MATH
 
 
 //FUNCIONES DE IMPRESION DE MENUS
@@ -18,7 +20,7 @@ function imprimirMenuCalculadora() {
 function imprimirMenuProductos() {
     console.log("-- Gestión de Productos -- \n\n");
     console.log(" 1- Listar todos los productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto\
-    \n 4- Pedido de Productos \n 5- Entrega de Pedidos \n 6- Cancelar Pedido Pendiente \n 7- Listado de Pedidos\
+    \n 4- Pedido de Productos \n 5- Entrega de Pedido \n 6- Cancelar Pedido Pendiente \n 7- Listado de Pedidos\
     \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
 
@@ -100,10 +102,10 @@ class Pedido {
     }
 
     imprimir() { //SACAR PRODUCTOS
-        console.log("======================\n\ID pedido: " + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
+        console.log("======================\n\Pedido ID #" + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
         imprimirProductosDePedido(this);
-        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" + 
-        this.precioIva() + "\n¿Entregado?: " + productoEntregado(this) + "\n======================");
+        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" +
+            this.precioIva() + "\n¿Entregado?: " + productoEntregado(this) + "\n======================");
     }
     Iva() {
         return Math.round(this.precio * 0.23);
@@ -166,7 +168,7 @@ function imprimirProductosDePedido(pedido) {
 
 //AGREGAR PRODUCTO A PEDIDO
 function agregarProductoAPedido(pedido, producto, cantidad) {
-    let precioProducto
+    let precioProducto, retorno;
     //SI EL PEDIDO TIENE VALOR INICIAL UNDEFINED O SI NO EXISTE AÚN EN LA LISTA, SE AGREGA AL ARRAY
     let indiceProducto = pedido.productos.findIndex(element => element.id == producto.id);
     if (Object.keys(pedido.productos).length == 0 || indiceProducto == -1) {
@@ -174,13 +176,16 @@ function agregarProductoAPedido(pedido, producto, cantidad) {
         pedido.cantidadProductos.push(cantidad);
         precioProducto = producto.precio * cantidad;
         pedido.preciosProductos.push(precioProducto);
+        retorno = "AGREGADO AL CARRITO: +" + cantidad + " \"" + producto.nombre + "\"";
     }
     else {
         //SI YA EXISTE EN LA LISTA, SE SUMA A LA CANTIDAD YA EXISTENTE Y AL PRECIO PREVIAMENTE ESTABLECIDO
         pedido.cantidadProductos[indiceProducto] += cantidad;
         precioProducto = producto.precio * cantidad;
         pedido.preciosProductos[indiceProducto] += precioProducto;
+        retorno = "AGREGADO AL CARRITO: +" + cantidad + " \"" + producto.nombre + "\"";
     }
+    return retorno;
 }
 
 //LISTA CATEGORÍAS
@@ -425,15 +430,15 @@ else {
                                 const prodBaja = productos.findIndex(element => element.id == idProd);
                                 const objProdBaja = productos.find(element => element.id == idProd);
                                 if (prodBaja == -1) {
-                                    console.log("ID de producto ingresado NO válido!");
+                                    console.log("ID de producto ingresado NO VÁLIDO");
                                 }
                                 else {
                                     if (objProdBaja.categoria == categoriaProd) {
                                         productos.splice(prodBaja, 1);
-                                        console.log("Producto \"" + objProdBaja.nombre + "\" ELIMINADO!");
+                                        console.log("Producto \"" + objProdBaja.nombre + "\" ELIMINADO");
                                     }
                                     else {
-                                        console.log("ID de producto válido, pero NO coincide con la CATEGORÍA!");
+                                        console.log("ID de producto válido, pero NO coincide con la CATEGORÍA");
                                     }
                                 }
                             }
@@ -463,7 +468,7 @@ else {
                                     if (idProd != 0) {
                                         const prodAgregar = productos.find(element => element.id == idProd);
                                         if (prodAgregar === undefined) {
-                                            console.log("ID de producto ingresado NO válido!");
+                                            console.log("ID de producto ingresado NO VÁLIDO");
                                         }
                                         else {
                                             if (prodAgregar.categoria == categoriaProd) {
@@ -475,7 +480,8 @@ else {
                                                 }
                                                 else {
                                                     let prod1 = encontrarProductoPorId(idProd, productos);
-                                                    agregarProductoAPedido(pedido1, prod1, cantidad);
+                                                    let resultadoAlta = agregarProductoAPedido(pedido1, prod1, cantidad);
+                                                    console.log(resultadoAlta);
                                                     //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO
                                                     console.log("¿Finalizar Pedido? (S)i / (N)o");
                                                     pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
@@ -483,7 +489,7 @@ else {
                                                 }
                                             }
                                             else {
-                                                console.log("ID de producto válido, pero NO coincide con la CATEGORÍA! \
+                                                console.log("ID de producto válido, pero NO coincide con la CATEGORÍA \
                                                     \n¿Finalizar Pedido? (S)i / (N)o");
                                                 pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
                                             }
@@ -498,7 +504,7 @@ else {
                                     pedido1.hora = horaActual();
                                     pedido1.precio = calcularPrecioPedido(pedido1);
                                     pedidos.push(pedido1);
-                                    console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO! \nDetalle del Pedido:");
+                                    console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO \nDetalle del Pedido:");
                                     console.log(pedido1.imprimir(productos));
                                 }
                             }
@@ -531,13 +537,17 @@ else {
                                         break;
                                     }
                                     else {
-                                        let idProducto = pedidos.findIndex(element => element.id == idPedido);
-                                        if (idProducto != -1) {
-                                            pedidos[idPedido - 1].entregado = true;
-                                            console.log("Pedido #" + pedidos[idPedido - 1].id + " ENTREGADO!");
+                                        //VERIFICA QUE EL PEDIDO ESTÉ EN EL ARRAY 'PEDIDOS' Y SI FUE YA ENTREGADO
+                                        let indicePedido = pedidos.findIndex(element => element.id == idPedido);
+                                        if (indicePedido != -1 && pedidos[idPedido - 1].entregado) {
+                                            console.log("Pedido #" + pedidos[idPedido - 1].id + " PREVIAMENTE ENTREGADO!");
                                         }
-                                        else{
-                                            console.log ("Pedido ingresado NO es válido!")
+                                        else if (indicePedido != -1 && !pedidos[idPedido - 1].entregado) {
+                                            pedidos[idPedido - 1].entregado = true;
+                                            console.log("Pedido #" + pedidos[idPedido - 1].id + " exitosamente ENTREGADO");
+                                        }
+                                        else {
+                                            console.log("Pedido ID #" + idPedido + " NO VÁLIDO")
                                         }
                                     }
                                 }
@@ -572,12 +582,15 @@ else {
                                     }
                                     else {
                                         let idProducto = pedidos.findIndex(element => element.id == idPedido);
-                                        if (idProducto != -1) {
+                                        if (idProducto != -1 && !pedidos[idPedido - 1].entregado) {
                                             pedidos.splice(idPedido - 1, 1);
-                                            console.log("Pedido #" + idPedido + " ELIMINADO!");
+                                            console.log("Pedido #" + idPedido + " ELIMINADO");
                                         }
-                                        else{
-                                            console.log ("Pedido ingresado NO es válido!")
+                                        else if (idProducto != -1 && pedidos[idPedido - 1].entregado) {
+                                            console.log("Pedido #" + pedidos[idPedido - 1].id + " ya ENTREGADO. No puede ser cancelado.");
+                                        }
+                                        else {
+                                            console.log("Pedido ID #" + idPedido + " NO VÁLIDO")
                                         }
 
                                     }
