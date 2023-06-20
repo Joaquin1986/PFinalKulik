@@ -4,7 +4,7 @@
 //FUNCIONES DE IMPRESION DE MENUS
 function imprimirMenuPrincipal() {
     console.log("-- Bienvenid@ al Menú Principal -- \n\n");
-    console.log(" 1- Calculadora \n 2- Productos \n 3- Promedio de N números \n \n 0- Salir \
+    console.log(" 1- Calculadora \n 2- Gestión de Productos \n 3- Promedio de N números \n \n 0- Salir \
      \n \n Elija su opcion, por favor: ");
 }
 
@@ -16,9 +16,10 @@ function imprimirMenuCalculadora() {
 }
 
 function imprimirMenuProductos() {
-    console.log("-- Productos -- \n\n");
-    console.log(" 1- Listar todos los productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto \n 4- Pedido de Productos\
-    \n 5- Listado de Pedidos \n \n 0- Volver \n \n Elija su opcion, por favor: ");
+    console.log("-- Gestión de Productos -- \n\n");
+    console.log(" 1- Listar todos los productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto\
+    \n 4- Pedido de Productos \n 5- Entrega de Pedidos \n 6- Cancelar Pedido Pendiente \n 7- Listado de Pedidos\
+    \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
 
 //FUNCIONES CALCULADORA
@@ -87,19 +88,21 @@ class Producto {
 //CLASE 'PEDIDO' CON CONSTRUCTOR DE OBJETO
 
 class Pedido {
-    constructor(id, fecha, hora, idProductos, cantidadProductos, precio) {
+    constructor(id, fecha, hora, idProductos, cantidadProductos, preciosProductos, precio, entregado) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
         this.idProductos = idProductos;
         this.cantidadProductos = cantidadProductos;
+        this.preciosProductos = preciosProductos;
         this.precio = precio;
+        this.entregado = entregado;
     }
 
     imprimir(productos) {
         console.log("ID pedido: " + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
         imprimirProductosDePedido(this, productos);
-        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" + this.precioIva());
+        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" + this.precioIva() + "\n¿Entregado?: " + productoEntregado(this));
     }
     Iva() {
         return this.precio * 0.23;
@@ -131,6 +134,18 @@ function horaActual() {
     minuto = fechaComp.getMinutes();
     horaDevuelta = hora + ":" + minuto + " hrs.";
     return horaDevuelta;
+}
+
+//DEVUELVE 'SI' O 'NO' SI EL PRODUCTO ESTA ENTREGADO O NO, RESPECTIVAMENTE
+function productoEntregado(producto) {
+    let entregado;
+    if (producto.entregado) {
+        entregado = "Si";
+    }
+    else {
+        entregado = "No";
+    }
+    return entregado;
 }
 
 //ENCONTRAR PRODUCTO POR ID
@@ -250,14 +265,15 @@ function idLibrePedido(pedidos) {
     return idLibrePedido;
 }
 
-//CALCULAR PRECIO DE PEDIDO, TOMA COMO PARÁMETROS UN OBJETO DEL TIPO "PEDIDO" Y UN ARRAY DE PRODUCTOS, DEVUELVE EL PRECIO TOTAL SIN IVA
-//LOS OBJETOS YA CUENTAN CON SUS PROPIOS MÉTODOS PARA CALCULAR SU IVA
+/*CALCULAR PRECIO DE PEDIDO, TOMA COMO PARÁMETROS UN OBJETO DEL TIPO "PEDIDO" Y UN ARRAY DE PRODUCTOS,
+DEVUELVE EL PRECIO TOTAL SIN IVA. LOS OBJETOS YA CUENTAN CON SUS PROPIOS MÉTODOS PARA CALCULAR SU IVA*/
 function calcularPrecioPedido(pedido, productos) {
     let precio = 0;
+    let productoCalc;
     let largoArr = Object.keys(pedido.idProductos).length;
     for (let i = 0; i < largoArr; i++) {
-        const productoCalc = encontrarProductoPorId(pedido.idProductos[i], productos);
-        precio = + (productoCalc.precio * pedido.cantidadProductos[i]);
+        productoCalc = encontrarProductoPorId(pedido.idProductos[i], productos);
+        precio += (productoCalc.precio * pedido.cantidadProductos[i]);
     }
     return precio;
 }
@@ -287,12 +303,18 @@ function preguntarFinalizarPedido(mensaje) {
 imprimirMenuPrincipal();
 const productos = [];
 //SE PRE-CARGAN ALGUNOS DATOS PARA EL TESTEO
-const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar ambientes", "Meditacion", "125");
+const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar.", "Meditacion", "125");
 productos.push(prod0);
-const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar diferentes comidas", "Ayurveda (Medicina y Cocina)", "250");
+const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar-", "Ayurveda (Medicina y Cocina)", "250");
 productos.push(prod2);
-const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica de la cultura Hindú", "Vestimenta Hindu", "2400");
+const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindu", "2780");
 productos.push(prod3);
+const prod4 = new Producto(4, "CD de música relax", "Disco individual. Para estimular relajación", "Meditacion", "470");
+productos.push(prod4);
+const prod5 = new Producto(5, "Pimienta negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365");
+productos.push(prod5);
+const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindu", "3450");
+productos.push(prod6);
 let opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
 let opcionSecundaria = 0;
 if (opcionPrincipal == 0) {
@@ -301,7 +323,7 @@ if (opcionPrincipal == 0) {
 else {
     while (opcionPrincipal != 0) {
         switch (opcionPrincipal) {
-
+            //CALCULADORA, IMPLEMENTA FUNCIONES ARITMÉTICAS PROPIAS Y DEFINIDAS EN LA CLASE MATH
             case 1:
                 imprimirMenuCalculadora();
                 opcionSecundaria = parseInt(prompt("Ingrese la operación a ejecutar (0- Volver):"));
@@ -367,9 +389,9 @@ else {
                 break;
 
             case 2:
-                //OPCION DE PRODUCTOS (SE IMPLEMENTAN OBJETOS)
+                //OPCION DE PRODUCTOS (SE IMPLEMENTAN OBJETOS, ARRAYS Y FUNCIONES DE ORDEN SUPERIOR)
                 imprimirMenuProductos();
-                let encontrado, idProd, nombreProd, descripcionProd, categoriaProd, precioProd;
+                let encontrado, idProd, nombreProd, descripcionProd, categoriaProd, precioProd, idPedido, pedidoMostrado;
                 opcionSecundaria = parseInt(prompt("Ingrese su opción (0-Volver):"));
                 while (opcionSecundaria != 0) {
                     switch (opcionSecundaria) {
@@ -405,14 +427,15 @@ else {
                             else {
                                 imprimirProductosPorCategoría(productos, categoriaProd);
                                 idProd = ingresarNumero("Seleccione el ID del producto que desea ELIMINAR: (0- Volver)");
-                                const prodBaja = productos.find(element => element.id == idProd);
-                                if (prodBaja === undefined) {
+                                const prodBaja = productos.findIndex(element => element.id == idProd);
+                                const objProdBaja = productos.find(element => element.id == idProd);
+                                if (prodBaja == -1) {
                                     console.log("ID de producto ingresado NO válido!");
                                 }
                                 else {
-                                    if (prodBaja.categoria == categoriaProd) {
-                                        console.log(prodBaja.nombre + " " + prodBaja.categoria);
-                                        productos.splice((prodBaja.id - 1), 1);
+                                    if (objProdBaja.categoria == categoriaProd) {
+                                        productos.splice(prodBaja, 1);
+                                        console.log("Producto \"" + objProdBaja.nombre + "\" ELIMINADO!");
                                     }
                                     else {
                                         console.log("ID de producto válido, pero NO coincide con la CATEGORÍA!");
@@ -427,7 +450,8 @@ else {
                             console.log("-- Pedido de Producto -- \n\nSeleccione el número de la categoría del producto deseado: ");
                             const productosPedido = [0];
                             const cantidadProductos = [0];
-                            const pedido1 = new Pedido(1, "07/07/1777", "00:00 hrs.", productosPedido, cantidadProductos);
+                            const preciosProductos = [0];
+                            const pedido1 = new Pedido(1, "07/07/1777", "00:00 hrs.", productosPedido, cantidadProductos, preciosProductos, 0, false);
                             //FLAGS PARA CONTROLAR EL CORRECTO INGRESO Y FLUJO DE LOS PEDIDOS
                             let pedidoFinalizado = false;
                             let pedidoFinalizadoOk = false;
@@ -455,7 +479,7 @@ else {
                                                     pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
                                                 }
                                                 else {
-                                                    agregarProductoAPedido(pedido1, idProd, cantidad, productos);
+                                                    agregarProductoAPedido(pedido1, idProd, cantidad, productos); // DEBO SACAR PRODUCTOS Y USAR ARRAY DE OBJ EN VEZ DE ID, ASÍ EVITO PROBLEMAS AUNQUE BORRE UN PRODUCTO
                                                     //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO
                                                     console.log("¿Finalizar Pedido? (S)i / (N)o");
                                                     pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
@@ -476,7 +500,7 @@ else {
                                     pedido1.id = idLibrePedido(pedidos);
                                     pedido1.fecha = fechaActual();
                                     pedido1.hora = horaActual();
-                                    pedido1.precio = calcularPrecioPedido(pedido1, productos);
+                                    pedido1.precio = calcularPrecioPedido(pedido1, productos); //ACA DEBO CAMBIAR POR ARRAY DE OBJ EN VEZ DE ID, ASÍ EVITO PROBLEMA AUNQUE BORRE UN PRODUCTO
                                     pedidos.push(pedido1);
                                     console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO! \nDetalle del Pedido:");
                                     console.log(pedido1.imprimir(productos));
@@ -485,11 +509,81 @@ else {
                             break;
 
                         case 5:
+                            //ENTREGA DE PEDIDOS
+                            console.log("-- Entrega de Pedidos --");
+                            //SE VERIFICA SI ARRAY DE PEDIDOS ESTA VACÍO
+                            if (pedidos.length < 1) {
+                                console.log("No hay pedidos realizados aún.");
+                            }
+                            else {
+                                //SE SELECCIONA EL PEDIDO PARA SER MARCADO COMO 'ENTREGADO'
+                                pedidoMostrado = false;
+                                for (let i = 0; i < pedidos.length; i++) {
+                                    if (!pedidos[i].entregado) {
+                                        pedidos[i].imprimir(productos);
+                                        pedidoMostrado = true;
+                                    }
+                                }
+                                //SE VERIFICA QUE HAYAN PEDIDOS PARA ENTREGAR
+                                if (!pedidoMostrado) {
+                                    console.log("No hay pedidos pendientes de entrega.");
+                                }
+                                else {
+                                    idPedido = ingresarNumero("Seleccione el ID del pedido para marcarlo como ENTREGADO (0- Volver): ");
+                                    if (idPedido == 0) {
+                                        console.log("Acción cancelada, VOLVIENDO...");
+                                        break;
+                                    }
+                                    else {
+                                        pedidos[idPedido - 1].entregado = true;
+                                        console.log("Pedido #" + pedidos[idPedido - 1].id + " ENTREGADO!");
+                                    }
+                                }
+                            }
+                            break;
+
+                        case 6:
+                            //CANCELAR PEDIDO PENDIENTE DE ENTREGA
+                            console.log("-- Cancelar Pedido Pendiente --");
+                            //SE VERIFICA SI ARRAY DE PEDIDOS ESTA VACÍO
+                            if (pedidos.length < 1) {
+                                console.log("No hay pedidos realizados aún.");
+                            }
+                            else {
+                                //SE SELECCIONA EL PEDIDO PARA SER MARCADO COMO 'ENTREGADO'
+                                pedidoMostrado = false;
+                                for (let i = 0; i < pedidos.length; i++) {
+                                    if (!pedidos[i].entregado) {
+                                        pedidos[i].imprimir(productos);
+                                        pedidoMostrado = true;
+                                    }
+                                }
+                                //SE VERIFICA QUE HAYAN PEDIDOS PARA ENTREGAR
+                                if (!pedidoMostrado) {
+                                    console.log("No hay pedidos pendientes de entrega.");
+                                }
+                                else {
+                                    idPedido = ingresarNumero("Seleccione el ID del pedido a CANCELAR (0- Volver): ");
+                                    if (idPedido == 0) {
+                                        console.log("Acción cancelada, VOLVIENDO...");
+                                        break;
+                                    }
+                                    else {
+                                        pedidos.splice(idPedido - 1, 1);
+                                        console.log("Pedido #" + idPedido + " ELIMINADO!");
+                                    }
+                                }
+                            }
+                            break;
+
+                        case 7:
+                            //LISTADO DE PEDIDOS
                             console.log("-- Listado de Pedidos --");
                             if (pedidos.length < 1) {
                                 console.log("No hay pedidos realizados aún.");
                             }
                             else {
+                                //SE MUESTRAN TODOS LOS PEDIDOS
                                 for (let i = 0; i < pedidos.length; i++) {
                                     pedidos[i].imprimir(productos);
                                 }
@@ -508,7 +602,7 @@ else {
                 break;
 
             case 3:
-                //OPCION DE CALCULO DE PROMEDIO (SE IMPLEMENTAN ARRAYS Y FUNCIONES DE ORDEN SUPERIOR MATH)
+                //OPCION DE CALCULO DE PROMEDIO (SE IMPLEMENTAN ARRAYS Y FUNCIONES DE ORDEN SUPERIOR)
                 console.log("-- Calculo de promedio -- \n");
                 let cantidadOk = false;
                 while (!cantidadOk) {
