@@ -81,35 +81,36 @@ class Producto {
             this.categoria + "\nPrecio sin IVA: $" + this.precio + "\nPrecio con IVA (23%): $" + this.precioIVA());
     }
     precioIVA() {
-        return this.precio * 1.23;
+        return Math.round(this.precio * 1.23);
     }
 }
 
 //CLASE 'PEDIDO' CON CONSTRUCTOR DE OBJETO
 
 class Pedido {
-    constructor(id, fecha, hora, idProductos, cantidadProductos, preciosProductos, precio, entregado) {
+    constructor(id, fecha, hora, productos, cantidadProductos, preciosProductos, precio, entregado) {
         this.id = id;
         this.fecha = fecha;
         this.hora = hora;
-        this.idProductos = idProductos;
+        this.productos = productos;
         this.cantidadProductos = cantidadProductos;
         this.preciosProductos = preciosProductos;
         this.precio = precio;
         this.entregado = entregado;
     }
 
-    imprimir(productos) {
-        console.log("ID pedido: " + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
-        imprimirProductosDePedido(this, productos);
-        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" + this.precioIva() + "\n¿Entregado?: " + productoEntregado(this));
+    imprimir() { //SACAR PRODUCTOS
+        console.log("======================\n\ID pedido: " + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
+        imprimirProductosDePedido(this);
+        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" + 
+        this.precioIva() + "\n¿Entregado?: " + productoEntregado(this) + "\n======================");
     }
     Iva() {
-        return this.precio * 0.23;
+        return Math.round(this.precio * 0.23);
     }
 
     precioIva() {
-        return this.precio * 1.23;
+        return Math.round(this.precio * 1.23);
     }
 }
 
@@ -156,32 +157,29 @@ function encontrarProductoPorId(idProducto, productos) {
 }
 
 //IMPRIMIR PRODUCTOS DE PEDIDO
-function imprimirProductosDePedido(pedido, productos) {
-    let largoArr = Object.keys(pedido.idProductos).length;
+function imprimirProductosDePedido(pedido) {
+    let largoArr = Object.keys(pedido.productos).length;
     for (let i = 0; i < largoArr; i++) {
-        const productoPedido = encontrarProductoPorId(pedido.idProductos[i], productos);
-        console.log("Producto: \"" + productoPedido.nombre + "\" | Cantidad: " + pedido.cantidadProductos[i]);
+        console.log("Producto: \"" + pedido.productos[i].nombre + "\" | Cantidad: " + pedido.cantidadProductos[i] + " | Precio: $" + pedido.preciosProductos[i]);
     }
 }
 
 //AGREGAR PRODUCTO A PEDIDO
-function agregarProductoAPedido(pedido, idProducto, cantidad) {
-    //SI EL PEDIDO TIENE VALOR INICIAL 0, SIGNIFICA QUE AÚN NO TIENE PRODUCTOS
-    if (pedido.idProductos[0] == 0) {
-        pedido.idProductos[0] = idProducto;
-        pedido.cantidadProductos[0] = cantidad;
+function agregarProductoAPedido(pedido, producto, cantidad) {
+    let precioProducto
+    //SI EL PEDIDO TIENE VALOR INICIAL UNDEFINED O SI NO EXISTE AÚN EN LA LISTA, SE AGREGA AL ARRAY
+    let indiceProducto = pedido.productos.findIndex(element => element.id == producto.id);
+    if (Object.keys(pedido.productos).length == 0 || indiceProducto == -1) {
+        pedido.productos.push(producto);
+        pedido.cantidadProductos.push(cantidad);
+        precioProducto = producto.precio * cantidad;
+        pedido.preciosProductos.push(precioProducto);
     }
     else {
-        const indiceProducto = pedido.idProductos.findIndex(element => element == idProducto);
-        //SI NO EXISTE AÚN EL PRODUCTO EN LA LISTA, SE AGREGA AL ARRAY
-        if (indiceProducto == -1) {
-            pedido.idProductos.push(idProducto);
-            pedido.cantidadProductos.push(cantidad);
-        }
-        //SI YA EXISTE EN LA LISTA, SE SUMA A LA CANTIDAD YA EXISTENTE
-        else {
-            pedido.cantidadProductos[indiceProducto] += cantidad;
-        }
+        //SI YA EXISTE EN LA LISTA, SE SUMA A LA CANTIDAD YA EXISTENTE Y AL PRECIO PREVIAMENTE ESTABLECIDO
+        pedido.cantidadProductos[indiceProducto] += cantidad;
+        precioProducto = producto.precio * cantidad;
+        pedido.preciosProductos[indiceProducto] += precioProducto;
     }
 }
 
@@ -265,17 +263,14 @@ function idLibrePedido(pedidos) {
     return idLibrePedido;
 }
 
-/*CALCULAR PRECIO DE PEDIDO, TOMA COMO PARÁMETROS UN OBJETO DEL TIPO "PEDIDO" Y UN ARRAY DE PRODUCTOS,
+/*CALCULAR PRECIO DE PEDIDO, TOMA COMO PARÁMETROS UN OBJETO DEL TIPO "PEDIDO",
 DEVUELVE EL PRECIO TOTAL SIN IVA. LOS OBJETOS YA CUENTAN CON SUS PROPIOS MÉTODOS PARA CALCULAR SU IVA*/
-function calcularPrecioPedido(pedido, productos) {
-    let precio = 0;
-    let productoCalc;
-    let largoArr = Object.keys(pedido.idProductos).length;
-    for (let i = 0; i < largoArr; i++) {
-        productoCalc = encontrarProductoPorId(pedido.idProductos[i], productos);
-        precio += (productoCalc.precio * pedido.cantidadProductos[i]);
+function calcularPrecioPedido(pedido) {
+    let precioPedido = 0;
+    for (let i = 0; i < Object.keys(pedido.productos).length; i++) {
+        precioPedido += (pedido.productos[i].precio * pedido.cantidadProductos[i]);
     }
-    return precio;
+    return precioPedido;
 }
 
 //PREGUNTAR SI HA FINALIZADO O NO EL PEDIDO (DEVUELVE BOOLEAN)
@@ -410,7 +405,7 @@ else {
                             imprimirCategorias();
                             categoriaProd = ingresarCategoria();
                             precioProd = ingresarNumero("Ingrese el precio del producto: ");
-                            const prod1 = new Producto(idLibreProducto(productos), nombreProd, descripcionProd, categoriaProd, precioProd);
+                            const prod1 = new Producto(idLibreProducto(productos), nombreProd, descripcionProd, categoriaProd, Math.round(precioProd));
                             productos.push(prod1);
                             console.log("El producto \"" + prod1.nombre + "\" fue creado exitosamente!");
                             break;
@@ -448,9 +443,9 @@ else {
                             //PEDIDO DE PRODUCTOS
                             let cantidad;
                             console.log("-- Pedido de Producto -- \n\nSeleccione el número de la categoría del producto deseado: ");
-                            const productosPedido = [0];
-                            const cantidadProductos = [0];
-                            const preciosProductos = [0];
+                            const productosPedido = []
+                            const cantidadProductos = [];
+                            const preciosProductos = [];
                             const pedido1 = new Pedido(1, "07/07/1777", "00:00 hrs.", productosPedido, cantidadProductos, preciosProductos, 0, false);
                             //FLAGS PARA CONTROLAR EL CORRECTO INGRESO Y FLUJO DE LOS PEDIDOS
                             let pedidoFinalizado = false;
@@ -479,7 +474,8 @@ else {
                                                     pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
                                                 }
                                                 else {
-                                                    agregarProductoAPedido(pedido1, idProd, cantidad, productos); // DEBO SACAR PRODUCTOS Y USAR ARRAY DE OBJ EN VEZ DE ID, ASÍ EVITO PROBLEMAS AUNQUE BORRE UN PRODUCTO
+                                                    let prod1 = encontrarProductoPorId(idProd, productos);
+                                                    agregarProductoAPedido(pedido1, prod1, cantidad);
                                                     //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO
                                                     console.log("¿Finalizar Pedido? (S)i / (N)o");
                                                     pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
@@ -500,7 +496,7 @@ else {
                                     pedido1.id = idLibrePedido(pedidos);
                                     pedido1.fecha = fechaActual();
                                     pedido1.hora = horaActual();
-                                    pedido1.precio = calcularPrecioPedido(pedido1, productos); //ACA DEBO CAMBIAR POR ARRAY DE OBJ EN VEZ DE ID, ASÍ EVITO PROBLEMA AUNQUE BORRE UN PRODUCTO
+                                    pedido1.precio = calcularPrecioPedido(pedido1);
                                     pedidos.push(pedido1);
                                     console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO! \nDetalle del Pedido:");
                                     console.log(pedido1.imprimir(productos));
@@ -535,8 +531,14 @@ else {
                                         break;
                                     }
                                     else {
-                                        pedidos[idPedido - 1].entregado = true;
-                                        console.log("Pedido #" + pedidos[idPedido - 1].id + " ENTREGADO!");
+                                        let idProducto = pedidos.findIndex(element => element.id == idPedido);
+                                        if (idProducto != -1) {
+                                            pedidos[idPedido - 1].entregado = true;
+                                            console.log("Pedido #" + pedidos[idPedido - 1].id + " ENTREGADO!");
+                                        }
+                                        else{
+                                            console.log ("Pedido ingresado NO es válido!")
+                                        }
                                     }
                                 }
                             }
@@ -569,8 +571,15 @@ else {
                                         break;
                                     }
                                     else {
-                                        pedidos.splice(idPedido - 1, 1);
-                                        console.log("Pedido #" + idPedido + " ELIMINADO!");
+                                        let idProducto = pedidos.findIndex(element => element.id == idPedido);
+                                        if (idProducto != -1) {
+                                            pedidos.splice(idPedido - 1, 1);
+                                            console.log("Pedido #" + idPedido + " ELIMINADO!");
+                                        }
+                                        else{
+                                            console.log ("Pedido ingresado NO es válido!")
+                                        }
+
                                     }
                                 }
                             }
