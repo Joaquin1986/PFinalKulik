@@ -17,9 +17,11 @@ function imprimirMenuCalculadora() {
 
 function imprimirMenuProductos() {
     console.log("-- Productos -- \n\n");
-    console.log(" 1- Listado de productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto \n 4- Pedido de Productos\
-    \n \n 0- Volver \n \n Elija su opcion, por favor: ");
+    console.log(" 1- Listar todos los productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto \n 4- Pedido de Productos\
+    \n 5- Listado de Pedidos \n \n 0- Volver \n \n Elija su opcion, por favor: ");
 }
+
+//FUNCIONES CALCULADORA
 
 //FUNCION DE CONTROL DE INGRESO DE NUMERO, MUESTRA UN MENSAJE COMO PARÁMETRO DE ENTRADA Y DEVUELVE EL NÚMERO INGRESADO
 function ingresarNumero(mensaje) {
@@ -58,6 +60,11 @@ function divide(numero1, numero2) {
 // SE DEFINEN CATEGORÍAS DE PRODUCTOS EN UN ARRAY
 const categorias = ["Meditacion", "Ayurveda (Medicina y Cocina)", "Vestimenta Hindu"];
 
+// SE DEFINE ARRAY DE PEDIDOS CON SCOPE GLOBAL
+const pedidos = [];
+
+//CLASES
+
 //CLASE 'PRODUCTO' CON CONSTRUCTOR DE OBJETO
 
 class Producto {
@@ -70,18 +77,102 @@ class Producto {
     }
     imprimir() {
         console.log("ID: " + this.id + "\nNombre: " + this.nombre + "\nDescripción: " + this.descripcion + "\nCategoría: " +
-            this.categoria + "\nPrecio sin IVA: " + this.precio + "\nPrecio con IVA: " + this.precioIVA());
+            this.categoria + "\nPrecio sin IVA: $" + this.precio + "\nPrecio con IVA (23%): $" + this.precioIVA());
     }
     precioIVA() {
-        return this.precio * 1.20;
+        return this.precio * 1.23;
     }
 }
 
-//FUNCIONES DE PRODUCTOS
+//CLASE 'PEDIDO' CON CONSTRUCTOR DE OBJETO
+
+class Pedido {
+    constructor(id, fecha, hora, idProductos, cantidadProductos, precio) {
+        this.id = id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.idProductos = idProductos;
+        this.cantidadProductos = cantidadProductos;
+        this.precio = precio;
+    }
+
+    imprimir(productos) {
+        console.log("ID pedido: " + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
+        imprimirProductosDePedido(this, productos);
+        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" + this.precioIva());
+    }
+    Iva() {
+        return this.precio * 0.23;
+    }
+
+    precioIva() {
+        return this.precio * 1.23;
+    }
+}
+
+
+//FUNCIONES DE PRODUCTOS Y PEDIDOS
+
+//AGREGAR FECHA A PEDIDO
+function fechaActual() {
+    const fecha = new Date();
+    let dia, mes, ano, fechaDevuelta;
+    dia = fecha.getDate();
+    mes = (fecha.getMonth() + 1);
+    ano = fecha.getFullYear();
+    fechaDevuelta = dia + "/" + mes + "/" + ano;
+    return fechaDevuelta;
+}
+
+function horaActual() {
+    const fechaComp = new Date();
+    let hora, minuto, horaDevuelta;
+    hora = fechaComp.getHours();
+    minuto = fechaComp.getMinutes();
+    horaDevuelta = hora + ":" + minuto + " hrs.";
+    return horaDevuelta;
+}
+
+//ENCONTRAR PRODUCTO POR ID
+
+function encontrarProductoPorId(idProducto, productos) {
+    const productoEncontrado = productos.find(element => element.id === idProducto);
+    return productoEncontrado;
+}
+
+//IMPRIMIR PRODUCTOS DE PEDIDO
+function imprimirProductosDePedido(pedido, productos) {
+    let largoArr = Object.keys(pedido.idProductos).length;
+    for (let i = 0; i < largoArr; i++) {
+        const productoPedido = encontrarProductoPorId(pedido.idProductos[i], productos);
+        console.log("Producto: \"" + productoPedido.nombre + "\" | Cantidad: " + pedido.cantidadProductos[i]);
+    }
+}
+
+//AGREGAR PRODUCTO A PEDIDO
+function agregarProductoAPedido(pedido, idProducto, cantidad) {
+    //SI EL PEDIDO TIENE VALOR INICIAL 0, SIGNIFICA QUE AÚN NO TIENE PRODUCTOS
+    if (pedido.idProductos[0] == 0) {
+        pedido.idProductos[0] = idProducto;
+        pedido.cantidadProductos[0] = cantidad;
+    }
+    else {
+        const indiceProducto = pedido.idProductos.findIndex(element => element == idProducto);
+        //SI NO EXISTE AÚN EL PRODUCTO EN LA LISTA, SE AGREGA AL ARRAY
+        if (indiceProducto == -1) {
+            pedido.idProductos.push(idProducto);
+            pedido.cantidadProductos.push(cantidad);
+        }
+        //SI YA EXISTE EN LA LISTA, SE SUMA A LA CANTIDAD YA EXISTENTE
+        else {
+            pedido.cantidadProductos[indiceProducto] += cantidad;
+        }
+    }
+}
 
 //LISTA CATEGORÍAS
 function imprimirCategorias() {
-    console.log("Categorías: \n 1- Meditación\n 2- Ayurveda (Medicina y Cocina)\n 3-Vestimenta Hindú");
+    console.log("Categorías: \n 1- Meditación\n 2- Ayurveda (Medicina y Cocina)\n 3- Vestimenta Hindú");
 }
 
 //FUNCION DE VERIFICACION DE INGRESO DE CATEGORÍA CORRECTA
@@ -90,7 +181,7 @@ function ingresarCategoria() {
     let numero, opcionElegida;
     while (!numeroOk) {
         numero = parseInt(prompt("Elija la categoría del Producto: \n 1- Meditación\
-        \n 2- Ayurveda (Medicina y Cocina)\n 3-Vestimenta Hindú"));
+            \n 2- Ayurveda (Medicina y Cocina)\n 3- Vestimenta Hindú"));
         if (isNaN(numero) || numero < 1 || numero > 3) {
             console.log("Valor ingresado no es válido \n");
         }
@@ -133,18 +224,75 @@ function imprimirProductosPorCategoría(productos, categoria) {
 
 //BUSCA UN ID LIBRE DE PRODUCTO
 function idLibreProducto(productos) {
-    let idLibre;
+    let idLibreProducto;
     const ids = [];
     productos.forEach(element => {
         ids.push(element.id);
     });
-    idLibre = Math.max(...ids) + 1;
-    return idLibre;
+    idLibreProducto = Math.max(...ids) + 1;
+    return idLibreProducto;
+}
+
+//BUSCA UN ID LIBRE DE PEDIDO
+function idLibrePedido(pedidos) {
+    let idLibrePedido;
+    let largoArr = Object.keys(pedidos).length;
+    if (largoArr == 0) {
+        idLibrePedido = 1;
+    }
+    else {
+        const ids = [];
+        pedidos.forEach(element => {
+            ids.push(element.id);
+        });
+        idLibrePedido = Math.max(...ids) + 1;
+    }
+    return idLibrePedido;
+}
+
+//CALCULAR PRECIO DE PEDIDO, TOMA COMO PARÁMETROS UN OBJETO DEL TIPO "PEDIDO" Y UN ARRAY DE PRODUCTOS, DEVUELVE EL PRECIO TOTAL SIN IVA
+//LOS OBJETOS YA CUENTAN CON SUS PROPIOS MÉTODOS PARA CALCULAR SU IVA
+function calcularPrecioPedido(pedido, productos) {
+    let precio = 0;
+    let largoArr = Object.keys(pedido.idProductos).length;
+    for (let i = 0; i < largoArr; i++) {
+        const productoCalc = encontrarProductoPorId(pedido.idProductos[i], productos);
+        precio = + (productoCalc.precio * pedido.cantidadProductos[i]);
+    }
+    return precio;
+}
+
+//PREGUNTAR SI HA FINALIZADO O NO EL PEDIDO (DEVUELVE BOOLEAN)
+function preguntarFinalizarPedido(mensaje) {
+    let opcionElegida, valorRetorno;
+    let opcionOk = false;
+    while (!opcionOk) {
+        opcionElegida = prompt(mensaje);
+        if (opcionElegida == "S" || opcionElegida == "s") {
+            valorRetorno = true;
+            opcionOk = true;
+        }
+        else if (opcionElegida == "N" || opcionElegida == "n") {
+            valorRetorno = false;
+            opcionOk = true;
+        }
+        else {
+            console.log("Opción ingresada NO válida. Pulse \"S\" para CONTINUAR o \"N\" para FINALIZAR el pedido");
+        }
+    }
+    return valorRetorno;
 }
 
 //MENU PRINCIPAL
 imprimirMenuPrincipal();
 const productos = [];
+//SE PRE-CARGAN ALGUNOS DATOS PARA EL TESTEO
+const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar ambientes", "Meditacion", "125");
+productos.push(prod0);
+const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar diferentes comidas", "Ayurveda (Medicina y Cocina)", "250");
+productos.push(prod2);
+const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica de la cultura Hindú", "Vestimenta Hindu", "2400");
+productos.push(prod3);
 let opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
 let opcionSecundaria = 0;
 if (opcionPrincipal == 0) {
@@ -220,15 +368,13 @@ else {
 
             case 2:
                 //OPCION DE PRODUCTOS (SE IMPLEMENTAN OBJETOS)
-                const prod0 = new Producto(1, "Incienso", "Para aromatizar ambientes", "Meditacion", "50");
-                productos.push(prod0);
                 imprimirMenuProductos();
-                let idProd, nombreProd, descripcionProd, categoriaProd, precioProd;
+                let encontrado, idProd, nombreProd, descripcionProd, categoriaProd, precioProd;
                 opcionSecundaria = parseInt(prompt("Ingrese su opción (0-Volver):"));
                 while (opcionSecundaria != 0) {
                     switch (opcionSecundaria) {
                         case 1:
-                            //LISTADO DE PRODUCTOS POR CATEGORÍA
+                            //LISTADO DE TODOS LOS PRODUCTOS POR CATEGORÍA
                             for (let i = 0; i < 3; i++) {
                                 imprimirProductosPorCategoría(productos, categorias[i]);
                             }
@@ -252,9 +398,9 @@ else {
                             console.log("-- Baja de Producto -- \n Seleccione el número de la categoría deseada: ");
                             imprimirCategorias();
                             categoriaProd = ingresarCategoria();
-                            const encontrado = categorias.find(element => element.categoria === categoriaProd)
+                            encontrado = categorias.find(element => element === categoriaProd);
                             if (encontrado === undefined) {
-                                console.log ("La categoría ingresada está VACÍA");
+                                console.log("La categoría ingresada está VACÍA");
                             }
                             else {
                                 imprimirProductosPorCategoría(productos, categoriaProd);
@@ -276,14 +422,84 @@ else {
                             break;
 
                         case 4:
-                            //COMPRA DE PRODUCTOS
+                            //PEDIDO DE PRODUCTOS
+                            let cantidad;
+                            console.log("-- Pedido de Producto -- \n\nSeleccione el número de la categoría del producto deseado: ");
+                            const productosPedido = [0];
+                            const cantidadProductos = [0];
+                            const pedido1 = new Pedido(1, "07/07/1777", "00:00 hrs.", productosPedido, cantidadProductos);
+                            //FLAGS PARA CONTROLAR EL CORRECTO INGRESO Y FLUJO DE LOS PEDIDOS
+                            let pedidoFinalizado = false;
+                            let pedidoFinalizadoOk = false;
+                            while (!pedidoFinalizado) {
+                                imprimirCategorias();
+                                categoriaProd = ingresarCategoria();
+                                encontrado = categorias.find(element => element === categoriaProd);
+                                if (encontrado === undefined) {
+                                    console.log("La categoría ingresada está VACÍA");
+                                }
+                                else {
+                                    imprimirProductosPorCategoría(productos, categoriaProd);
+                                    idProd = ingresarNumero("Seleccione el ID del producto a agregar al PEDIDO: (0- Volver)");
+                                    if (idProd != 0) {
+                                        const prodAgregar = productos.find(element => element.id == idProd);
+                                        if (prodAgregar === undefined) {
+                                            console.log("ID de producto ingresado NO válido!");
+                                        }
+                                        else {
+                                            if (prodAgregar.categoria == categoriaProd) {
+                                                //AGREGAR CANTIDAD DEL PRODUCTO
+                                                cantidad = ingresarNumero("Ingrese la cantidad de \"" + prodAgregar.nombre + "\" (0- Volver): ");
+                                                if (cantidad == 0) {
+                                                    console.log("¿Finalizar Pedido? (S)i / (N)o");
+                                                    pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
+                                                }
+                                                else {
+                                                    agregarProductoAPedido(pedido1, idProd, cantidad, productos);
+                                                    //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO
+                                                    console.log("¿Finalizar Pedido? (S)i / (N)o");
+                                                    pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
+                                                    pedidoFinalizadoOk = true;
+                                                }
+                                            }
+                                            else {
+                                                console.log("ID de producto válido, pero NO coincide con la CATEGORÍA! \
+                                                    \n¿Finalizar Pedido? (S)i / (N)o");
+                                                pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
+                                            }
+                                        }
 
+                                    }
+                                }
+                                //SI EL PEDIDO FUE FINALIZADO CORRECTAMENTE, TERMINAR DE SETEARLO Y AGREGARLO AL ARRAY DE PEDIDOS
+                                if (pedidoFinalizado && pedidoFinalizadoOk) {
+                                    pedido1.id = idLibrePedido(pedidos);
+                                    pedido1.fecha = fechaActual();
+                                    pedido1.hora = horaActual();
+                                    pedido1.precio = calcularPrecioPedido(pedido1, productos);
+                                    pedidos.push(pedido1);
+                                    console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO! \nDetalle del Pedido:");
+                                    console.log(pedido1.imprimir(productos));
+                                }
+                            }
                             break;
 
+                        case 5:
+                            console.log("-- Listado de Pedidos --");
+                            if (pedidos.length < 1) {
+                                console.log("No hay pedidos realizados aún.");
+                            }
+                            else {
+                                for (let i = 0; i < pedidos.length; i++) {
+                                    pedidos[i].imprimir(productos);
+                                }
+                            }
+                            break;
 
                         default:
                             console.log("Opción ingresada no es valida, elija otra por favor");
                             break;
+
                     }
                     imprimirMenuProductos();
                     opcionSecundaria = parseInt(prompt("Ingrese su opción (0-Volver):"));
