@@ -1,6 +1,9 @@
-//ARCHIVO JS DE PRE-ENTREGA 2 - JOAQUIN KULIK
-//EL "JUGO" ESTÁ EN LA OPCIÓN '2' (GESTIÓN DE PRODUCTOS). ALLÍ SE IMPLEMENTA TODO LO VISTO DESDE LA CLASE 5 HASTA LA 8
-//DE TODOS MODOS, SE MANTIENEN LAS OPCIONES '1' CALCULADORA Y '3' CALCULO DE PROMEDIO, AGREGÁNDOLES FUNCIONES DE ORDEN SUPERIOR MATH
+/*ARCHIVO JS DE PRE-ENTREGA 2 - JOAQUIN KULIK
+
+LA MAYORÍA DE LO IMPLEMENTADO ESTÁ EN LA OPCIÓN '2' (GESTIÓN DE PRODUCTOS), LO VISTO DESDE LA CLASE 5 HASTA LA 8.
+SE IMPLEMENTAS, ARRAYS, OBJETOS, FUNCIONES DE ORDEN SUPERIOR Y MÉTODOS.
+DE TODOS MODOS, SE MANTIENEN LAS OPCIONES '1' CALCULADORA Y '3' CALCULO DE PROMEDIO, 
+MEJORÁNDOLAS CON FUNCIONES DE ORDEN SUPERIOR MATH,  FUNCIONES PROPIAS, ETC.*/
 
 
 //FUNCIONES DE IMPRESION DE MENUS
@@ -79,8 +82,9 @@ class Producto {
         this.precio = precio;
     }
     imprimir() {
-        console.log("ID: " + this.id + "\nNombre: " + this.nombre + "\nDescripción: " + this.descripcion + "\nCategoría: " +
-            this.categoria + "\nPrecio sin IVA: $" + this.precio + "\nPrecio con IVA (23%): $" + this.precioIVA());
+        console.log("======================\nProducto ID #" + this.id + "\nNombre: " + this.nombre + "\nDescripción: " +
+            this.descripcion + "\nCategoría: " + this.categoria + "\nPrecio sin IVA: $" +
+            this.precio + "\nPrecio con IVA (23%): $" + this.precioIVA() + "\n======================");
     }
     precioIVA() {
         return Math.round(this.precio * 1.23);
@@ -101,7 +105,7 @@ class Pedido {
         this.entregado = entregado;
     }
 
-    imprimir() { //SACAR PRODUCTOS
+    imprimir() {
         console.log("======================\n\Pedido ID #" + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
         imprimirProductosDePedido(this);
         console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" +
@@ -198,7 +202,7 @@ function ingresarCategoria() {
     let numeroOk = false;
     let numero, opcionElegida;
     while (!numeroOk) {
-        numero = parseInt(prompt("Elija la categoría del Producto: \n 1- Meditación\
+        numero = parseInt(prompt("Elija la categoría del Producto (1-3) que desea agregar al CARRITO: \n 1- Meditación\
             \n 2- Ayurveda (Medicina y Cocina)\n 3- Vestimenta Hindú"));
         if (isNaN(numero) || numero < 1 || numero > 3) {
             console.log("Valor ingresado no es válido \n");
@@ -224,13 +228,10 @@ function ingresarCategoria() {
 
 function imprimirProductosPorCategoría(productos, categoria) {
     let vacio = true;
-    console.log("Categoría: " + categoria + "\n");
+    console.log("CATEGORÍA: " + categoria + "\n");
     for (let x = 0; x < productos.length; x++) {
         if (productos[x].categoria == categoria) {
-            /*DESCONOZCO POR QUÉ DEVUELVE "UNDEFINED" AQUÍ
-            SI SE EJECUTA EL MÉTODO "imprimir()"" POR FUERA DEL "for", NO DEVUELVE EL MISMO RESULTADO
-            DE TODOS MODOS, CREO QUE NO SERÁ PROBLEMA CUANDO LA INTERFAZ SEA WEB EN VEZ DE CONSOLA*/
-            console.log(productos[x].imprimir());
+            productos[x].imprimir();
             vacio = false;
         }
     }
@@ -479,8 +480,8 @@ else {
                                                 if (cantidad == 0) {
                                                     console.log("Cancelar Pedido? (S)i / (N)o");
                                                     pedidoFinalizado = preguntarFinalizarPedido("Cancelar Pedido? (S)i / (N)o");
-                                                    if (pedidoFinalizado && !pedidoFinalizadoOk){
-                                                        console.log ("Pedido CANCELADO. Volviendo...");
+                                                    if (pedidoFinalizado && !pedidoFinalizadoOk) {
+                                                        console.log("Pedido CANCELADO. Volviendo...");
                                                     }
                                                 }
                                                 else {
@@ -498,8 +499,8 @@ else {
                                                 console.log("ID de producto válido, pero NO coincide con la CATEGORÍA \
                                                     \n¿Cancelar Pedido? (S)i / (N)o");
                                                 pedidoFinalizado = preguntarFinalizarPedido("¿Cancelar Pedido? (S)i / (N)o");
-                                                if (pedidoFinalizado && !pedidoFinalizadoOk){
-                                                    console.log ("Pedido CANCELADO. Volviendo...");
+                                                if (pedidoFinalizado && !pedidoFinalizadoOk) {
+                                                    console.log("Pedido CANCELADO. Volviendo...");
                                                 }
                                             }
                                         }
@@ -514,7 +515,7 @@ else {
                                     pedido1.precio = calcularPrecioPedido(pedido1);
                                     pedidos.push(pedido1);
                                     console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO \nDetalle del Pedido:");
-                                    console.log(pedido1.imprimir(productos));
+                                    pedido1.imprimir();
                                 }
                             }
                             break;
