@@ -1,24 +1,17 @@
 //*ARCHIVO JS DE PRE-ENTREGA 3 - JOAQUIN KULIK
 
-//FUNCIONES DE IMPRESION DE MENUS
-function imprimirMenuProductos() {
-    console.log("-- Gestión de Productos -- \n\n");
-    console.log(" 1- Listar todos los productos por Categoría \n 2- Alta de Producto \n 3- Baja de Producto\
-    \n 4- Pedido de Productos \n 5- Entrega de Pedido \n 6- Cancelar Pedido Pendiente \n 7- Listado de Pedidos\
-    \n \n 0- Salir \n \n Elija su opcion, por favor: ");
-}
-
 //CLASES
 
 //CLASE 'PRODUCTO' CON CONSTRUCTOR DE OBJETO
 
 class Producto {
-    constructor(id, nombre, descripcion, categoria, precio) {
+    constructor(id, nombre, descripcion, categoria, precio, imgURL) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.categoria = categoria;
         this.precio = precio;
+        this.imgURL = imgURL;
     }
     imprimir() {
         console.log("======================\nProducto ID #" + this.id + "\nNombre: " + this.nombre + "\nDescripción: " +
@@ -65,8 +58,54 @@ const categorias = ["Meditacion", "Ayurveda (Medicina y Cocina)", "Vestimenta Hi
 // SE DEFINE ARRAY DE PEDIDOS CON SCOPE GLOBAL
 const pedidosLoad = JSON.parse(localStorage.getItem("pedidos")) || [];
 const pedidos = convertirPedidos(pedidosLoad);
+const productosPedido = JSON.parse(localStorage.getItem("productosPedido")) || [];
+const cantidadProductos = JSON.parse(localStorage.getItem("cantidadProductos")) || [];
+const preciosProductos = JSON.parse(localStorage.getItem("preciosProductos")) || [];
+const productosLoad = JSON.parse(localStorage.getItem("productos")) || [];
+const productos = [];
+if (productosLoad.length < 1) {
+    //SE PRE-CARGAN ALGUNOS DATOS PARA EL TESTEO
+    const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar.", "Meditacion", "125", "./img/incienso.jpg");
+    productos.push(prod0);
+    const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar-", "Ayurveda (Medicina y Cocina)", "250", "./img/curcuma.jpg");
+    productos.push(prod2);
+    const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindu", "2780", "./img/tunica.jpg");
+    productos.push(prod3);
+    const prod4 = new Producto(4, "CD de música relax", "Disco individual. Para estimular relajación", "Meditacion", "470", "./img/cdmusica.jpg");
+    productos.push(prod4);
+    const prod5 = new Producto(5, "Pimienta negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365", "./img/pimientanegra.jpg");
+    productos.push(prod5);
+    const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindu", "3450", " ./img/sandalias.jpg");
+    productos.push(prod6);
+    localStorage.setItem("productos", JSON.stringify(productos));
+} else {
+    //SE CONVIERTEN LOS OBJETOS GENÉRICOS DEL LOCALSTORAGE A OBJETOS DEL TIPO 'PRODUCTOS'
+    for (let i = 0; i < productosLoad.length; i++) {
+        let pr1 = new Producto(productosLoad[i].id, productosLoad[i].nombre, productosLoad[i].descripcion,
+            productosLoad[i].categoria, productosLoad[i].precio, productosLoad[i].imgURL);
+        productos[i] = pr1;
+    }
+}
 
 //FUNCIONES DE PRODUCTOS Y PEDIDOS
+
+function mostrarProductos(productosDiv) {
+    productosDiv.innerHTML = '';
+    productos.forEach(el => {
+        const tarjetaProd = document.createElement("div");
+        tarjetaProd.classList.add("tarjetaProd");
+        tarjetaProd.innerHTML = ` 
+        <h2 id="prodTitulo">${el.nombre}</h2>
+        <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
+        <p id="prodDesc">${el.descripcion}</p>
+        <p id="prodPrecio">Precio:  $${el.precio}</p>
+        <p id="prodIva">IVA (23%):  $${Math.round(el.precio * 0.23)}</p>
+        <p id="prodPrecioTotal">Precio total:  $${el.precioIVA()}</p>
+        `
+        productosDiv.appendChild(tarjetaProd);
+    }
+    )
+}
 
 //FUNCION DE CONTROL DE INGRESO DE NUMERO, MUESTRA UN MENSAJE COMO PARÁMETRO DE ENTRADA Y DEVUELVE EL NÚMERO INGRESADO
 function ingresarNumero(mensaje) {
@@ -286,34 +325,19 @@ function preguntarFinalizarPedido(mensaje) {
 }
 
 //MENU PRINCIPAL DEL PROGRAMA
-//CARGAMOS LOS ARRAYS
-const productosPedido = JSON.parse(localStorage.getItem("productosPedido")) || [];
-const cantidadProductos = JSON.parse(localStorage.getItem("cantidadProductos")) || [];
-const preciosProductos = JSON.parse(localStorage.getItem("preciosProductos")) || [];
-const productosLoad = JSON.parse(localStorage.getItem("productos")) || [];
-const productos = [];
-if (productosLoad.length < 1) {
-    //SE PRE-CARGAN ALGUNOS DATOS PARA EL TESTEO
-    const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar.", "Meditacion", "125");
-    productos.push(prod0);
-    const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar-", "Ayurveda (Medicina y Cocina)", "250");
-    productos.push(prod2);
-    const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindu", "2780");
-    productos.push(prod3);
-    const prod4 = new Producto(4, "CD de música relax", "Disco individual. Para estimular relajación", "Meditacion", "470");
-    productos.push(prod4);
-    const prod5 = new Producto(5, "Pimienta negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365");
-    productos.push(prod5);
-    const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindu", "3450");
-    productos.push(prod6);
-} else {
-    //SE CONVIERTEN LOS OBJETOS GENÉRICOS DEL LOCALSTORAGE A OBJETOS DEL TIPO 'PRODUCTOS'
-    for (let i = 0; i < productosLoad.length; i++) {
-        let pr1 = new Producto(productosLoad[i].id, productosLoad[i].nombre, productosLoad[i].descripcion,
-            productosLoad[i].categoria, productosLoad[i].precio);
-        productos[i] = pr1;
-    }
-}
+
+
+//DOM - ASOCIAMOS LOS ELEMENTOS HTML A OBJETOS JS
+let productosDiv = document.getElementById("productosDiv");
+
+//DOM - EVENTOS JS ASOCIADOS A LOS OBJETOS ANTERIORES
+
+//
+/*prodAgregar.addEventListener("click", () => {
+
+})*/
+mostrarProductos(productosDiv);
+/*
 imprimirMenuProductos();
 let encontrado, idProd, nombreProd, descripcionProd, categoriaProd, precioProd, idPedido, pedidoMostrado;
 opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
@@ -557,3 +581,4 @@ while (opcionPrincipal != 0) {
         console.log("Eligió SALIR, hasta la próxima! Pulse F5 para volver a ejecutar...");
     }
 }
+*/
