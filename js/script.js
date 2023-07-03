@@ -53,7 +53,7 @@ class Pedido {
 }
 
 // SE DEFINEN CATEGORÍAS DE PRODUCTOS EN UN ARRAY
-const categorias = ["Meditacion", "Ayurveda (Medicina y Cocina)", "Vestimenta Hindu"];
+const categorias = ["Meditación", "Ayurveda (Medicina y Cocina)", "Vestimenta Hindú"];
 
 // SE DEFINE ARRAY DE PEDIDOS CON SCOPE GLOBAL
 const pedidosLoad = JSON.parse(localStorage.getItem("pedidos")) || [];
@@ -65,17 +65,17 @@ const productosLoad = JSON.parse(localStorage.getItem("productos")) || [];
 const productos = [];
 if (productosLoad.length < 1) {
     //SE PRE-CARGAN ALGUNOS DATOS PARA EL TESTEO
-    const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar.", "Meditacion", "125", "./img/incienso.jpg");
+    const prod0 = new Producto(1, "Incienso", "Paquete 10 unidades. Para aromatizar.", "Meditación", "125", "../img/incienso.jpg");
     productos.push(prod0);
-    const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar-", "Ayurveda (Medicina y Cocina)", "250", "./img/curcuma.jpg");
+    const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar-", "Ayurveda (Medicina y Cocina)", "250", "../img/curcuma.jpg");
     productos.push(prod2);
-    const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindu", "2780", "./img/tunica.jpg");
+    const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindú", "2780", "../img/tunica.jpg");
     productos.push(prod3);
-    const prod4 = new Producto(4, "CD de música relax", "Disco individual. Para estimular relajación", "Meditacion", "470", "./img/cdmusica.jpg");
+    const prod4 = new Producto(4, "CD de música relax", "Disco individual. Para estimular relajación", "Meditación", "470", "../img/cdmusica.jpg");
     productos.push(prod4);
-    const prod5 = new Producto(5, "Pimienta negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365", "./img/pimientanegra.jpg");
+    const prod5 = new Producto(5, "Pimienta negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365", "../img/pimientanegra.jpg");
     productos.push(prod5);
-    const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindu", "3450", " ./img/sandalias.jpg");
+    const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindú", "3450", "../img/sandalias.jpg");
     productos.push(prod6);
     localStorage.setItem("productos", JSON.stringify(productos));
 } else {
@@ -91,20 +91,28 @@ if (productosLoad.length < 1) {
 
 function mostrarProductos(productosDiv) {
     productosDiv.innerHTML = '';
-    productos.forEach(el => {
-        const tarjetaProd = document.createElement("div");
-        tarjetaProd.classList.add("tarjetaProd");
-        tarjetaProd.innerHTML = ` 
-        <h2 id="prodTitulo">${el.nombre}</h2>
-        <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
-        <p id="prodDesc">${el.descripcion}</p>
-        <p id="prodPrecio">Precio:  $${el.precio}</p>
-        <p id="prodIva">IVA (23%):  $${Math.round(el.precio * 0.23)}</p>
-        <p id="prodPrecioTotal">Precio total:  $${el.precioIVA()}</p>
-        `
-        productosDiv.appendChild(tarjetaProd);
-    }
-    )
+    categorias.forEach(el1 => {
+        const divCategoria = document.createElement("div");
+        divCategoria.classList.add("divCategoria");
+        divCategoria.innerHTML = `<h2 id="h2Categ">Categoría: "${el1}": </h2>`
+        productosDiv.appendChild(divCategoria);
+        productos.forEach(el => {
+            if (el.categoria == el1) {
+                const tarjetaProd = document.createElement("div");
+                tarjetaProd.classList.add("tarjetaProd");
+                tarjetaProd.innerHTML = ` 
+                <h2 id="prodTitulo">${el.nombre}</h2>
+                <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
+                <p id="prodDesc">${el.descripcion}</p>
+                <p id="prodPrecio">Precio:  $${el.precio}</p>
+                <p id="prodIva">IVA (23%):  $${Math.round(el.precio * 0.23)}</p>
+                <p id="prodPrecioTotal">Precio total:  $${el.precioIVA()}</p>
+                `
+                productosDiv.appendChild(tarjetaProd);
+            }
+        }
+        )
+    })
 }
 
 //FUNCION DE CONTROL DE INGRESO DE NUMERO, MUESTRA UN MENSAJE COMO PARÁMETRO DE ENTRADA Y DEVUELVE EL NÚMERO INGRESADO
@@ -186,14 +194,6 @@ function encontrarProductoPorId(idProducto, productos) {
     return productoEncontrado;
 }
 
-//IMPRIMIR PRODUCTOS DE PEDIDO
-function imprimirProductosDePedido(pedido) {
-    let largoArr = Object.keys(pedido.productos).length;
-    for (let i = 0; i < largoArr; i++) {
-        console.log("Producto: \"" + pedido.productos[i].nombre + "\" | Cantidad: " + pedido.cantidadProductos[i] + " | Precio: $" + pedido.preciosProductos[i]);
-    }
-}
-
 //AGREGAR PRODUCTO A PEDIDO
 function agregarProductoAPedido(pedido, producto, cantidad) {
     let precioProducto, retorno;
@@ -215,55 +215,6 @@ function agregarProductoAPedido(pedido, producto, cantidad) {
     }
     return retorno;
 }
-
-//LISTA CATEGORÍAS
-function imprimirCategorias() {
-    console.log("Categorías: \n 1- Meditación\n 2- Ayurveda (Medicina y Cocina)\n 3- Vestimenta Hindú");
-}
-
-//FUNCION DE VERIFICACION DE INGRESO DE CATEGORÍA CORRECTA
-function ingresarCategoria() {
-    let numeroOk = false;
-    let numero, opcionElegida;
-    while (!numeroOk) {
-        numero = parseInt(prompt("Elija la categoría del Producto (1-3) que desea agregar al CARRITO: \n 1- Meditación\
-            \n 2- Ayurveda (Medicina y Cocina)\n 3- Vestimenta Hindú"));
-        if (isNaN(numero) || numero < 1 || numero > 3) {
-            console.log("Valor ingresado no es válido \n");
-        }
-        else if (numero == 1) {
-            numeroOk = true;
-            opcionElegida = "Meditacion";
-        }
-        else if (numero == 2) {
-            numeroOk = true;
-            opcionElegida = "Ayurveda (Medicina y Cocina)";
-        }
-        else if (numero == 3) {
-            numeroOk = true;
-            opcionElegida = "Vestimenta Hindu";
-
-        }
-    }
-    return opcionElegida;
-}
-
-//IMPRIME LOS PRODUCTOS POR DETERMINADA CATEGORIA
-
-function imprimirProductosPorCategoría(productos, categoria) {
-    let vacio = true;
-    console.log("CATEGORÍA: " + categoria + "\n");
-    for (let x = 0; x < productos.length; x++) {
-        if (productos[x].categoria == categoria) {
-            productos[x].imprimir();
-            vacio = false;
-        }
-    }
-    if (vacio == true) {
-        console.log("\nVACÍA");
-    }
-}
-
 
 //BUSCA UN ID LIBRE DE PRODUCTO
 function idLibreProducto(productos) {
@@ -303,30 +254,6 @@ function calcularPrecioPedido(pedido) {
     return precioPedido;
 }
 
-//PREGUNTAR SI HA FINALIZADO O NO EL PEDIDO (DEVUELVE BOOLEAN)
-function preguntarFinalizarPedido(mensaje) {
-    let opcionElegida, valorRetorno;
-    let opcionOk = false;
-    while (!opcionOk) {
-        opcionElegida = prompt(mensaje);
-        if (opcionElegida == "S" || opcionElegida == "s") {
-            valorRetorno = true;
-            opcionOk = true;
-        }
-        else if (opcionElegida == "N" || opcionElegida == "n") {
-            valorRetorno = false;
-            opcionOk = true;
-        }
-        else {
-            console.log("Opción ingresada NO válida. Pulse \"S\" para CONTINUAR o \"N\" para FINALIZAR el pedido");
-        }
-    }
-    return valorRetorno;
-}
-
-//MENU PRINCIPAL DEL PROGRAMA
-
-
 //DOM - ASOCIAMOS LOS ELEMENTOS HTML A OBJETOS JS
 let productosDiv = document.getElementById("productosDiv");
 
@@ -336,249 +263,10 @@ let productosDiv = document.getElementById("productosDiv");
 /*prodAgregar.addEventListener("click", () => {
 
 })*/
-mostrarProductos(productosDiv);
-/*
-imprimirMenuProductos();
-let encontrado, idProd, nombreProd, descripcionProd, categoriaProd, precioProd, idPedido, pedidoMostrado;
-opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
-while (opcionPrincipal != 0) {
-    switch (opcionPrincipal) {
-        case 1:
-            //LISTADO DE TODOS LOS PRODUCTOS POR CATEGORÍA
-            for (let i = 0; i < 3; i++) {
-                imprimirProductosPorCategoría(productos, categorias[i]);
-            }
-            break;
 
-        case 2:
-            //ALTA DE PRODUCTO
-            console.log("-- Alta de Producto -- \n");
-            nombreProd = prompt("Ingrese el nombre del producto: ");
-            descripcionProd = prompt("Ingrese una descripción del producto: ");
-            imprimirCategorias();
-            categoriaProd = ingresarCategoria();
-            precioProd = ingresarNumero("Ingrese el precio del producto: ");
-            const prod1 = new Producto(idLibreProducto(productos), nombreProd, descripcionProd, categoriaProd, Math.round(precioProd));
-            productos.push(prod1);
-            localStorage.setItem("productos", JSON.stringify(productos));
-            console.log("El producto \"" + prod1.nombre + "\" fue creado exitosamente!");
-            break;
 
-        case 3:
-            //BAJA DE PRODUCTO
-            console.log("-- Baja de Producto -- \n Seleccione el número de la categoría deseada: ");
-            imprimirCategorias();
-            categoriaProd = ingresarCategoria();
-            encontrado = categorias.find(element => element === categoriaProd);
-            if (encontrado === undefined) {
-                console.log("La categoría ingresada está VACÍA");
-            }
-            else {
-                imprimirProductosPorCategoría(productos, categoriaProd);
-                idProd = ingresarNumero("Seleccione el ID del producto que desea ELIMINAR: (0- Volver)");
-                const prodBaja = productos.findIndex(element => element.id == idProd);
-                const objProdBaja = productos.find(element => element.id == idProd);
-                if (prodBaja == -1) {
-                    console.log("ID de producto ingresado NO VÁLIDO");
-                }
-                else {
-                    if (objProdBaja.categoria == categoriaProd) {
-                        productos.splice(prodBaja, 1);
-                        localStorage.setItem("productos", JSON.stringify(productos));
-                        console.log("Producto \"" + objProdBaja.nombre + "\" ELIMINADO");
-                    }
-                    else {
-                        console.log("ID de producto válido, pero NO coincide con la CATEGORÍA");
-                    }
-                }
-            }
-            break;
-
-        case 4:
-            //PEDIDO DE PRODUCTOS
-            let cantidad;
-            console.log("-- Pedido de Producto -- \n\nSeleccione el número de la categoría del producto deseado: ");
-            const pedido1 = new Pedido(1, "07/07/1777", "00:00 hrs.", [], [], [], 0, false);
-            //FLAGS PARA CONTROLAR EL CORRECTO INGRESO Y FLUJO DE LOS PEDIDOS
-            let pedidoFinalizado = false;
-            let pedidoFinalizadoOk = false;
-            while (!pedidoFinalizado) {
-                imprimirCategorias();
-                categoriaProd = ingresarCategoria();
-                encontrado = categorias.find(element => element === categoriaProd);
-                if (encontrado === undefined) {
-                    console.log("La categoría ingresada está VACÍA");
-                }
-                else {
-                    imprimirProductosPorCategoría(productos, categoriaProd);
-                    idProd = ingresarNumero("Seleccione el ID del producto a agregar al PEDIDO: (0- Volver)");
-                    if (idProd != 0) {
-                        const prodAgregar = productos.find(element => element.id == idProd);
-                        if (prodAgregar === undefined) {
-                            console.log("ID de producto ingresado NO VÁLIDO");
-                        }
-                        else {
-                            if (prodAgregar.categoria == categoriaProd) {
-                                //AGREGAR CANTIDAD DEL PRODUCTO
-                                cantidad = ingresarNumero("Ingrese la cantidad de \"" + prodAgregar.nombre + "\" (0- Volver): ");
-                                if (cantidad == 0) {
-                                    console.log("Cancelar Pedido? (S)i / (N)o");
-                                    pedidoFinalizado = preguntarFinalizarPedido("Cancelar Pedido? (S)i / (N)o");
-                                    if (pedidoFinalizado && !pedidoFinalizadoOk) {
-                                        console.log("Pedido CANCELADO. Volviendo...");
-                                    }
-                                }
-                                else {
-                                    let prod1 = encontrarProductoPorId(idProd, productos);
-                                    let resultadoAlta = agregarProductoAPedido(pedido1, prod1, cantidad);
-                                    console.log(resultadoAlta);
-                                    //PREGUNTAR AL USUARIO SI QUIERE FINALIZAR EL PEDIDO O SI SIGUE COMPRANDO
-                                    console.log("¿Finalizar Pedido? (S)i / (N)o");
-                                    pedidoFinalizado = preguntarFinalizarPedido("¿Finalizar Pedido? (S)i / (N)o");
-                                    pedidoFinalizadoOk = true;
-                                }
-                            }
-                            else {
-                                //PREGUNTAR AL USUARIO SI QUIERE CANCELAR EL PEDIDO O SI SIGUE COMPRANDO
-                                console.log("ID de producto válido, pero NO coincide con la CATEGORÍA \
-                                                    \n¿Cancelar Pedido? (S)i / (N)o");
-                                pedidoFinalizado = preguntarFinalizarPedido("¿Cancelar Pedido? (S)i / (N)o");
-                                if (pedidoFinalizado && !pedidoFinalizadoOk) {
-                                    console.log("Pedido CANCELADO. Volviendo...");
-                                }
-                            }
-                        }
-
-                    }
-                }
-                //SI EL PEDIDO FUE FINALIZADO CORRECTAMENTE, TERMINAR DE SETEARLO Y AGREGARLO AL ARRAY DE PEDIDOS
-
-                if (pedidoFinalizado && pedidoFinalizadoOk) {
-                    pedido1.id = idLibrePedido(pedidos);
-                    pedido1.fecha = fechaActual();
-                    pedido1.hora = horaActual();
-                    pedido1.precio = calcularPrecioPedido(pedido1);
-                    pedidos.push(pedido1);
-                    localStorage.setItem("pedidos", JSON.stringify(pedidos));
-                    console.log("El pedido #" + pedido1.id + " fue creado con ÉXITO \nDetalle del Pedido:");
-                    pedido1.imprimir();
-                }
-            }
-            break;
-
-        case 5:
-            //ENTREGA DE PEDIDOS
-            console.log("-- Entrega de Pedidos --");
-            //SE VERIFICA SI ARRAY DE PEDIDOS ESTA VACÍO
-            if (pedidos.length < 1) {
-                console.log("No hay pedidos realizados aún.");
-            }
-            else {
-                //SE SELECCIONA EL PEDIDO PARA SER MARCADO COMO 'ENTREGADO'
-                pedidoMostrado = false;
-                for (let i = 0; i < pedidos.length; i++) {
-                    if (!pedidos[i].entregado) {
-                        pedidos[i].imprimir(productos);
-                        pedidoMostrado = true;
-                    }
-                }
-                //SE VERIFICA QUE HAYAN PEDIDOS PARA ENTREGAR
-                if (!pedidoMostrado) {
-                    console.log("No hay pedidos pendientes de entrega.");
-                }
-                else {
-                    idPedido = ingresarNumero("Seleccione el ID del pedido para marcarlo como ENTREGADO (0- Volver): ");
-                    if (idPedido == 0) {
-                        console.log("Acción cancelada, VOLVIENDO...");
-                        break;
-                    }
-                    else {
-                        //VERIFICA QUE EL PEDIDO ESTÉ EN EL ARRAY 'PEDIDOS' Y SI FUE YA ENTREGADO
-                        let indicePedido = pedidos.findIndex(element => element.id == idPedido);
-                        if (indicePedido != -1 && pedidos[idPedido - 1].entregado) {
-                            console.log("Pedido #" + pedidos[idPedido - 1].id + " PREVIAMENTE ENTREGADO!");
-                        }
-                        else if (indicePedido != -1 && !pedidos[idPedido - 1].entregado) {
-                            pedidos[idPedido - 1].entregado = true;
-                            localStorage.setItem("pedidos", JSON.stringify(pedidos));
-                            console.log("Pedido #" + pedidos[idPedido - 1].id + " exitosamente ENTREGADO");
-                        }
-                        else {
-                            console.log("Pedido ID #" + idPedido + " NO VÁLIDO")
-                        }
-                    }
-                }
-            }
-            break;
-
-        case 6:
-            //CANCELAR PEDIDO PENDIENTE DE ENTREGA
-            console.log("-- Cancelar Pedido Pendiente --");
-            //SE VERIFICA SI ARRAY DE PEDIDOS ESTA VACÍO
-            if (pedidos.length < 1) {
-                console.log("No hay pedidos realizados aún.");
-            }
-            else {
-                //SE SELECCIONA EL PEDIDO PARA SER MARCADO COMO 'ENTREGADO'
-                pedidoMostrado = false;
-                for (let i = 0; i < pedidos.length; i++) {
-                    if (!pedidos[i].entregado) {
-                        pedidos[i].imprimir(productos);
-                        pedidoMostrado = true;
-                    }
-                }
-                //SE VERIFICA QUE HAYAN PEDIDOS PARA ENTREGAR
-                if (!pedidoMostrado) {
-                    console.log("No hay pedidos pendientes de entrega.");
-                }
-                else {
-                    idPedido = ingresarNumero("Seleccione el ID del pedido a CANCELAR (0- Volver): ");
-                    if (idPedido == 0) {
-                        console.log("Acción cancelada, VOLVIENDO...");
-                        break;
-                    }
-                    else {
-                        let idProducto = pedidos.findIndex(element => element.id == idPedido);
-                        if (idProducto != -1 && !pedidos[idPedido - 1].entregado) {
-                            pedidos.splice(idPedido - 1, 1);
-                            localStorage.setItem("pedidos", JSON.stringify(pedidos));
-                            console.log("Pedido #" + idPedido + " ELIMINADO");
-                        }
-                        else if (idProducto != -1 && pedidos[idPedido - 1].entregado) {
-                            console.log("Pedido #" + pedidos[idPedido - 1].id + " ya ENTREGADO. No puede ser cancelado.");
-                        }
-                        else {
-                            console.log("Pedido ID #" + idPedido + " NO VÁLIDO")
-                        }
-
-                    }
-                }
-            }
-            break;
-
-        case 7:
-            //LISTADO DE PEDIDOS
-            console.log("-- Listado de Pedidos --");
-            if (pedidos.length < 1) {
-                console.log("No hay pedidos realizados aún.");
-            }
-            else {
-                //SE MUESTRAN TODOS LOS PEDIDOS
-                for (let i = 0; i < pedidos.length; i++) {
-                    pedidos[i].imprimir(productos);
-                }
-            }
-            break;
-
-        default:
-            console.log("Opción ingresada no es valida, elija otra por favor");
-            break;
-
-    }
-    imprimirMenuProductos();
-    opcionPrincipal = parseInt(prompt("Ingrese su opción (0-Salir):"));
-    if (opcionPrincipal == 0) {
-        console.log("Eligió SALIR, hasta la próxima! Pulse F5 para volver a ejecutar...");
-    }
+const arhivoHTML = location.href.split("/").slice(-1);
+console.log(arhivoHTML);
+if (arhivoHTML == "verProductos.html") {
+    mostrarProductos(productosDiv);
 }
-*/
