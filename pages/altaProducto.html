@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGARAPANA : Alta de Producto</title>
+    <!--CSS Y BOOTSTRAP-->
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- NAVBAR O MENU DEL SITIO -->
+    <header>
+        <nav class="navbar">
+            <h1><a href="../index.html">AGARAPANA</a> : Alta de Producto</h1>
+            <ul class="navlist">
+                <a href="./verProductos.html">
+                    <li class="listitem">Ver Productos</li>
+                </a>
+                <a href="./altaProducto.html">
+                    <li class="listitem">Alta de Producto</li>
+                </a>
+                <a href="./bajaProducto.html">
+                    <li class="listitem">Baja de Producto</li>
+                </a>
+                <li class="listitem">Realizar Pedido</li>
+                <li class="listitem">Entrega de Pedido</li>
+                <li class="listitem">Cancelar Pedido</li>
+                <li class="listitem">Listado de Pedidos</li>
+            </ul>
+        </nav>
+    </header>
+    <div class="col-12 col-md-11">
+        <div class="formularioAlta">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Nombre: </span>
+                <input type="nombreProducto" class="form-control" id="nombreProducto" placeholder="Nombre del producto">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Descripción:</span>
+                <textarea class="form-control" id="descProducto" rows="2"
+                    placeholder="Descripción del Producto"></textarea>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="categProducto   ">Categoría:</span>
+                <select name="categProducto" class="form-select" id="categProducto">
+                    <option value="Meditación">Meditación</option>
+                    <option value="Ayurveda (Medicina y Cocina)">Ayurveda (Medicina y Cocina)</option>
+                    <option value="Vestimenta Hindú">Vestimenta Hindú</option>
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Precio $: </span>
+                <input type="precioProducto" class="form-control" id="precioProducto"
+                    placeholder="Precio del producto ($)">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Imagen: </span>
+                <input type="file" class="form-control" id="imagenProducto">
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" type="button" id="btnAltaProd">Crear Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <h3>3° PreEntrega para Comisión 43120 JS de Coderhouse</h3>
+    </footer>
+    <!--SCRIPTS DEL DOCUMENTO-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

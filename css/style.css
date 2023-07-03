@@ -149,10 +149,57 @@ footer h3 {
 }
 
 .tarjetaProd{
-    filter: grayscale(20%) blur(0.25px);
+    filter: grayscale(30%) blur(0.50px);
 }
 
 .tarjetaProd:hover {
     background-color: #ff9100;
     filter: grayscale(0%) blur(0px);
+}
+
+.formularioAlta{
+    margin-top: 50px;
+    margin-left: 100px;
+    padding-bottom: 9px;
+}
+
+.formularioAlta textarea{
+    resize: none;
+}
+
+
+.bajaBtn.btn.btn-primary {
+    background-color: #ffdac1;
+    border-color: #2b2b2b;
+    color: #2b2b2b;
+    transition: 0.4s;
+}
+
+.bajaBtn.btn.btn-primary:hover{
+    background-color: #ff934b;
+    border-color: #8f4000 ;
+}
+
+.formularioAlta span{
+    background-color: #ffdac1;
+}
+
+.formularioAlta span,
+.formularioAlta input,
+.formularioAlta select,
+.formularioAlta textarea{
+    border-color: #2b2b2b !important;
+}
+
+.formularioAlta .btn.btn-primary {
+    background-color: #ffdac1;
+    border-color: #2b2b2b;
+    color: #2b2b2b;
+    transition: 0.4s;
+    margin-top: 40px;
+}
+
+.formularioAlta .btn.btn-primary:hover{
+    background-color: #ff934b;
+    border-color: #8f4000 ;
 }

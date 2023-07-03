@@ -89,7 +89,27 @@ if (productosLoad.length < 1) {
 
 //FUNCIONES DE PRODUCTOS Y PEDIDOS
 
-function mostrarProductos(productosDiv) {
+function borrarProductoConfirmacion(mensaje) {
+    let opcionElegida, valorRetorno;
+    let opcionOk = false;
+    while (!opcionOk) {
+        opcionElegida = prompt(mensaje);
+        if (opcionElegida == "S" || opcionElegida == "s") {
+            valorRetorno = true;
+            opcionOk = true;
+        }
+        else if (opcionElegida == "N" || opcionElegida == "n") {
+            valorRetorno = false;
+            opcionOk = true;
+        }
+        else {
+            alert("Opción ingresada NO válida. Pulse \"S\" para BORRAR EL PRODUCTO o \"N\" para CANCELAR la acción");
+        }
+    }
+    return valorRetorno;
+}
+
+function mostrarProductos(productosDiv, arhivoHTML) {
     productosDiv.innerHTML = '';
     categorias.forEach(el1 => {
         const divCategoria = document.createElement("div");
@@ -101,13 +121,21 @@ function mostrarProductos(productosDiv) {
                 const tarjetaProd = document.createElement("div");
                 tarjetaProd.classList.add("tarjetaProd");
                 tarjetaProd.innerHTML = ` 
-                <h2 id="prodTitulo">${el.nombre}</h2>
+                <h2 id="prodTitulo">#${el.id}-${el.nombre}</h2>
                 <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
-                <p id="prodDesc">${el.descripcion}</p>
-                <p id="prodPrecio">Precio:  $${el.precio}</p>
-                <p id="prodIva">IVA (23%):  $${Math.round(el.precio * 0.23)}</p>
-                <p id="prodPrecioTotal">Precio total:  $${el.precioIVA()}</p>
-                `
+                <p id="prodId"></p>
+                <p id="prodDesc">${el.descripcion}<br>Precio:  $${el.precio}<br>
+                IVA (23%):  $${Math.round(el.precio * 0.23)}<br>
+                Precio total:  $${el.precioIVA()}
+                `;
+                if (arhivoHTML == "verProductos.html") {
+                    tarjetaProd.innerHTML = tarjetaProd.innerHTML + `</p>`;
+                }
+                if (arhivoHTML == "bajaProducto.html") {
+                    tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
+                    <button class="bajaBtn btn btn-primary" type="submit">Borrar </button></p>
+                    `;
+                }
                 productosDiv.appendChild(tarjetaProd);
             }
         }
@@ -191,7 +219,7 @@ function productoEntregado(producto) {
 
 function encontrarProductoPorId(idProducto, productos) {
     const productoEncontrado = productos.find(element => element.id === idProducto);
-    return productoEncontrado;
+    return convertirProducto(productoEncontrado);
 }
 
 //AGREGAR PRODUCTO A PEDIDO
@@ -257,16 +285,43 @@ function calcularPrecioPedido(pedido) {
 //DOM - ASOCIAMOS LOS ELEMENTOS HTML A OBJETOS JS
 let productosDiv = document.getElementById("productosDiv");
 
-//DOM - EVENTOS JS ASOCIADOS A LOS OBJETOS ANTERIORES
-
-//
-/*prodAgregar.addEventListener("click", () => {
-
-})*/
-
-
+//VERIFICAMOS EL ARCHIVO HTML DESDE EL CUAL SE EJECUTA EL JS PARA SEGUIR EL FLUJO CORRESPONDIENTE
 const arhivoHTML = location.href.split("/").slice(-1);
-console.log(arhivoHTML);
+//VER PRODUCTOS
 if (arhivoHTML == "verProductos.html") {
-    mostrarProductos(productosDiv);
+    mostrarProductos(productosDiv, arhivoHTML);
+}
+//BAJA DE PRODUCTO
+else if (arhivoHTML == "bajaProducto.html") {
+    mostrarProductos(productosDiv, arhivoHTML);
+    let productosBajaBtn = document.getElementsByClassName("btn");
+    for (let i = 0; i < productosBajaBtn.length; i++) {
+        productosBajaBtn[i].addEventListener("click", () => {
+            //EXTRAEMOS EL DIV DEL ELEMENTO PADRE PARA CONOCER EL ID DEL PRODUCTO A BORRAR
+            const idProdDiv = productosBajaBtn[i].parentElement;
+            let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
+            idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
+            const idProd = parseInt((idProdDivStr[0].slice(0, 1)));
+            let prodObj = encontrarProductoPorId(idProd, productos);
+            //PEDIMOS CONFIRMACIÓN PARA BORRAR EL PRODUCTO
+            let borrarOk = borrarProductoConfirmacion("¿Borrar el producto \"" + prodObj.nombre + "\"? (S)i / (N)o");
+            if (borrarOk) {
+                //SI EL USUARIO DA EL OK, SE BORRA Y SE RECARGA EL SITIO
+                productos.splice(productos.findIndex(element => element.id == idProd), 1);
+                localStorage.setItem("productos", JSON.stringify(productos));
+                alert("Se ha BORRADO el producto \"" + prodObj.nombre + "\"");
+                location.replace(location.href);
+            }
+        })
+    }
+
+}
+//ALTA DE PRODUCTO
+else if (arhivoHTML == "altaProducto.html") {
+    let productoAltaBtn = document.getElementsByClassName("btn");
+    for (let i = 0; i < productoAltaBtn.length; i++) {
+        productoAltaBtn[i].addEventListener("click", () => {
+            
+        })
+    }
 }
