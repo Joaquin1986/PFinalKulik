@@ -391,30 +391,36 @@ else if (arhivoHTML == "realizarPedido.html") {
     for (let i = 0; i < productosAgregarBtn.length; i++) {
         productosAgregarBtn[i].addEventListener("click", () => {
             //EXTRAEMOS EL DIV DEL ELEMENTO PADRE PARA CONOCER EL ID DEL PRODUCTO A AGREGAR SIGO ACA!!!!!1
-
+            let prodObj;
             const btnValor = productosAgregarBtn[i].innerHTML.split(">").slice(-1);
-            console.log (btnValor);
             if ((btnValor == "Quitar") || (btnValor == "Agregar")) {
                 const idProdDiv = productosAgregarBtn[i].parentElement;
                 let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
                 idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
-                const idProd = parseInt((idProdDivStr[0].slice(0, 1)));
+                idProd = parseInt((idProdDivStr[0].slice(0, 1)));
                 //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
-                let prodObj = encontrarProductoPorId(idProd, productos);
-            }
-            if (btnValor == "Quitar") {
-                //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
-                console.log(quitarProductoDePedido(pedido, prodObj) + prodObj.nombre);
-                console.log(pedido.cantidadProductos);
-            }
-            else if (btnValor == "Agregar") {
-                //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
-                console.log("SE AGREGA +1 DE " + prodObj.nombre);
-                console.log(agregarProductoAPedido(pedido, prodObj, 1));
-                console.log(pedido.cantidadProductos);
+                prodObj = encontrarProductoPorId(idProd, productos);    
+                if (btnValor == "Quitar") {
+                    //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
+                    console.log(quitarProductoDePedido(pedido, prodObj)); 
+                    localStorage.setItem("pedido", JSON.stringify(pedido));
+                }
+                else if (btnValor == "Agregar") {
+                    //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
+                    console.log(agregarProductoAPedido(pedido, prodObj, 1));
+                    localStorage.setItem("pedido", JSON.stringify(pedido));
+                }
             }
             else {
-                console.log("se apreto el de finalizar");
+                //SE TERMINA DE ARMAR EL OBJETO PEDIDO Y SE AGREGA AL ARRAY Y AL LOCALSTORAGE
+                pedido.fecha = fechaActual();
+                pedido.hora = horaActual();
+                pedido.precio = calcularPrecioPedido(pedido);
+                pedidos.push(pedido);
+                localStorage.setItem("pedidos", JSON.stringify(pedidos));
+                //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
+                delete pedido;
+                localStorage.removeItem("pedido");
             }
         })
     }
