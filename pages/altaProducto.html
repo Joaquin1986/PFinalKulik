@@ -16,26 +16,30 @@
     <!-- NAVBAR O MENU DEL SITIO -->
     <header>
         <nav class="navbar">
-            <h1><a href="../index.html">AGARAPANA</a> : Alta de Producto</h1>
-            <ul class="navlist">
-                <a href="./verProductos.html">
-                    <li class="listitem">Ver Productos</li>
-                </a>
-                <a href="./altaProducto.html">
-                    <li class="listitem">Alta de Producto</li>
-                </a>
-                <a href="./bajaProducto.html">
-                    <li class="listitem">Baja de Producto</li>
-                </a>
-                <li class="listitem">Realizar Pedido</li>
-                <li class="listitem">Entrega de Pedido</li>
-                <li class="listitem">Cancelar Pedido</li>
-                <li class="listitem">Listado de Pedidos</li>
-            </ul>
+            <div class="container-fluid">
+                <h1><a href="../index.html">AGARAPANA</a> : Alta de Producto</h1>
+                <ul class="navlist">
+                    <a href="./verProductos.html">
+                        <li class="listitem">Ver Productos</li>
+                    </a>
+                    <a href="./altaProducto.html">
+                        <li class="listitem">Alta de Producto</li>
+                    </a>
+                    <a href="./bajaProducto.html">
+                        <li class="listitem">Baja de Producto</li>
+                    </a>
+                    <a href="./realizarPedido.html">
+                        <li class="listitem">Realizar Pedido</li>
+                    </a>
+                    <li class="listitem">Entrega de Pedido</li>
+                    <li class="listitem">Cancelar Pedido</li>
+                    <li class="listitem">Lista de Pedidos</li>
+                </ul>
+            </div>
         </nav>
     </header>
     <div class="col-12 col-md-11">
-        <div class="formularioAlta">
+        <div class="formularioAlta" id="formularioAlta">
             <div class="input-group mb-3">
                 <span class="input-group-text">Nombre: </span>
                 <input type="nombreProducto" class="form-control" id="nombreProducto" placeholder="Nombre del producto">
@@ -60,7 +64,12 @@
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Imagen: </span>
-                <input type="file" class="form-control" id="imagenProducto">
+                <input type="nombreProducto" class="form-control" id="imagenProducto"
+                    placeholder="Imagen del producto (ej: ../img/curcuma.jpg)">
+            </div>
+            <div class="d-grid gap-2">
+                <span class="input-group-text">Imagenes disponibles para nuevos productos: "aceites.jpg",
+                    "mixespecias.jpg", "perfume.jpeg", "tejidolino.jpg", "cdyoga.jpg" y "cartera.jpg"</span>
             </div>
             <div class="d-grid gap-2">
                 <button class="btn btn-primary" type="button" id="btnAltaProd">Crear Producto</button>

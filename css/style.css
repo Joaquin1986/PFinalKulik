@@ -29,7 +29,7 @@ body {
 body {
     overflow-x: hidden;
     font-family: Laila !important;
-    color:#2b2b2b
+    color: #2b2b2b
 }
 
 
@@ -41,12 +41,8 @@ h1 {
 }
 
 
-h2 {
-    font-size: 20px;
-}
-
 li,
-a, 
+a,
 h1,
 h2,
 p {
@@ -55,13 +51,14 @@ p {
     transition: 0.4s;
 }
 
-a:hover{
-    color: #ffd7a3 !important; 
+a:hover {
+    color: #ffefd9 !important;
 }
 
 .navbar {
     background-color: #f08e0f;
-}   
+}
+
 
 .navlist {
     margin-top: px;
@@ -79,13 +76,13 @@ a:hover{
     background-color: #ffdac1;
     border-radius: 15px;
     border-color: #616161;
-    border-style:groove;
+    border-style: groove;
     transition: 0.4s;
 }
 
 .listitem:hover {
     background-color: #ff934b;
-    border-color: #8f4000 ;
+    border-color: #8f4000;
 }
 
 footer {
@@ -93,10 +90,10 @@ footer {
     padding-top: 10px;
     padding-bottom: 3px;
     margin-top: 70px;
-}  
+}
 
 footer h3 {
-   
+
     color: #2b2b2b;
     font-size: 14px;
     text-align: center;
@@ -108,31 +105,30 @@ footer h3 {
     margin-top: 50px;
 }
 
-.carousel-inner{
+.carousel-inner {
     border-radius: 7px;
 }
 
-/* ESTILOS DE PRODUCTOS */
+/* ESTILOS DE PRODUCTOS (CARDS) */
 
 #productosDiv {
     text-align: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-top: 30px; 
+    margin-top: 30px;
     justify-content: center;
 
 }
 
 #productosDiv img {
     max-width: 250px;
-   
+
 }
 
 .divCategoria {
     flex-basis: 100%;
 }
-
 
 .tarjetaProd {
     background-color: #e08d1f;
@@ -140,16 +136,13 @@ footer h3 {
     border-style: solid;
     border-color: #2b2b2b;
     text-align: center;
-    align-items:center;
+    align-items: center;
     margin-right: 30px;
     margin-top: 30px;
     margin-bottom: 30px;
-    transition: 0.4;
-    max-width: 260px;
-}
-
-.tarjetaProd{
-    filter: grayscale(30%) blur(0.50px);
+    transition: 0.5;
+    max-width: 256px;
+    filter: grayscale(20%) blur(0.40px);
 }
 
 .tarjetaProd:hover {
@@ -157,41 +150,51 @@ footer h3 {
     filter: grayscale(0%) blur(0px);
 }
 
-.formularioAlta{
-    margin-top: 50px;
-    margin-left: 100px;
-    padding-bottom: 9px;
+.tarjetaProd h2 {
+    margin-top: 5px;
+    font-size: 22px !important;
 }
 
-.formularioAlta textarea{
-    resize: none;
-}
-
-
-.bajaBtn.btn.btn-primary {
+.tarjetaProd button {
     background-color: #ffdac1;
     border-color: #2b2b2b;
     color: #2b2b2b;
     transition: 0.4s;
 }
 
-.bajaBtn.btn.btn-primary:hover{
-    background-color: #ff934b;
-    border-color: #8f4000 ;
+.tarjetaProd button:hover,
+.tarjetaProd button:active,
+.tarjetaProd button:focus {
+    background-color: #ff934b !important;
+    border-color: #8f4000 !important;
+    border-color: #8f4000 !important;
 }
 
-.formularioAlta span{
+/* ESTILOS DE ALTA DE PRODUCTO */
+
+.formularioAlta {
+    margin-top: 50px;
+    margin-left: 100px;
+    padding-bottom: 9px;
+}
+
+.formularioAlta textarea {
+    resize: none;
+}
+
+.formularioAlta span {
     background-color: #ffdac1;
 }
 
 .formularioAlta span,
 .formularioAlta input,
 .formularioAlta select,
-.formularioAlta textarea{
+.formularioAlta textarea {
     border-color: #2b2b2b !important;
 }
 
-.formularioAlta .btn.btn-primary {
+.formularioAlta .btn.btn-primary,
+#finalizarBtn {
     background-color: #ffdac1;
     border-color: #2b2b2b;
     color: #2b2b2b;
@@ -199,7 +202,13 @@ footer h3 {
     margin-top: 40px;
 }
 
-.formularioAlta .btn.btn-primary:hover{
+.formularioAlta .btn.btn-primary:hover,
+.formularioAlta .btn.btn-primary:active,
+.formularioAlta .btn.btn-primary:focus,
+#finalizarBtn:hover,
+#finalizarBtn:active,
+#finalizarBtn:focus {
     background-color: #ff934b;
-    border-color: #8f4000 ;
+    border-color: #8f4000;
+    color: #2b2b2b;
 }

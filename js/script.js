@@ -77,6 +77,12 @@ if (productosLoad.length < 1) {
     productos.push(prod5);
     const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindú", "3450", "../img/sandalias.jpg");
     productos.push(prod6);
+    const prod7 = new Producto(7, "Libro de Yoga", "Suami Vishnu - Devananda", "Meditación", "1420", "../img/libroyoga.jpg");
+    productos.push(prod7);
+    const prod8 = new Producto(8, "Ghee", "En presentación de 500ml", "Ayurveda (Medicina y Cocina)", "674", "../img/ghee.webp");
+    productos.push(prod8);
+    const prod9 = new Producto(9, "Collar Lakshmi", "Material en Oro", "Vestimenta Hindú", "12750", "../img/collarlakshmi.png");
+    productos.push(prod9);
     localStorage.setItem("productos", JSON.stringify(productos));
 } else {
     //SE CONVIERTEN LOS OBJETOS GENÉRICOS DEL LOCALSTORAGE A OBJETOS DEL TIPO 'PRODUCTOS'
@@ -85,6 +91,18 @@ if (productosLoad.length < 1) {
             productosLoad[i].categoria, productosLoad[i].precio, productosLoad[i].imgURL);
         productos[i] = pr1;
     }
+}
+
+//SE OBTIENE PEDIDO GUARDADO, EN CASO DE HABER ALGUNO
+let pedido;
+const pedidoLoad = JSON.parse(localStorage.getItem("pedido")) || "";
+if (pedidoLoad) {
+    pedido = new Pedido(pedidoLoad.id, pedidoLoad.fecha, pedidoLoad.hora, pedidoLoad.productos,
+        pedidoLoad.cantidadProductos, pedidoLoad.preciosProductos, pedidoLoad.precio, pedidoLoad.entregado);
+}
+else {
+    pedido = new Pedido(1, "07/07/1777", "00:00 hrs.", productosPedido, cantidadProductos,
+        preciosProductos, 0, false);
 }
 
 //FUNCIONES DE PRODUCTOS Y PEDIDOS
@@ -133,7 +151,13 @@ function mostrarProductos(productosDiv, arhivoHTML) {
                 }
                 if (arhivoHTML == "bajaProducto.html") {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
-                    <button class="bajaBtn btn btn-primary" type="submit">Borrar </button></p>
+                    <button class="bajaBtn btn btn-primary" type="submit">Borrar</button></p>
+                    `;
+                }
+                if (arhivoHTML == "realizarPedido.html") {
+                    tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
+                    <button class="agregarBtn btn btn-primary" type="submit">Agregar</button>
+                    <button class="quitarBtn btn btn-primary" type="submit">Quitar</button></p>
                     `;
                 }
                 productosDiv.appendChild(tarjetaProd);
@@ -232,14 +256,42 @@ function agregarProductoAPedido(pedido, producto, cantidad) {
         pedido.cantidadProductos.push(cantidad);
         precioProducto = producto.precio * cantidad;
         pedido.preciosProductos.push(precioProducto);
-        retorno = "AGREGADO AL CARRITO: +" + cantidad + " \"" + producto.nombre + "\"";
+        retorno = "agrega";
     }
     else {
         //SI YA EXISTE EN LA LISTA, SE SUMA A LA CANTIDAD YA EXISTENTE Y AL PRECIO PREVIAMENTE ESTABLECIDO
         pedido.cantidadProductos[indiceProducto] += cantidad;
         precioProducto = producto.precio * cantidad;
         pedido.preciosProductos[indiceProducto] += precioProducto;
-        retorno = "AGREGADO AL CARRITO: +" + cantidad + " \"" + producto.nombre + "\"";
+        retorno = "suma";
+    }
+    return retorno;
+}
+
+//QUITAR PRODUCTO DE PEDIDO
+function quitarProductoDePedido(pedido, producto) {
+    let precioProducto, retorno;
+    //SI EL PEDIDO TIENE VALOR INICIAL UNDEFINED O SI NO EXISTE AÚN EN LA LISTA, SE AGREGA AL ARRAY
+    let indiceProducto = pedido.productos.findIndex(element => element.id == producto.id);
+    if (Object.keys(pedido.productos).length == 0 || indiceProducto == -1) {
+        retorno = "nada";
+    }
+
+    else {
+        //SI YA EXISTE EN LA LISTA Y HAY MAS DE UNO, SE RESTA
+        if (pedido.cantidadProductos[indiceProducto] > 1) {
+            pedido.cantidadProductos[indiceProducto] -= 1;
+            pedido.precio = calcularPrecioPedido(pedido);
+            retorno = "resta";
+        }
+        else if (pedido.cantidadProductos[indiceProducto] == 1) {
+            //SI QUEDA UN ÚNICO PRODUCTO, SE QUITA DEL PEDIDO
+            pedido.productos.splice(indiceProducto, 1);
+            pedido.cantidadProductos.splice(indiceProducto, 1);
+            pedido.preciosProductos.splice(indiceProducto, 1);
+            pedido.precio = calcularPrecioPedido(pedido);
+            retorno = "quita";
+        }
     }
     return retorno;
 }
@@ -321,7 +373,49 @@ else if (arhivoHTML == "altaProducto.html") {
     let productoAltaBtn = document.getElementsByClassName("btn");
     for (let i = 0; i < productoAltaBtn.length; i++) {
         productoAltaBtn[i].addEventListener("click", () => {
-            
+            const divForm = document.getElementsByClassName("form-control");
+            const catProducto = document.getElementById("categProducto");
+            const prod1 = new Producto(idLibreProducto(productos), divForm[0].value, divForm[1].value,
+                catProducto.value, divForm[2].value, divForm[3].value);
+            productos.push(prod1);
+            localStorage.setItem("productos", JSON.stringify(productos));
+            alert("Se ha CREADO el producto \"" + prod1.nombre + "\"");
+            location.replace(location.href);
+        })
+    }
+}
+//REALIZAR PEDIDO
+else if (arhivoHTML == "realizarPedido.html") {
+    mostrarProductos(productosDiv, arhivoHTML);
+    let productosAgregarBtn = document.getElementsByClassName("btn");
+    for (let i = 0; i < productosAgregarBtn.length; i++) {
+        productosAgregarBtn[i].addEventListener("click", () => {
+            //EXTRAEMOS EL DIV DEL ELEMENTO PADRE PARA CONOCER EL ID DEL PRODUCTO A AGREGAR SIGO ACA!!!!!1
+
+            const btnValor = productosAgregarBtn[i].innerHTML.split(">").slice(-1);
+            console.log (btnValor);
+            if ((btnValor == "Quitar") || (btnValor == "Agregar")) {
+                const idProdDiv = productosAgregarBtn[i].parentElement;
+                let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
+                idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
+                const idProd = parseInt((idProdDivStr[0].slice(0, 1)));
+                //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
+                let prodObj = encontrarProductoPorId(idProd, productos);
+            }
+            if (btnValor == "Quitar") {
+                //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
+                console.log(quitarProductoDePedido(pedido, prodObj) + prodObj.nombre);
+                console.log(pedido.cantidadProductos);
+            }
+            else if (btnValor == "Agregar") {
+                //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
+                console.log("SE AGREGA +1 DE " + prodObj.nombre);
+                console.log(agregarProductoAPedido(pedido, prodObj, 1));
+                console.log(pedido.cantidadProductos);
+            }
+            else {
+                console.log("se apreto el de finalizar");
+            }
         })
     }
 }
