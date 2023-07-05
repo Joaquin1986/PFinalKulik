@@ -50,6 +50,18 @@ class Pedido {
     precioIva() {
         return Math.round(this.precio * 1.23);
     }
+
+    cantidadDe(Producto) {
+        let indiceProd;
+        //SE BUSCA EL INDICE DEL PRODUCTO
+        for (let i = 0; i < this.productos.length; i++) {
+            if (Producto.id == this.productos[i].id) {
+                indiceProd = i;
+            }
+        }
+        //SE DEVUELVE LA CANTIDAD DE PRODUCTOS CON ESE MISMO INDICE
+        return parseInt(this.cantidadProductos[indiceProd]);
+    }
 }
 
 // SE DEFINEN CATEGORÍAS DE PRODUCTOS EN UN ARRAY
@@ -101,7 +113,7 @@ if (pedidoLoad) {
         pedidoLoad.cantidadProductos, pedidoLoad.preciosProductos, pedidoLoad.precio, pedidoLoad.entregado);
 }
 else {
-    pedido = new Pedido(1, "07/07/1777", "00:00 hrs.", productosPedido, cantidadProductos,
+    pedido = new Pedido(1, fechaActual(), horaActual(), productosPedido, cantidadProductos,
         preciosProductos, 0, false);
 }
 
@@ -136,12 +148,12 @@ function mostrarProductos(productosDiv, arhivoHTML) {
         productosDiv.appendChild(divCategoria);
         productos.forEach(el => {
             if (el.categoria == el1) {
+
                 const tarjetaProd = document.createElement("div");
                 tarjetaProd.classList.add("tarjetaProd");
                 tarjetaProd.innerHTML = ` 
                 <h2 id="prodTitulo">#${el.id}-${el.nombre}</h2>
                 <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
-                <p id="prodId"></p>
                 <p id="prodDesc">${el.descripcion}<br>Precio:  $${el.precio}<br>
                 IVA (23%):  $${Math.round(el.precio * 0.23)}<br>
                 Precio total:  $${el.precioIVA()}
@@ -149,14 +161,24 @@ function mostrarProductos(productosDiv, arhivoHTML) {
                 if (arhivoHTML == "verProductos.html") {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `</p>`;
                 }
-                if (arhivoHTML == "bajaProducto.html") {
+                else if (arhivoHTML == "bajaProducto.html") {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
                     <button class="bajaBtn btn btn-primary" type="submit">Borrar</button></p>
                     `;
                 }
-                if (arhivoHTML == "realizarPedido.html") {
+                else if (arhivoHTML == "realizarPedido.html" && pedido.cantidadDe(el)) {
+                    //SE BUSCA EL NUMERO DE INDICE DEL PRODUCTO
+
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
-                    <button class="agregarBtn btn btn-primary" type="submit">Agregar</button>
+                    <p id="prodCant">Cantidad: ${pedido.cantidadDe(el)}</p>
+                    <button class="agregarBtn btn btn-primary" id="agregarBtn" type="submit">Agregar</button>
+                    <button class="quitarBtn btn btn-primary" type="submit">Quitar</button></p>
+                    `;
+                }
+                else {
+                    tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
+                    <p id="prodCant">Cantidad: 0</p>
+                    <button class="agregarBtn btn btn-primary" id="agregarBtn" type="submit">Agregar</button>
                     <button class="quitarBtn btn btn-primary" type="submit">Quitar</button></p>
                     `;
                 }
@@ -256,6 +278,7 @@ function agregarProductoAPedido(pedido, producto, cantidad) {
         pedido.cantidadProductos.push(cantidad);
         precioProducto = producto.precio * cantidad;
         pedido.preciosProductos.push(precioProducto);
+        pedido.precio = calcularPrecioPedido(pedido);
         retorno = "agrega";
     }
     else {
@@ -263,6 +286,7 @@ function agregarProductoAPedido(pedido, producto, cantidad) {
         pedido.cantidadProductos[indiceProducto] += cantidad;
         precioProducto = producto.precio * cantidad;
         pedido.preciosProductos[indiceProducto] += precioProducto;
+        pedido.precio = calcularPrecioPedido(pedido);
         retorno = "suma";
     }
     return retorno;
@@ -386,7 +410,7 @@ else if (arhivoHTML == "altaProducto.html") {
 }
 //REALIZAR PEDIDO
 else if (arhivoHTML == "realizarPedido.html") {
-    mostrarProductos(productosDiv, arhivoHTML);
+    mostrarProductos(productosDiv, arhivoHTML, pedido);
     let productosAgregarBtn = document.getElementsByClassName("btn");
     for (let i = 0; i < productosAgregarBtn.length; i++) {
         productosAgregarBtn[i].addEventListener("click", () => {
@@ -396,22 +420,29 @@ else if (arhivoHTML == "realizarPedido.html") {
             if ((btnValor == "Quitar") || (btnValor == "Agregar")) {
                 const idProdDiv = productosAgregarBtn[i].parentElement;
                 let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
+                const prodCant = idProdDiv.querySelector("#prodCant");
                 idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
+                let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
                 idProd = parseInt((idProdDivStr[0].slice(0, 1)));
                 //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
-                prodObj = encontrarProductoPorId(idProd, productos);    
+                prodObj = encontrarProductoPorId(idProd, productos);
                 if (btnValor == "Quitar") {
                     //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
-                    console.log(quitarProductoDePedido(pedido, prodObj)); 
+                    const resultado = quitarProductoDePedido(pedido, prodObj);
                     localStorage.setItem("pedido", JSON.stringify(pedido));
+                    if (resultado != "nada") {
+                        prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);
+                    }
                 }
                 else if (btnValor == "Agregar") {
                     //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
-                    console.log(agregarProductoAPedido(pedido, prodObj, 1));
+                    agregarProductoAPedido(pedido, prodObj, 1);
                     localStorage.setItem("pedido", JSON.stringify(pedido));
+                    prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
                 }
+
             }
-            else {
+            else if ((btnValor == "Finalizar Pedido")) {
                 //SE TERMINA DE ARMAR EL OBJETO PEDIDO Y SE AGREGA AL ARRAY Y AL LOCALSTORAGE
                 pedido.fecha = fechaActual();
                 pedido.hora = horaActual();
@@ -421,6 +452,16 @@ else if (arhivoHTML == "realizarPedido.html") {
                 //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
                 delete pedido;
                 localStorage.removeItem("pedido");
+                alert("Se ha creado el pedido!");
+                location.replace(location.href);
+            }
+            else {
+                console.log("Se cancela el pedido!");
+                //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
+                delete pedido;
+                localStorage.removeItem("pedido");
+                alert("Se ha cancelado el pedido!");
+                location.replace(location.href);
             }
         })
     }

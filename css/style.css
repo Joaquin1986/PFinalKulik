@@ -141,8 +141,14 @@ footer h3 {
     margin-top: 30px;
     margin-bottom: 30px;
     transition: 0.5;
+    min-width: 256px;
     max-width: 256px;
     filter: grayscale(20%) blur(0.40px);
+}
+
+.tarjetaProd img {
+    min-width: 250px;
+    max-width: 250px;
 }
 
 .tarjetaProd:hover {
@@ -162,12 +168,35 @@ footer h3 {
     transition: 0.4s;
 }
 
+
+
 .tarjetaProd button:hover,
-.tarjetaProd button:active,
-.tarjetaProd button:focus {
+.tarjetaProd button:active {
     background-color: #ff934b !important;
     border-color: #8f4000 !important;
-    border-color: #8f4000 !important;
+}
+
+#agregarBtn:hover {
+    background-color: #29b41d85 !important;
+    border-color: #053b00 !important;
+
+}
+
+#prodDesc {
+    margin-top: 20px;
+    margin-left: 25px;
+    max-width: 200px;
+    background-color: #fdece1;
+    border-radius: 5px;
+    border-style:groove;
+}
+
+#prodCant {
+    margin-left: 25px;
+    max-width: 200px;
+    background-color: #fdece1;
+    border-radius: 5px;
+    border-style:groove;
 }
 
 /* ESTILOS DE ALTA DE PRODUCTO */
@@ -195,8 +224,8 @@ footer h3 {
 
 .formularioAlta .btn.btn-primary,
 #finalizarBtn {
-    background-color: #ffdac1;
-    border-color: #2b2b2b;
+    background-color: #fa6c0d;
+    border-color: #9b3e00;
     color: #2b2b2b;
     transition: 0.4s;
     margin-top: 40px;
@@ -204,11 +233,19 @@ footer h3 {
 
 .formularioAlta .btn.btn-primary:hover,
 .formularioAlta .btn.btn-primary:active,
-.formularioAlta .btn.btn-primary:focus,
 #finalizarBtn:hover,
-#finalizarBtn:active,
-#finalizarBtn:focus {
-    background-color: #ff934b;
-    border-color: #8f4000;
+#finalizarBtn:active {
+    background-color: #ff9100;
+    border-color: #ff6600;
     color: #2b2b2b;
+}
+
+#cancelarBtn {
+    background-color: #494949;
+    border-color: #313131;
+}
+
+#cancelarBtn:hover,
+#cancelarBtn:active {
+    background-color: #686868;
 }
