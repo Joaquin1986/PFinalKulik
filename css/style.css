@@ -85,6 +85,41 @@ a:hover {
     border-color: #8f4000;
 }
 
+#arribaBtn,
+#cestaBtn,
+#whatsappBtn{
+    transition: 0.4s;
+}
+
+#arribaBtn:hover,
+#cestaBtn:hover,
+#whatsappBtn:hover{
+    color: #ff6600;
+}
+
+#arribaBtn{
+    position: fixed;
+    left: 94%;
+    top:65%;
+}
+
+#cestaBtn{
+    position: fixed;
+    left: 94%;
+    top:75%;
+}
+
+#cestaBtn:hover,
+#whatsappBtn{
+    cursor:pointer;
+}
+
+#whatsappBtn{
+    position: fixed;
+    left: 94%;
+    top:85%;
+}
+
 footer {
     background-color: #f08e0f;
     padding-top: 10px;
@@ -178,13 +213,13 @@ footer h3 {
 
 /* ESTILOS PUNTUALES DE ALTA DE PRODUCTO */
 
-#btnAltaProd{
+#btnAltaProd {
     background-color: #f08e0f;
     border-color: #ad6f1d;
-    
+
 }
 
-#btnAltaProd:hover{
+#btnAltaProd:hover {
     background-color: #ffae00;
     border-color: #ad7f1d;
 }

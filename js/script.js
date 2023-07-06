@@ -164,8 +164,6 @@ function validarFormAltaTexto(formInputs) {
 
 function validarFormAltaNumber(formInputs) {
     let valido = true;
-    console.log(parseInt(formInputs[2].value))
-    console.log(typeof formInputs[2].value);
     if (!parseInt(formInputs[2].value)) {
         valido = false;
     }
@@ -425,7 +423,6 @@ else if (arhivoHTML == "bajaProducto.html") {
             })
         })
     }
-
 }
 //ALTA DE PRODUCTO
 else if (arhivoHTML == "altaProducto.html") {
@@ -448,7 +445,7 @@ else if (arhivoHTML == "altaProducto.html") {
                 }).then(function () {
                     location.reload();
                 });
-            }else{
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error: Formulario inválido',
@@ -468,6 +465,31 @@ else if (arhivoHTML == "altaProducto.html") {
 }
 //REALIZAR PEDIDO
 else if (arhivoHTML == "realizarPedido.html") {
+    const btnArriba = document.getElementById("cestaBtn");
+    btnArriba.addEventListener("click", () => {
+        if (!pedido.esVacio()) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cesta de Compra',
+                html: `Tu Cesta de Compra<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
+            });
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cesta de Compra',
+                text: `Tu Cesta de Compra está VACÍA`,
+            });
+        }
+    });
+    const btnWhatsapp = document.getElementById("whatsappBtn");
+    btnWhatsapp.addEventListener("click", () => {
+        Swal.fire({
+            icon: 'info',
+            title: 'Funcionalidad Whatsapp',
+            text: 'Se implementará próximamente esta funcionalidad',
+        });
+    });
     mostrarProductos(productosDiv, arhivoHTML, pedido);
     let productosAgregarBtn = document.getElementsByClassName("btn");
     for (let i = 0; i < productosAgregarBtn.length; i++) {
