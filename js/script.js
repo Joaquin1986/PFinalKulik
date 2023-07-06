@@ -13,11 +13,6 @@ class Producto {
         this.precio = precio;
         this.imgURL = imgURL;
     }
-    imprimir() {
-        console.log("======================\nProducto ID #" + this.id + "\nNombre: " + this.nombre + "\nDescripción: " +
-            this.descripcion + "\nCategoría: " + this.categoria + "\nPrecio sin IVA: $" +
-            this.precio + "\nPrecio con IVA (23%): $" + this.precioIVA() + "\n======================");
-    }
     precioIVA() {
         return Math.round(this.precio * 1.23);
     }
@@ -35,13 +30,6 @@ class Pedido {
         this.preciosProductos = preciosProductos;
         this.precio = precio;
         this.entregado = entregado;
-    }
-
-    imprimir() {
-        console.log("======================\n\Pedido ID #" + this.id + "\nFecha: " + this.fecha + "\nHora: " + this.hora);
-        imprimirProductosDePedido(this);
-        console.log("Subtotal: $" + this.precio + "\nIVA (23%): $" + this.Iva() + "\nTOTAL: $" +
-            this.precioIva() + "\n¿Entregado?: " + productoEntregado(this) + "\n======================");
     }
     Iva() {
         return Math.round(this.precio * 0.23);
@@ -62,6 +50,30 @@ class Pedido {
         //SE DEVUELVE LA CANTIDAD DE PRODUCTOS CON ESE MISMO INDICE
         return parseInt(this.cantidadProductos[indiceProd]);
     }
+
+    esVacio() {
+        //SE DEVUELVE TRUE SI EL PEDIDO NO TIENE PRODUCTOS AGREGADOS O FALSE EN CASO CONTRARIO
+        let esVacio;
+        const suma = this.cantidadProductos.reduce(
+            (acumulador, valorActual) => acumulador + valorActual, 0
+        );
+        if (suma < 1) {
+            esVacio = true;
+        } else {
+            esVacio = false;
+        }
+        return esVacio;
+    }
+
+    detalle() {
+        //DEVUELVE UNA CADENA O STRING PARA PASARLE AL SWEET ALERT EL DETALLE DEL PEDIDO
+        let detallePedido = "";
+        for (let i = 0; i < this.productos.length; i++) {
+            detallePedido = detallePedido + "Producto: " + this.productos[i].nombre + " | Cantidad: " +
+                this.cantidadProductos[i] + " | Precio: $" + this.preciosProductos[i] + "<br>";
+        }
+        return detallePedido;
+    }
 }
 
 // SE DEFINEN CATEGORÍAS DE PRODUCTOS EN UN ARRAY
@@ -81,11 +93,11 @@ if (productosLoad.length < 1) {
     productos.push(prod0);
     const prod2 = new Producto(2, "Cúrcuma", "Paquete 100 gr. Para condimentar-", "Ayurveda (Medicina y Cocina)", "250", "../img/curcuma.jpg");
     productos.push(prod2);
-    const prod3 = new Producto(3, "Túnica hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindú", "2780", "../img/tunica.jpg");
+    const prod3 = new Producto(3, "Túnica Hindú", "Pieza individual. Ropa típica hindú", "Vestimenta Hindú", "2780", "../img/tunica.jpg");
     productos.push(prod3);
-    const prod4 = new Producto(4, "CD de música relax", "Disco individual. Para estimular relajación", "Meditación", "470", "../img/cdmusica.jpg");
+    const prod4 = new Producto(4, "CD Música Relax", "Disco individual. Para estimular relajación", "Meditación", "470", "../img/cdmusica.jpg");
     productos.push(prod4);
-    const prod5 = new Producto(5, "Pimienta negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365", "../img/pimientanegra.jpg");
+    const prod5 = new Producto(5, "Pimienta Negra", "Molinillo de 200 gr. Para condimentar", "Ayurveda (Medicina y Cocina)", "365", "../img/pimientanegra.jpg");
     productos.push(prod5);
     const prod6 = new Producto(6, "Sandalias", "Caja de a par. Calzado típico hindú", "Vestimenta Hindú", "3450", "../img/sandalias.jpg");
     productos.push(prod6);
@@ -106,14 +118,14 @@ if (productosLoad.length < 1) {
 }
 
 //SE OBTIENE PEDIDO GUARDADO, EN CASO DE HABER ALGUNO
-let pedido;
 const pedidoLoad = JSON.parse(localStorage.getItem("pedido")) || "";
+let pedido = new Pedido();
 if (pedidoLoad) {
     pedido = new Pedido(pedidoLoad.id, pedidoLoad.fecha, pedidoLoad.hora, pedidoLoad.productos,
         pedidoLoad.cantidadProductos, pedidoLoad.preciosProductos, pedidoLoad.precio, pedidoLoad.entregado);
 }
 else {
-    pedido = new Pedido(1, fechaActual(), horaActual(), productosPedido, cantidadProductos,
+    pedido = new Pedido(idLibrePedido(pedidos), fechaActual(), horaActual(), productosPedido, cantidadProductos,
         preciosProductos, 0, false);
 }
 
@@ -139,6 +151,29 @@ function borrarProductoConfirmacion(mensaje) {
     return valorRetorno;
 }
 
+//SE VALIDA FORMULARIO DE ALTA
+function validarFormAltaTexto(formInputs) {
+    let valido = true;
+    for (let i = 0; i < formInputs.length; i++) {
+        if (!formInputs[i].value) {
+            valido = false;
+        }
+    }
+    return valido;
+}
+
+function validarFormAltaNumber(formInputs) {
+    let valido = true;
+    console.log(parseInt(formInputs[2].value))
+    console.log(typeof formInputs[2].value);
+    if (!parseInt(formInputs[2].value)) {
+        valido = false;
+    }
+    return valido;
+}
+
+//FUNCION QUE MUESTRA LOS PRODUCTOS DE ACUERDO AL SITIO EN EL QUE ES CARGADO (ARCHIVO HTML)
+
 function mostrarProductos(productosDiv, arhivoHTML) {
     productosDiv.innerHTML = '';
     categorias.forEach(el1 => {
@@ -152,7 +187,7 @@ function mostrarProductos(productosDiv, arhivoHTML) {
                 const tarjetaProd = document.createElement("div");
                 tarjetaProd.classList.add("tarjetaProd");
                 tarjetaProd.innerHTML = ` 
-                <h2 id="prodTitulo">#${el.id}-${el.nombre}</h2>
+                <h2 id="prodTitulo">${el.nombre}:#${el.id}</h2>
                 <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
                 <p id="prodDesc">${el.descripcion}<br>Precio:  $${el.precio}<br>
                 IVA (23%):  $${Math.round(el.precio * 0.23)}<br>
@@ -187,22 +222,6 @@ function mostrarProductos(productosDiv, arhivoHTML) {
         }
         )
     })
-}
-
-//FUNCION DE CONTROL DE INGRESO DE NUMERO, MUESTRA UN MENSAJE COMO PARÁMETRO DE ENTRADA Y DEVUELVE EL NÚMERO INGRESADO
-function ingresarNumero(mensaje) {
-    let numeroOk = false;
-    let numero;
-    while (!numeroOk) {
-        numero = parseInt(prompt(mensaje));
-        if (isNaN(numero)) {
-            console.log("Valor ingresado no es válido \n");
-        }
-        else {
-            numeroOk = true;
-        }
-    }
-    return numero;
 }
 
 //CONVERTIR ARRAY DE PEDIDOS DESDE LOCALSTORAGE A OBJETOS DEL TIPO 'PEDIDO'
@@ -292,6 +311,8 @@ function agregarProductoAPedido(pedido, producto, cantidad) {
     return retorno;
 }
 
+
+
 //QUITAR PRODUCTO DE PEDIDO
 function quitarProductoDePedido(pedido, producto) {
     let precioProducto, retorno;
@@ -377,36 +398,73 @@ else if (arhivoHTML == "bajaProducto.html") {
             const idProdDiv = productosBajaBtn[i].parentElement;
             let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
             idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
-            const idProd = parseInt((idProdDivStr[0].slice(0, 1)));
+            const idProd = parseInt((idProdDivStr[0].slice(0, Infinity)));
             let prodObj = encontrarProductoPorId(idProd, productos);
             //PEDIMOS CONFIRMACIÓN PARA BORRAR EL PRODUCTO
-            let borrarOk = borrarProductoConfirmacion("¿Borrar el producto \"" + prodObj.nombre + "\"? (S)i / (N)o");
-            if (borrarOk) {
-                //SI EL USUARIO DA EL OK, SE BORRA Y SE RECARGA EL SITIO
-                productos.splice(productos.findIndex(element => element.id == idProd), 1);
-                localStorage.setItem("productos", JSON.stringify(productos));
-                alert("Se ha BORRADO el producto \"" + prodObj.nombre + "\"");
-                location.replace(location.href);
-            }
+            Swal.fire({
+                title: `Seguro que desea BORRAR ${prodObj.nombre}?`,
+                text: "Luego de eliminado, el producto puede ser creado nuevamente de todos modos (Alta de Producto)",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2ab41d',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Sí, BORRARLO'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    productos.splice(productos.findIndex(element => element.id == idProd), 1);
+                    localStorage.setItem("productos", JSON.stringify(productos));
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Producto BORRADO!',
+                        text: `"${prodObj.nombre}"`
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+            })
         })
     }
 
 }
 //ALTA DE PRODUCTO
 else if (arhivoHTML == "altaProducto.html") {
-    let productoAltaBtn = document.getElementsByClassName("btn");
-    for (let i = 0; i < productoAltaBtn.length; i++) {
-        productoAltaBtn[i].addEventListener("click", () => {
-            const divForm = document.getElementsByClassName("form-control");
-            const catProducto = document.getElementById("categProducto");
-            const prod1 = new Producto(idLibreProducto(productos), divForm[0].value, divForm[1].value,
-                catProducto.value, divForm[2].value, divForm[3].value);
-            productos.push(prod1);
-            localStorage.setItem("productos", JSON.stringify(productos));
-            alert("Se ha CREADO el producto \"" + prod1.nombre + "\"");
-            location.replace(location.href);
-        })
-    }
+    let productoAltaBtn = document.getElementById("btnAltaProd");
+    productoAltaBtn.addEventListener("click", () => {
+        const divForm = document.querySelectorAll(".form-control");
+        const catProducto = document.getElementById("categProducto");
+        if (validarFormAltaTexto(divForm)) {
+            //SE VALIDA QUE EL PRECIO NO SEA NAN
+            if (validarFormAltaNumber(divForm)) {
+                //SE EJECUTA EL ALTA TRAS VALIDAR QUE NO HAYAN INPUTS EN BLANCO
+                const prod1 = new Producto(idLibreProducto(productos), divForm[0].value, divForm[1].value,
+                    catProducto.value, divForm[2].value, divForm[3].value);
+                productos.push(prod1);
+                localStorage.setItem("productos", JSON.stringify(productos));
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Producto Creado',
+                    text: `El producto "${prod1.nombre}" ha sido realizado con ÉXITO!`,
+                }).then(function () {
+                    location.reload();
+                });
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error: Formulario inválido',
+                    text: `El precio ingresado no es válido, ingrese un número por favor`,
+                })
+            }
+        }
+        else {
+            //NO SE VALIDO EL FORM
+            Swal.fire({
+                icon: 'error',
+                title: 'Error: Formulario inválido',
+                text: `Revise los datos ingresados por favor, hay campos vacíos`,
+            })
+        }
+    })
 }
 //REALIZAR PEDIDO
 else if (arhivoHTML == "realizarPedido.html") {
@@ -432,6 +490,32 @@ else if (arhivoHTML == "realizarPedido.html") {
                     localStorage.setItem("pedido", JSON.stringify(pedido));
                     if (resultado != "nada") {
                         prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);
+                        Toastify({
+                            text: `Cantidad -1 de ${prodObj.nombre}`,
+                            duration: 2000,
+                            newWindow: true,
+                            gravity: "bottom",
+                            position: "right",
+                            stopOnFocus: true,
+                            style: {
+                                background: "linear-gradient(to right, #ff6600, #ff9100)",
+                            },
+                            // onClick: function(){} // Callback after click
+                        }).showToast();
+                    }
+                    else {
+                        Toastify({
+                            text: `No hay ${prodObj.nombre} en el carrito`,
+                            duration: 1000,
+                            newWindow: true,
+                            gravity: "bottom",
+                            position: "right",
+                            stopOnFocus: true,
+                            style: {
+                                background: "linear-gradient(to right, #ff6600, #ff9100)",
+                            },
+                            // onClick: function(){} // Callback after click
+                        }).showToast();
                     }
                 }
                 else if (btnValor == "Agregar") {
@@ -439,29 +523,59 @@ else if (arhivoHTML == "realizarPedido.html") {
                     agregarProductoAPedido(pedido, prodObj, 1);
                     localStorage.setItem("pedido", JSON.stringify(pedido));
                     prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
+                    Toastify({
+                        text: `Cantidad +1 de ${prodObj.nombre}`,
+                        duration: 1000,
+                        newWindow: true,
+                        gravity: "bottom",
+                        position: "right",
+                        stopOnFocus: true,
+                        style: {
+                            background: "linear-gradient(to right, #0b8300, #15ff00)",
+                        },
+                        // onClick: function(){} // Callback after click
+                    }).showToast();
                 }
 
             }
             else if ((btnValor == "Finalizar Pedido")) {
                 //SE TERMINA DE ARMAR EL OBJETO PEDIDO Y SE AGREGA AL ARRAY Y AL LOCALSTORAGE
-                pedido.fecha = fechaActual();
-                pedido.hora = horaActual();
-                pedido.precio = calcularPrecioPedido(pedido);
-                pedidos.push(pedido);
-                localStorage.setItem("pedidos", JSON.stringify(pedidos));
-                //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
-                delete pedido;
-                localStorage.removeItem("pedido");
-                alert("Se ha creado el pedido!");
-                location.replace(location.href);
+                if (!pedido.esVacio()) {
+                    pedido.fecha = fechaActual();
+                    pedido.hora = horaActual();
+                    pedido.precio = calcularPrecioPedido(pedido);
+                    pedidos.push(pedido);
+                    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+                    //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
+                    delete pedido;
+                    localStorage.removeItem("pedido");
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pedido Realizado',
+                        html: `Su pedido #${pedido.id} ha sido realizado con ÉXITO!<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
+                        <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
+                    }).then(function () {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error: Pedido Vacío',
+                        text: 'El Pedido no se puede realizar, dado que está VACÍO',
+                    });
+                }
             }
             else {
-                console.log("Se cancela el pedido!");
                 //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
                 delete pedido;
                 localStorage.removeItem("pedido");
-                alert("Se ha cancelado el pedido!");
-                location.replace(location.href);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pedido Cancelado',
+                    text: 'Se ha CANCELADO el Pedido!!',
+                }).then(function () {
+                    location.reload();
+                });
             }
         })
     }

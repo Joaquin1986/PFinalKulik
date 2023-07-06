@@ -89,7 +89,7 @@ footer {
     background-color: #f08e0f;
     padding-top: 10px;
     padding-bottom: 3px;
-    margin-top: 70px;
+    margin-top: 32px;
 }
 
 footer h3 {
@@ -109,7 +109,7 @@ footer h3 {
     border-radius: 7px;
 }
 
-/* ESTILOS DE PRODUCTOS (CARDS) */
+/* ESTILOS DE PRODUCTOS Y REALIZAR PEDIDOS (CARDS)*/
 
 #productosDiv {
     text-align: center;
@@ -176,11 +176,55 @@ footer h3 {
     border-color: #8f4000 !important;
 }
 
+/* ESTILOS PUNTUALES DE ALTA DE PRODUCTO */
+
+#btnAltaProd{
+    background-color: #f08e0f;
+    border-color: #ad6f1d;
+    
+}
+
+#btnAltaProd:hover{
+    background-color: #ffae00;
+    border-color: #ad7f1d;
+}
+
+
+/* ESTILOS PUNTUALES DE REALIZAR PEDIDOS */
+
 #agregarBtn:hover {
     background-color: #29b41d85 !important;
     border-color: #053b00 !important;
 
 }
+
+
+#finalizarBtn {
+    background-color: #2ab41d !important;
+    border-color: #053b00 !important;
+
+}
+
+#finalizarBtn:hover {
+    background-color: #22ce12 !important;
+    border-color: #096400 !important;
+
+}
+
+#cancelarBtn {
+    background-color: #ff4800;
+    border-color: #2b2b2b;
+    transition: 0.4s;
+}
+
+
+
+#cancelarBtn:hover {
+    background-color: #fd651f !important;
+    border-color: #ca5b00 !important;
+}
+
+
 
 #prodDesc {
     margin-top: 20px;
@@ -188,7 +232,7 @@ footer h3 {
     max-width: 200px;
     background-color: #fdece1;
     border-radius: 5px;
-    border-style:groove;
+    border-style: groove;
 }
 
 #prodCant {
@@ -196,7 +240,7 @@ footer h3 {
     max-width: 200px;
     background-color: #fdece1;
     border-radius: 5px;
-    border-style:groove;
+    border-style: groove;
 }
 
 /* ESTILOS DE ALTA DE PRODUCTO */
@@ -212,7 +256,11 @@ footer h3 {
 }
 
 .formularioAlta span {
-    background-color: #ffdac1;
+    background-color: #ff9100;
+}
+
+.formularioAlta span:hover {
+    background-color: #ffae00;
 }
 
 .formularioAlta span,
@@ -222,8 +270,7 @@ footer h3 {
     border-color: #2b2b2b !important;
 }
 
-.formularioAlta .btn.btn-primary,
-#finalizarBtn {
+.formularioAlta .btn.btn-primary {
     background-color: #fa6c0d;
     border-color: #9b3e00;
     color: #2b2b2b;
@@ -231,21 +278,11 @@ footer h3 {
     margin-top: 40px;
 }
 
+
+
 .formularioAlta .btn.btn-primary:hover,
-.formularioAlta .btn.btn-primary:active,
-#finalizarBtn:hover,
-#finalizarBtn:active {
+.formularioAlta .btn.btn-primary:active {
     background-color: #ff9100;
     border-color: #ff6600;
     color: #2b2b2b;
-}
-
-#cancelarBtn {
-    background-color: #494949;
-    border-color: #313131;
-}
-
-#cancelarBtn:hover,
-#cancelarBtn:active {
-    background-color: #686868;
 }
