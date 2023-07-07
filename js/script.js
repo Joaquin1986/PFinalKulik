@@ -386,8 +386,8 @@ function cestaNav() {
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
-                html: `Cesta de Compra:<br>${pedido.detalle()}<br>------------------<br>Subtotal: $${pedido.precio}
-            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>                  ------------------`,
+                html: `Cesta de Compra:<br>${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------`,
             });
         } else {
             Swal.fire({
@@ -415,8 +415,8 @@ function panelCostado() {
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
-                html: `Tu Cesta de Compra<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
-            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
+                html: `Cesta de Compra:<br>${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------`,
             });
         } else {
             Swal.fire({

@@ -203,7 +203,7 @@ footer h3 {
     background-color: #fd4d12;
     border-radius: 20px;
     border-style: solid;
-    border-color: #2b2b2b;
+    border-color: #b1360d;
     text-align: center;
     align-items: center;
     margin-right: 30px;
@@ -222,11 +222,10 @@ footer h3 {
 
 
 .tarjetaProd:hover {
-    border-color: #8f8f8f;
+    border-color: #d33e0c;
     background-color: #fd4d12;
     filter: grayscale(0%) blur(0px);
-    min-width: 256px;
-    max-width: 256px;
+    filter: brightness(120%);
 
 }
 
