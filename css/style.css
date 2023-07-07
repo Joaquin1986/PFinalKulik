@@ -359,3 +359,43 @@ footer h3 {
     color: #ff4800 !important;
 
 }
+
+/* VER PEDIDOS HTML */
+#h1VerPedidos{
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.pedidosDiv{
+    text-align: center;  
+    background-color: #ff4800;
+    margin-bottom: 50px;
+    max-width: 400px;
+    border-radius: 20px;
+}
+
+.pedidosDiv p,
+.h2Pedido{
+   color: white !important;
+}
+
+.pedidosDiv h2{
+    padding-top: 20px;
+    margin: 0 auto;
+}
+/* ESTILOS DE SWEET ALERT */
+.swal2-confirm {
+    background-color: #ff4800 !important;
+    border-color: #cf2900 !important;;
+    border-style: solid;
+}
+
+.swal2-confirm:hover{
+    filter: brightness(150%);
+}
+
+.swal2-confirm:focus{
+    outline: none !important;
+
+}

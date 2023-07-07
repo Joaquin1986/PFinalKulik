@@ -222,6 +222,18 @@ function mostrarProductos(productosDiv, arhivoHTML) {
     })
 }
 
+//FUNCION QUE MUESTRA LOS PEDIDOS
+function mostrarPedidos(productosDiv, arhivoHTML) {
+    productosDiv.innerHTML = '<h1 id="h1VerPedidos">Listado de Pedidos</h1>';
+    pedidos.forEach(el1 => {
+        const tarjetaPedido = document.createElement("div");
+        tarjetaPedido.classList.add("pedidosDiv");
+        tarjetaPedido.innerHTML = `<h2 class="h2Pedido">Pedido #"${el1.id}:"</h2><p><br>${el1.detalle()}------------------<br>Subtotal: $${el1.precio}
+                <br>IVA(23%): $${Math.round(el1.Iva())}<br>TOTAL: $${Math.round(el1.precio * 1.23)}<br>------------------</p>`;
+        productosDiv.appendChild(tarjetaPedido);
+    })
+}
+
 //CONVERTIR ARRAY DE PEDIDOS DESDE LOCALSTORAGE A OBJETOS DEL TIPO 'PEDIDO'
 function convertirPedidos(pedidosInput) {
     let pedidos = [];
@@ -379,7 +391,7 @@ function calcularPrecioPedido(pedido) {
 
 //SE CARGA LISTER PARA LA CESTA DEL NAV
 
-function cestaNav() {
+function cestaNav(arhivoHTML) {
     const btnArriba2 = document.getElementById("cestaBtnNav");
     btnArriba2.addEventListener("click", () => {
         if (!pedido.esVacio()) {
@@ -390,10 +402,16 @@ function cestaNav() {
             <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------`,
             });
         } else {
+            let rutaStr = "";
+            if (arhivoHTML == "index.html") {
+                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>";
+            } else {
+                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./realizarPedido.html>Click aquí para comprar</a>";
+            }
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
-                html: `La Cesta de Compra está VACÍA<br><a href="./realizarPedido.html">Click aquí para comprar</a>`,
+                html: `${rutaStr}`,
             });
         }
     });
@@ -444,11 +462,11 @@ let productosDiv = document.getElementById("productosDiv");
 const arhivoHTML = location.href.split("/").slice(-1);
 //INDEX
 if (arhivoHTML == "index.html") {
-    cestaNav();
+    cestaNav(arhivoHTML);
 }
 //VER PRODUCTOS
 else if (arhivoHTML == "verProductos.html") {
-    cestaNav();
+    cestaNav(arhivoHTML);
     panelCostado();
     mostrarProductos(productosDiv, arhivoHTML);
 }
@@ -456,8 +474,8 @@ else if (arhivoHTML == "verProductos.html") {
 //BAJA DE PRODUCTO
 
 else if (arhivoHTML == "bajaProducto.html") {
-    cestaNav();
-    panelCostado();
+    cestaNav(arhivoHTML);
+    panelCostado(arhivoHTML);
     mostrarProductos(productosDiv, arhivoHTML);
     let productosBajaBtn = document.getElementsByClassName("btn");
     for (let i = 0; i < productosBajaBtn.length; i++) {
@@ -496,7 +514,7 @@ else if (arhivoHTML == "bajaProducto.html") {
 }
 //ALTA DE PRODUCTO
 else if (arhivoHTML == "altaProducto.html") {
-    cestaNav();
+    cestaNav(arhivoHTML);
     let productoAltaBtn = document.getElementById("btnAltaProd");
     productoAltaBtn.addEventListener("click", () => {
         const divForm = document.querySelectorAll(".form-control");
@@ -534,9 +552,18 @@ else if (arhivoHTML == "altaProducto.html") {
         }
     })
 }
-//REALIZAR PEDIDO
+
+//VER PEDIDOS HTML
+else if (arhivoHTML == "verPedidos.html") {
+    const pedidosDiv = document.getElementById("pedidosDiv");
+    cestaNav(arhivoHTML);
+    panelCostado();
+    mostrarPedidos(pedidosDiv, arhivoHTML);
+}
+
+//REALIZAR PEDIDO HTML
 else if (arhivoHTML == "realizarPedido.html") {
-    cestaNav();
+    cestaNav(arhivoHTML);
     panelCostado();
     mostrarProductos(productosDiv, arhivoHTML, pedido);
     let productosAgregarBtn = document.getElementsByClassName("btn");
