@@ -69,7 +69,7 @@ class Pedido {
         //DEVUELVE UNA CADENA O STRING PARA PASARLE AL SWEET ALERT EL DETALLE DEL PEDIDO
         let detallePedido = "";
         for (let i = 0; i < this.productos.length; i++) {
-            detallePedido = detallePedido + "Producto: " + this.productos[i].nombre + " | Cantidad: " +
+            detallePedido = detallePedido + this.productos[i].nombre + " | Cantidad: " +
                 this.cantidadProductos[i] + " | Precio: $" + this.preciosProductos[i] + "<br>";
         }
         return detallePedido;
@@ -177,7 +177,7 @@ function mostrarProductos(productosDiv, arhivoHTML) {
     categorias.forEach(el1 => {
         const divCategoria = document.createElement("div");
         divCategoria.classList.add("divCategoria");
-        divCategoria.innerHTML = `<h2 id="h2Categ">Categoría: "${el1}": </h2>`
+        divCategoria.innerHTML = `<h2 id="h2Categ">Categoría: "${el1}" </h2>`
         productosDiv.appendChild(divCategoria);
         productos.forEach(el => {
             if (el.categoria == el1) {
@@ -196,7 +196,7 @@ function mostrarProductos(productosDiv, arhivoHTML) {
                 }
                 else if (arhivoHTML == "bajaProducto.html") {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
-                    <button class="bajaBtn btn btn-primary" type="submit">Borrar</button></p>
+                    <button class="bajaBtn btn btn-primary" type="submit">Borrar Producto</button></p>
                     `;
                 }
                 else if (arhivoHTML == "realizarPedido.html" && pedido.cantidadDe(el)) {
@@ -377,17 +377,87 @@ function calcularPrecioPedido(pedido) {
     return precioPedido;
 }
 
+//SE CARGA LISTER PARA LA CESTA DEL NAV
+
+function cestaNav() {
+    const btnArriba2 = document.getElementById("cestaBtnNav");
+    btnArriba2.addEventListener("click", () => {
+        if (!pedido.esVacio()) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cesta de Compra',
+                html: `Cesta de Compra:<br>${pedido.detalle()}<br>------------------<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>                  ------------------`,
+            });
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cesta de Compra',
+                html: `La Cesta de Compra está VACÍA<br><a href="./realizarPedido.html">Click aquí para comprar</a>`,
+            });
+        }
+    });
+    const btnBuscar = document.getElementById("btnEnviar");
+    btnBuscar.addEventListener("click", () => {
+        Swal.fire({
+            icon: 'info',
+            title: 'Funcionalidad de Búsqueda',
+            text: 'Se implementará próximamente esta funcionalidad',
+        });
+    });
+}
+
+//SE CARGA LISTENER PARA LOS BOTONES DEL COSTADO
+function panelCostado() {
+    const btnArriba = document.getElementById("cestaBtn");
+    btnArriba.addEventListener("click", () => {
+        if (!pedido.esVacio()) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cesta de Compra',
+                html: `Tu Cesta de Compra<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
+            });
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cesta de Compra',
+                html: `Tu Cesta de Compra está VACÍA<br><a href="./realizarPedido.html">Click aquí para comprar</a>`,
+            });
+        }
+    });
+    const btnWhatsapp = document.getElementById("whatsappBtn");
+    btnWhatsapp.addEventListener("click", () => {
+        Swal.fire({
+            icon: 'info',
+            title: 'Funcionalidad Whatsapp',
+            text: 'Se implementará próximamente esta funcionalidad',
+        });
+    });
+}
+
+
 //DOM - ASOCIAMOS LOS ELEMENTOS HTML A OBJETOS JS
 let productosDiv = document.getElementById("productosDiv");
 
 //VERIFICAMOS EL ARCHIVO HTML DESDE EL CUAL SE EJECUTA EL JS PARA SEGUIR EL FLUJO CORRESPONDIENTE
 const arhivoHTML = location.href.split("/").slice(-1);
+//INDEX
+if (arhivoHTML == "index.html") {
+    cestaNav();
+}
 //VER PRODUCTOS
-if (arhivoHTML == "verProductos.html") {
+else if (arhivoHTML == "verProductos.html") {
+    cestaNav();
+    panelCostado();
     mostrarProductos(productosDiv, arhivoHTML);
 }
+
 //BAJA DE PRODUCTO
+
 else if (arhivoHTML == "bajaProducto.html") {
+    cestaNav();
+    panelCostado();
     mostrarProductos(productosDiv, arhivoHTML);
     let productosBajaBtn = document.getElementsByClassName("btn");
     for (let i = 0; i < productosBajaBtn.length; i++) {
@@ -426,6 +496,7 @@ else if (arhivoHTML == "bajaProducto.html") {
 }
 //ALTA DE PRODUCTO
 else if (arhivoHTML == "altaProducto.html") {
+    cestaNav();
     let productoAltaBtn = document.getElementById("btnAltaProd");
     productoAltaBtn.addEventListener("click", () => {
         const divForm = document.querySelectorAll(".form-control");
@@ -465,36 +536,12 @@ else if (arhivoHTML == "altaProducto.html") {
 }
 //REALIZAR PEDIDO
 else if (arhivoHTML == "realizarPedido.html") {
-    const btnArriba = document.getElementById("cestaBtn");
-    btnArriba.addEventListener("click", () => {
-        if (!pedido.esVacio()) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Cesta de Compra',
-                html: `Tu Cesta de Compra<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
-            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
-            });
-        } else {
-            Swal.fire({
-                icon: 'info',
-                title: 'Cesta de Compra',
-                text: `Tu Cesta de Compra está VACÍA`,
-            });
-        }
-    });
-    const btnWhatsapp = document.getElementById("whatsappBtn");
-    btnWhatsapp.addEventListener("click", () => {
-        Swal.fire({
-            icon: 'info',
-            title: 'Funcionalidad Whatsapp',
-            text: 'Se implementará próximamente esta funcionalidad',
-        });
-    });
+    cestaNav();
+    panelCostado();
     mostrarProductos(productosDiv, arhivoHTML, pedido);
     let productosAgregarBtn = document.getElementsByClassName("btn");
     for (let i = 0; i < productosAgregarBtn.length; i++) {
         productosAgregarBtn[i].addEventListener("click", () => {
-            //EXTRAEMOS EL DIV DEL ELEMENTO PADRE PARA CONOCER EL ID DEL PRODUCTO A AGREGAR SIGO ACA!!!!!1
             let prodObj;
             const btnValor = productosAgregarBtn[i].innerHTML.split(">").slice(-1);
             if ((btnValor == "Quitar") || (btnValor == "Agregar")) {
@@ -520,7 +567,7 @@ else if (arhivoHTML == "realizarPedido.html") {
                             position: "right",
                             stopOnFocus: true,
                             style: {
-                                background: "linear-gradient(to right, #ff6600, #ff9100)",
+                                background: "linear-gradient(to right, #9c1706, #ff1e00)",
                             },
                             // onClick: function(){} // Callback after click
                         }).showToast();
@@ -534,7 +581,7 @@ else if (arhivoHTML == "realizarPedido.html") {
                             position: "right",
                             stopOnFocus: true,
                             style: {
-                                background: "linear-gradient(to right, #ff6600, #ff9100)",
+                                background: "linear-gradient(to right, #9c1706, #ff1e00)",
                             },
                             // onClick: function(){} // Callback after click
                         }).showToast();
@@ -589,15 +636,25 @@ else if (arhivoHTML == "realizarPedido.html") {
             }
             else {
                 //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
-                delete pedido;
-                localStorage.removeItem("pedido");
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Pedido Cancelado',
-                    text: 'Se ha CANCELADO el Pedido!!',
-                }).then(function () {
-                    location.reload();
-                });
+                const pedidoVacio = pedido.esVacio();
+                if (!pedidoVacio) {
+                    delete pedido;
+                    localStorage.removeItem("pedido");
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pedido Cancelado',
+                        text: 'Se ha CANCELADO el Pedido',
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error: Pedido VACÍO',
+                        text: 'Pedido VACÍO, no es posible CANCELARLO',
+                    })
+                }
             }
         })
     }

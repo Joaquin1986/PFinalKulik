@@ -33,14 +33,6 @@ body {
 }
 
 
-h1 {
-    text-align: center;
-    margin-left: 370px;
-    font-family: Tillana;
-    color: #ffddc6;
-}
-
-
 li,
 a,
 h1,
@@ -55,82 +47,124 @@ a:hover {
     color: #ffefd9 !important;
 }
 
-.navbar {
-    background-color: #f08e0f;
+/* SETEOS DE NAVBAR */
+#nav {
+    background-color: #fd4d12 !important;
+    font-size: 20px;
+    font-family: Laila;
 }
 
-
-.navlist {
-    margin-top: px;
-    list-style: none;
-    margin-left: 100px;
-    max-height: 30px;
-
+.imgLogo {
+    max-width: 120px;
+    color: #ffefd9 !important;
+    color: #ffefd9 !important;
+    border-radius: 20px;
+    margin-left: 70px;
 }
 
-.listitem {
-    display: inline-block;
-    padding: 8px;
-    text-align: center;
-    margin-bottom: 20px;
-    background-color: #ffdac1;
-    border-radius: 15px;
-    border-color: #616161;
-    border-style: groove;
+.nav-item a {
+    color: #e4e4e4 !important;
     transition: 0.4s;
 }
 
-.listitem:hover {
-    background-color: #ff934b;
-    border-color: #8f4000;
+.nav-item a:hover {
+    color: #fdc968 !important;
 }
 
+.dropdown-menu {
+    background-color: #fd4d12 !important;
+    border-width: 2px !important;
+}
+
+.dropdown-menu a:hover {
+    background-color: #fd4d12 !important;
+}
+
+#cestaBtnNav {
+    max-width: 35px;
+    color: white;
+    margin-right: 10px;
+    transition: 0.5s;
+}
+
+#cestaBtnNav:hover {
+    color: #fdc968;
+    max-width: 39px;
+    cursor: pointer;
+}
+
+#buscarTxt {
+    transition: 0.5s;
+}
+
+#buscarTxt:hover {
+    background-color: #fdc968;
+    border-color: #fdb52e;
+}
+
+#btnEnviar {
+    margin-right: 118px;
+    background-color: #ebebeb;
+    border-color: #979797;
+    color: #6d6d6d;
+}
+
+#btnEnviar:hover {
+    background-color: #fdc968;
+    border-color: #fab941;
+    color: #464646;
+}
+
+/* SETEO DE BOTONOES DEL COSTADO */
 #arribaBtn,
 #cestaBtn,
-#whatsappBtn{
+#whatsappBtn {
     transition: 0.4s;
 }
 
 #arribaBtn:hover,
 #cestaBtn:hover,
-#whatsappBtn:hover{
-    color: #ff6600;
+#whatsappBtn:hover {
+    color: #fd4d12;
 }
 
-#arribaBtn{
+#arribaBtn {
     position: fixed;
     left: 94%;
-    top:65%;
+    top: 65%;
 }
 
-#cestaBtn{
+#cestaBtn {
     position: fixed;
     left: 94%;
-    top:75%;
+    top: 75%;
 }
 
 #cestaBtn:hover,
-#whatsappBtn{
-    cursor:pointer;
+#whatsappBtn {
+    cursor: pointer;
 }
 
-#whatsappBtn{
+#whatsappBtn {
     position: fixed;
     left: 94%;
-    top:85%;
+    top: 85%;
 }
 
+/* SETEOS DEL FOOTER */
+
 footer {
-    background-color: #f08e0f;
+    background-color: #fd4d12;
+    border-top-style: solid;
+    border-top-color: #ffffff;
     padding-top: 10px;
     padding-bottom: 3px;
-    margin-top: 32px;
 }
 
 footer h3 {
 
-    color: #2b2b2b;
-    font-size: 14px;
+    color: #ffffff;
+    font-size: 16px;
     text-align: center;
 }
 
@@ -144,7 +178,7 @@ footer h3 {
     border-radius: 7px;
 }
 
-/* ESTILOS DE PRODUCTOS Y REALIZAR PEDIDOS (CARDS)*/
+/* ESTILOS DE TARJETAS DE PRODUCTOS (CARDS)*/
 
 #productosDiv {
     text-align: center;
@@ -166,7 +200,7 @@ footer h3 {
 }
 
 .tarjetaProd {
-    background-color: #e08d1f;
+    background-color: #fd4d12;
     border-radius: 20px;
     border-style: solid;
     border-color: #2b2b2b;
@@ -174,11 +208,26 @@ footer h3 {
     align-items: center;
     margin-right: 30px;
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 70px;
     transition: 0.5;
     min-width: 256px;
     max-width: 256px;
-    filter: grayscale(20%) blur(0.40px);
+    filter: grayscale(15%) blur(0.40px);
+}
+
+.tarjetaProd h2,
+.tarjetaProd p {
+    color: white !important;
+}
+
+
+.tarjetaProd:hover {
+    border-color: #8f8f8f;
+    background-color: #fd4d12;
+    filter: grayscale(0%) blur(0px);
+    min-width: 256px;
+    max-width: 256px;
+
 }
 
 .tarjetaProd img {
@@ -186,99 +235,21 @@ footer h3 {
     max-width: 250px;
 }
 
-.tarjetaProd:hover {
-    background-color: #ff9100;
-    filter: grayscale(0%) blur(0px);
-}
-
 .tarjetaProd h2 {
     margin-top: 5px;
     font-size: 22px !important;
 }
 
-.tarjetaProd button {
-    background-color: #ffdac1;
-    border-color: #2b2b2b;
-    color: #2b2b2b;
-    transition: 0.4s;
-}
-
-
-
-.tarjetaProd button:hover,
-.tarjetaProd button:active {
-    background-color: #ff934b !important;
-    border-color: #8f4000 !important;
-}
-
-/* ESTILOS PUNTUALES DE ALTA DE PRODUCTO */
-
-#btnAltaProd {
-    background-color: #f08e0f;
-    border-color: #ad6f1d;
-
-}
-
-#btnAltaProd:hover {
-    background-color: #ffae00;
-    border-color: #ad7f1d;
-}
-
-
-/* ESTILOS PUNTUALES DE REALIZAR PEDIDOS */
-
-#agregarBtn:hover {
-    background-color: #29b41d85 !important;
-    border-color: #053b00 !important;
-
-}
-
-
-#finalizarBtn {
-    background-color: #2ab41d !important;
-    border-color: #053b00 !important;
-
-}
-
-#finalizarBtn:hover {
-    background-color: #22ce12 !important;
-    border-color: #096400 !important;
-
-}
-
-#cancelarBtn {
-    background-color: #ff4800;
-    border-color: #2b2b2b;
-    transition: 0.4s;
-}
-
-
-
-#cancelarBtn:hover {
-    background-color: #fd651f !important;
-    border-color: #ca5b00 !important;
-}
-
-
-
 #prodDesc {
     margin-top: 20px;
     margin-left: 25px;
     max-width: 200px;
-    background-color: #fdece1;
     border-radius: 5px;
-    border-style: groove;
+
 }
 
-#prodCant {
-    margin-left: 25px;
-    max-width: 200px;
-    background-color: #fdece1;
-    border-radius: 5px;
-    border-style: groove;
-}
 
-/* ESTILOS DE ALTA DE PRODUCTO */
+/* ESTILOS PUNTUALES DE ALTA O BAJA DE PRODUCTO */
 
 .formularioAlta {
     margin-top: 50px;
@@ -291,24 +262,26 @@ footer h3 {
 }
 
 .formularioAlta span {
-    background-color: #ff9100;
+    background-color: #ff4000;
+    color: #ffffff !important;
+    transition: 0.5s;
 }
 
 .formularioAlta span:hover {
-    background-color: #ffae00;
+    filter: brightness(150%);
 }
 
 .formularioAlta span,
 .formularioAlta input,
 .formularioAlta select,
 .formularioAlta textarea {
-    border-color: #2b2b2b !important;
+    border-color: #9b9b9b !important;
 }
 
 .formularioAlta .btn.btn-primary {
-    background-color: #fa6c0d;
-    border-color: #9b3e00;
-    color: #2b2b2b;
+    background-color: #12a505 !important;
+    border-color: #096400 !important;
+    color: #ffffff !important;
     transition: 0.4s;
     margin-top: 40px;
 }
@@ -317,7 +290,73 @@ footer h3 {
 
 .formularioAlta .btn.btn-primary:hover,
 .formularioAlta .btn.btn-primary:active {
-    background-color: #ff9100;
-    border-color: #ff6600;
-    color: #2b2b2b;
+    filter: brightness(125%);
+
+}
+
+
+/* ESTILOS PUNTUALES DE REALIZAR PEDIDOS */
+
+.tarjetaProd button {
+    background-color: #ff1e00;
+    border-color: #9c1706;
+    color: #ffffff;
+    transition: 0.5s;
+}
+
+.tarjetaProd button:hover,
+.tarjetaProd button:active {
+    background-color: #ff1e00;
+    border-color: #8a1d02;
+    filter: brightness(150%);
+
+}
+
+#agregarBtn {
+    background-color: #12a505 !important;
+    border-color: #096400 !important;
+    transition: 0.5s;
+    color: #ffffff;
+}
+
+#agregarBtn:hover {
+    filter: brightness(150%);
+}
+
+
+#finalizarBtn {
+    background-color: #12a505 !important;
+    border-color: #096400 !important;
+    transition: 0.5s;
+    color: #ffffff;
+
+}
+
+#finalizarBtn:hover {
+    filter: brightness(150%);
+
+}
+
+#cancelarBtn {
+    background-color: #ff1e00;
+    border-color: #9c1706;
+    color: #ffffff;
+    transition: 0.5s;
+    margin-bottom: 40px;
+
+}
+
+#cancelarBtn:hover {
+    filter: brightness(150%);
+}
+
+
+#prodCant {
+    margin-left: 25px;
+    max-width: 200px;
+}
+
+.swal2-popup a:hover {
+    color: #ff4800 !important;
+
 }

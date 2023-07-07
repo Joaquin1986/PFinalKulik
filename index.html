@@ -1,104 +1,145 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>AGARAPANA : Página Inicial</title>
-        <!--CSS Y BOOTSTRAP-->
-        <link rel="stylesheet" href="./css/style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGARAPANA : Página Inicial</title>
     <!--CSS Y BOOTSTRAP-->
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<!--CSS Y BOOTSTRAP-->
 
-    <body>
-        <!-- NAVBAR O MENU DEL SITIO -->
-        <header>
-            <nav class="navbar" id="navbar">
-                <div class="container-fluid">
-                    <h1><a href="./index.html">AGARAPANA</a> : Página Inicial</h1>
-                    <ul class="navlist">
-                        <a href="./pages/verProductos.html">
-                            <li class="listitem">Ver Productos</li>
-                        </a>
-                        <a href="./pages/altaProducto.html">
-                            <li class="listitem">Alta de Producto</li>
-                        </a>
-                        <a href="./pages/bajaProducto.html">
-                            <li class="listitem">Baja de Producto</li>
-                        </a>
-                        <a href="./pages/realizarPedido.html">
-                            <li class="listitem">Realizar Pedido</li>
-                        </a>
-                        <li class="listitem">Entrega de Pedido</li>
-                        <li class="listitem">Cancelar Pedido</li>
-                        <li class="listitem">Lista de Pedidos</li>
+<body>
+    <!-- NAVBAR O MENU DEL SITIO -->
+    <header>
+        <nav class="navbar navbar-expand-lg" id="nav">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="./index.html"><img src="./img/logo.jpg" alt="Logo de Agarapana"
+                        class="imgLogo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./index.html  ">Inicio</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Productos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="./pages/verProductos.html">Ver Productos</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="./pages/altaProducto.html">Alta de Producto</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="./pages/bajaProducto.html">Baja de Producto</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Pedidos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Ver Pedidos</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="./pages/realizarPedido.html">Realizar Pedido</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Gestionar Pedidos</a></li>
+                            </ul>
+                        </li>
                     </ul>
-                </div>
-            </nav>
-        </header>
-        <main>
-            <div class="container" id="contenedorIndex">
-                <div class="row">
-                    <div class="col-12 col-md-6 order-2 order-md-2">
-                        <h2 class="h2titulo">SITIO DE GESTIÓN DE PRODUCTOS DE AGARAPANA</h2>
-                        <p>
-                            El cliente se sumergerá en la rica cultura y tradiciones de la India a través de nuestra amplia
-                            gama de
-                            productos auténticos y de alta calidad. Desde exquisitas prendas de vestir hasta joyas
-                            deslumbrantes, decoración para el hogar y mucho más, tenemos todo lo que el cliente necesita
-                            para llevar
-                            un pedacito de la India a su vida.
-                        </p>
-                        <p>
-                            Ya sea que el cliente esté buscando un regalo especial, quiera decorar su hogar con un toque
-                            exótico o
-                            simplemente desee disfrutar de productos tradicionales de la India, aquí encontrará una amplia
-                            selección para satisfacer sus gustos y necesidades. Navega por nuestras categorías y agrega a
-                            los pedidos
-                            una variedad de vestimentas, adornos, especias aromáticas, artículos para la meditación
-                            y mucho más.
-                        </p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                        class="bi bi-basket" id="cestaBtnNav" viewBox="0 0 16 16">
+                        <path
+                            d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                    <div class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search"
+                            id="buscarTxt">
+                        <button class="btn btn-outline-success" id="btnEnviar">Buscar</button>
                     </div>
-                    <div class="col-12 col-md-6 order-1 order-md-3">
-                        <!-- CAROUSEL EN INDEX-->
-                        <div id="carouselIndex" class="carousel slide carousel-fade" data-bs-ride="carousel"
-                            data-bs-pause="false">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active divimg1" data-bs-interval="3000">
-                                    <img src="img/akhil-chandran-lzfk5IMVpgo-unsplash.jpg" class="d-block w-100"
-                                        alt="Foto de Akhil Chandran">
-                                </div>
-                                <div class="carousel-item divimg1" data-bs-interval="3000">
-                                    <img src="img/charlie-costello-YVMINsxTIKY-unsplash.jpg" class="d-block w-100"
-                                        alt="Foto de Charlie Costello">
-                                </div>
-                                <div class="carousel-item divimg1" data-bs-interval="3000">
-                                    <img src="img/pavan-gupta-_HzlOHmboSk-unsplash.jpg" class="d-block w-100"
-                                        alt="Foto de Pavan Gupta">
-                                </div>
-                                <div class="carousel-item divimg1" data-bs-interval="3000">
-                                    <img src="img/udayaditya-barua-xisPXJqwQkA-unsplash.jpg" class="d-block w-100"
-                                        alt="Foto de Udayaditya Barua">
-                                </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container" id="contenedorIndex">
+            <div class="row">
+                <div class="col-12 col-md-6 order-2 order-md-2">
+                    <h2 class="h2titulo">SITIO DE GESTIÓN DE PRODUCTOS DE AGARAPANA</h2>
+                    <p>
+                        El cliente se sumergerá en la rica cultura y tradiciones de la India a través de nuestra amplia
+                        gama de
+                        productos auténticos y de alta calidad. Desde exquisitas prendas de vestir hasta joyas
+                        deslumbrantes, decoración para el hogar y mucho más, tenemos todo lo que el cliente necesita
+                        para llevar
+                        un pedacito de la India a su vida.
+                    </p>
+                    <p>
+                        Ya sea que el cliente esté buscando un regalo especial, quiera decorar su hogar con un toque
+                        exótico o
+                        simplemente desee disfrutar de productos tradicionales de la India, aquí encontrará una amplia
+                        selección para satisfacer sus gustos y necesidades. Navega por nuestras categorías y agrega a
+                        los pedidos
+                        una variedad de vestimentas, adornos, especias aromáticas, artículos para la meditación
+                        y mucho más.
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 order-1 order-md-3">
+                    <!-- CAROUSEL EN INDEX-->
+                    <div id="carouselIndex" class="carousel slide carousel-fade" data-bs-ride="carousel"
+                        data-bs-pause="false">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active divimg1" data-bs-interval="3000">
+                                <img src="img/akhil-chandran-lzfk5IMVpgo-unsplash.jpg" class="d-block w-100"
+                                    alt="Foto de Akhil Chandran">
+                            </div>
+                            <div class="carousel-item divimg1" data-bs-interval="3000">
+                                <img src="img/charlie-costello-YVMINsxTIKY-unsplash.jpg" class="d-block w-100"
+                                    alt="Foto de Charlie Costello">
+                            </div>
+                            <div class="carousel-item divimg1" data-bs-interval="3000">
+                                <img src="img/pavan-gupta-_HzlOHmboSk-unsplash.jpg" class="d-block w-100"
+                                    alt="Foto de Pavan Gupta">
+                            </div>
+                            <div class="carousel-item divimg1" data-bs-interval="3000">
+                                <img src="img/udayaditya-barua-xisPXJqwQkA-unsplash.jpg" class="d-block w-100"
+                                    alt="Foto de Udayaditya Barua">
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-        </main>
+        </div>
 
-        <footer>
-            <h3>3° PreEntrega para Comisión 43120 JS de Coderhouse</h3>
-        </footer>
-        <!--SCRIPTS DEL DOCUMENTO-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-            crossorigin="anonymous"></script>
-    </body>
+    </main>
 
-    </html>
+    <footer class="fixed-bottom">
+        <h3>3° PreEntrega para Comisión 43120 JS de Coderhouse</h3>
+    </footer>
+    <!--SCRIPTS DEL DOCUMENTO-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
