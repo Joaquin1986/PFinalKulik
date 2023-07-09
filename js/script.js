@@ -246,33 +246,35 @@ function mostrarPedidos(productosDiv, arhivoHTML) {
                 tarjetaPedido.classList.add("pedidosCard");
                 tarjetaPedido.setAttribute("id", "idPedido-" + el1.id)
                 tarjetaPedido.innerHTML = `<h2 class="h2Pedido"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam-fill" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.01-.003.268-.108a.75.75 0 0 1 .558 0l.269.108.01.003 6.97 2.789ZM10.404 2 4.25 4.461 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339L8 5.961 5.596 5l6.154-2.461L10.404 2Z"/>
-      </svg>Pedido #${el1.id}:</h2><p><br>${el1.detalle()}
-        Estado: ${el1.yaEntregado()}<br>------------------<br>Subtotal: $${el1.precio}
+               <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.01-.003.268-.108a.75.75 0 0 1 .558 0l.269.108.01.003 6.97 2.789ZM10.404 2 4.25 4.461 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339L8 5.961 5.596 5l6.154-2.461L10.404 2Z"/>
+               </svg>Pedido #${el1.id}:</h2><p><br>${el1.detalle()}
+               Estado: ${el1.yaEntregado()}<br>------------------<br>Subtotal: $${el1.precio}
                 <br>IVA(23%): $${Math.round(el1.Iva())}<br>TOTAL: $${Math.round(el1.precio * 1.23)}<br>------------------`;
                 if (arhivoHTML == "verPedidos.html") {
                     tarjetaPedido.innerHTML += `</p>`;
                 }
                 else {
                     tarjetaPedido.innerHTML += `
-            <button class="entregarBtn btn btn-primary" id="entregarBtn-${el1.id}" type="submit">Entregar</button>
-            <button class="cancelarBtn btn btn-primary" id="cancelarBtn-${el1.id}"| type="submit">Cancelar</button></p>
-            `;
+                   <button class="entregarBtn btn btn-primary" id="entregarBtn-${el1.id}" type="submit">Entregar</button>
+                   <button class="cancelarBtn btn btn-primary" id="cancelarBtn-${el1.id}"| type="submit">Cancelar</button></p`;
                 }
+                productosDiv.appendChild(tarjetaPedido);
+            } else if ((el1.entregado) && arhivoHTML == "verPedidos.html") {
+                console.log("ACA AHORA " + el1.id)
+                hayAlgo = true;
+                const tarjetaPedido = document.createElement("div");
+                tarjetaPedido.classList.add("pedidosCard");
+                tarjetaPedido.setAttribute("id", "idPedido-" + el1.id)
+                tarjetaPedido.innerHTML = `<h2 class="h2Pedido"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam-fill" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.01-.003.268-.108a.75.75 0 0 1 .558 0l.269.108.01.003 6.97 2.789ZM10.404 2 4.25 4.461 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339L8 5.961 5.596 5l6.154-2.461L10.404 2Z"/>
+                 </svg>Pedido #${el1.id}:</h2><p><br>${el1.detalle()}
+                 Estado: ${el1.yaEntregado()}<br>------------------<br>Subtotal: $${el1.precio}
+                    <br>IVA(23%): $${Math.round(el1.Iva())}<br>TOTAL: $${Math.round(el1.precio * 1.23)}<br>------------------</p>`;
                 productosDiv.appendChild(tarjetaPedido);
             }
         })
-        if (!hayAlgo) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Sin Pedidos registrados',
-                html: `No hay Pedidos pendientes de gestión<br>
-    <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
-            }).then(function () {
-                location.reload();
-            });
-        }
-    } else {
+    }
+    if (!hayAlgo) {
         Swal.fire({
             icon: 'info',
             title: 'Sin Pedidos registrados',
@@ -281,6 +283,7 @@ function mostrarPedidos(productosDiv, arhivoHTML) {
         }).then(function () {
             location.reload();
         });
+
     }
 }
 
@@ -495,7 +498,7 @@ function cestaNav(arhivoHTML) {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         terminarPedido();
-                    } 
+                    }
                 })
             }
             else {
@@ -543,30 +546,58 @@ function cestaNav(arhivoHTML) {
 //FUNCION PARA LISTENER DE BOTONES DEL COSTADO
 function panelCostado() {
     const btnArriba = document.getElementById("cestaBtn");
+    let rutaStr = "";
     btnArriba.addEventListener("click", () => {
         if (!pedido.esVacio()) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Cesta de Compra',
-                html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
-            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------<br>
+            if (arhivoHTML == "index.html") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cesta de Compra',
+                    showCancelButton: true,
+                    confirmButtonColor: '#12a505',
+                    cancelButtonColor: '#ff1e00',
+                    cancelButtonText: 'Volver',
+                    confirmButtonText: 'Confirmar Compra',
+                    html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
+            <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        terminarPedido();
+                    }
+                })
+            }
+            else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cesta de Compra',
+                    showCancelButton: true,
+                    confirmButtonColor: '#12a505',
+                    cancelButtonColor: '#ff1e00',
+                    cancelButtonText: 'Volver',
+                    confirmButtonText: 'Confirmar Compra',
+                    html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+                       <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
+                       <br>------------------<br>
             <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
-            });
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        terminarPedido();
+                    }
+                })
+            }
         } else {
+            if (arhivoHTML == "index.html") {
+                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>";
+            } else {
+                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./realizarPedido.html>Click aquí para comprar</a>";
+            }
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
-                html: `Tu Cesta de Compra está VACÍA<br><a href="./realizarPedido.html">Click aquí para comprar</a>`,
+                html: `${rutaStr}`,
             });
         }
-    });
-    const btnWhatsapp = document.getElementById("whatsappBtn");
-    btnWhatsapp.addEventListener("click", () => {
-        Swal.fire({
-            icon: 'info',
-            title: 'Funcionalidad Whatsapp',
-            text: 'Se implementará próximamente esta funcionalidad',
-        });
     });
 }
 
@@ -861,14 +892,14 @@ else if (arhivoHTML == "gestionarPedidos.html") {
                 let idPedido = parseInt(entregarBtn[i].id.split("entregarBtn-")[1]);
                 //PEDIMOS CONFIRMACIÓN PARA ENTREGAR EL PEDIDO
                 Swal.fire({
-                    title: `ENTREGAR Pedido #${pedidos[i].id}?`,
+                    title: `ENTREGAR Pedido #${idPedido}?`,
                     text: "Luego de ENTREGADO, el Pedido NO podrá ser CANCELADO",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#12a505',
                     cancelButtonColor: '#d33',
                     cancelButtonText: 'Cancelar',
-                    confirmButtonText: 'Sí, BORRARLO'
+                    confirmButtonText: 'ENTREGAR '
                 }).then((result) => {
                     if (result.isConfirmed) {
                         entregarPedido(idPedido);
@@ -894,7 +925,7 @@ else if (arhivoHTML == "gestionarPedidos.html") {
                 let idPedido = parseInt(cancelarBtn[i].id.split("cancelarBtn-")[1]);
                 //PEDIMOS CONFIRMACIÓN PARA ENTREGAR EL PEDIDO
                 Swal.fire({
-                    title: `CANCELAR Pedido #${pedidos[i].id}?`,
+                    title: `CANCELAR Pedido #${idPedido}?`,
                     text: "Luego de CANCELADO, el Pedido será eliminado permanentemente",
                     icon: 'warning',
                     showCancelButton: true,
