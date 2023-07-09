@@ -119,13 +119,15 @@ a:hover {
 #arribaBtn,
 #cestaBtn,
 #whatsappBtn {
-    transition: 0.4s;
+    transition: 0.5s;
 }
 
 #arribaBtn:hover,
 #cestaBtn:hover,
 #whatsappBtn:hover {
     color: #fd4d12;
+    min-width: 55px;
+    min-height: 55px;
 }
 
 #arribaBtn {
@@ -235,7 +237,7 @@ footer h3 {
 }
 
 .tarjetaProd h2 {
-    margin-top: 5px;
+    margin-top: 7px;
     font-size: 22px !important;
 }
 
@@ -243,7 +245,6 @@ footer h3 {
     margin-top: 20px;
     margin-left: 25px;
     max-width: 200px;
-    border-radius: 5px;
 
 }
 
@@ -311,14 +312,14 @@ footer h3 {
 
 }
 
-#agregarBtn {
+.agregarBtn {
     background-color: #12a505 !important;
     border-color: #096400 !important;
     transition: 0.5s;
     color: #ffffff;
 }
 
-#agregarBtn:hover {
+.agregarBtn:hover {
     filter: brightness(150%);
 }
 
@@ -327,7 +328,9 @@ footer h3 {
     background-color: #12a505 !important;
     border-color: #096400 !important;
     transition: 0.5s;
+    font-size: 20px;
     color: #ffffff;
+    margin-bottom: 10px;
 
 }
 
@@ -342,7 +345,7 @@ footer h3 {
     color: #ffffff;
     transition: 0.5s;
     margin-bottom: 40px;
-
+    font-size: 20px;
 }
 
 #cancelarBtn:hover {
@@ -361,41 +364,138 @@ footer h3 {
 }
 
 /* VER PEDIDOS HTML */
-#h1VerPedidos{
+#h1VerPedidos {
     text-align: center;
     margin-top: 25px;
     margin-bottom: 20px;
 }
 
-.pedidosDiv{
-    text-align: center;  
+#pedidosDiv {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+
+.pedidosCard {
+    text-align: center;
+    border-style: solid;
+    border-color: #ac3100;
     background-color: #ff4800;
     margin-bottom: 50px;
-    max-width: 400px;
+    min-width: 350px;
+    max-width: 350px;
     border-radius: 20px;
+    margin-right: 30px;
 }
 
-.pedidosDiv p,
-.h2Pedido{
-   color: white !important;
+.pedidosCard:focus,
+.pedidosCard:hover {
+    filter: brightness(130%);
 }
 
-.pedidosDiv h2{
+.pedidosCard p,
+.h2Pedido {
+    color: white !important;
+}
+
+.pedidosCard h2 {
     padding-top: 20px;
-    margin: 0 auto;
-}
-/* ESTILOS DE SWEET ALERT */
-.swal2-confirm {
-    background-color: #ff4800 !important;
-    border-color: #cf2900 !important;;
-    border-style: solid;
 }
 
-.swal2-confirm:hover{
+.pedidosCard h2 svg {
+    margin-right: 10px;
+    min-width: 33px;
+    min-height: 33px;
+}
+
+/* GESTIONAR PEDIDOS HTML */
+.entregarBtn {
+    background-color: #12a505 !important;
+    border-color: #096400 !important;
+    transition: 0.5s;
+    color: #ffffff;
+}
+
+.entregarBtn:hover {
     filter: brightness(150%);
 }
 
-.swal2-confirm:focus{
+.cancelarBtn {
+    background-color: #ff1e00 !important;
+    border-color: #9c1706 !important;
+    transition: 0.5s;
+}
+
+.cancelarBtn:hover {
+    filter: brightness(150%);
+}
+
+/* ESTILOS DE SWEET ALERT */
+.swal2-confirm {
+    background-color: #ff4800 !important;
+    border-color: #cf2900 !important;
+    border-style: solid;
+}
+
+.swal2-html-container a {
+    color: #d43c00 !important;
+    transition: 0.5s;
+}
+
+.swal2-html-container a:hover {
+    filter: brightness(150%);
+}
+
+
+.swal2-confirm:hover {
+    filter: brightness(150%);
+}
+
+.swal2-confirm:focus {
     outline: none !important;
 
+}
+
+.colored-toast.swal2-icon-success {
+    background-color: #12a505 !important;
+}
+
+.colored-toast.swal2-icon-success h2 {
+    color: white !important;
+}
+
+.colored-toast.swal2-icon-error {
+    background-color: #ff1e00 !important;
+}
+
+.colored-toast.swal2-icon-error h2 {
+    color: white !important;
+}
+
+.colored-toast.swal2-icon-warning {
+    background-color: #f8bb86 !important;
+}
+
+.colored-toast.swal2-icon-info {
+    background-color: #3fc3ee !important;
+}
+
+.colored-toast.swal2-icon-question {
+    background-color: #87adbd !important;
+}
+
+.colored-toast .swal2-title {
+    color: white;
+}
+
+.colored-toast .swal2-close {
+    color: white;
+}
+
+.colored-toast .swal2-html-container {
+    color: white;
 }

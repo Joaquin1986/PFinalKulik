@@ -69,10 +69,21 @@ class Pedido {
         //DEVUELVE UNA CADENA O STRING PARA PASARLE AL SWEET ALERT EL DETALLE DEL PEDIDO
         let detallePedido = "";
         for (let i = 0; i < this.productos.length; i++) {
-            detallePedido = detallePedido + this.productos[i].nombre + " | Cantidad: " +
+            detallePedido += this.productos[i].nombre + " | Cantidad: " +
                 this.cantidadProductos[i] + " | Precio: $" + this.preciosProductos[i] + "<br>";
         }
         return detallePedido;
+    }
+
+    yaEntregado() {
+        let status;
+        if (this.entregado) {
+            status = "Ya entregado"
+        }
+        else {
+            status = "Pendiente de entrega"
+        }
+        return status;
     }
 }
 
@@ -82,6 +93,7 @@ const categorias = ["Meditación", "Ayurveda (Medicina y Cocina)", "Vestimenta H
 // SE DEFINE ARRAY DE PEDIDOS CON SCOPE GLOBAL
 const pedidosLoad = JSON.parse(localStorage.getItem("pedidos")) || [];
 const pedidos = convertirPedidos(pedidosLoad);
+
 const productosPedido = JSON.parse(localStorage.getItem("productosPedido")) || [];
 const cantidadProductos = JSON.parse(localStorage.getItem("cantidadProductos")) || [];
 const preciosProductos = JSON.parse(localStorage.getItem("preciosProductos")) || [];
@@ -121,7 +133,7 @@ if (productosLoad.length < 1) {
 const pedidoLoad = JSON.parse(localStorage.getItem("pedido")) || "";
 let pedido = new Pedido();
 if (pedidoLoad) {
-    pedido = new Pedido(pedidoLoad.id, pedidoLoad.fecha, pedidoLoad.hora, pedidoLoad.productos,
+    pedido = new Pedido(pedidoLoad.id, pedidoLoad.fecha, pedidoLoad.hora, convertirProductos(pedidoLoad.productos),
         pedidoLoad.cantidadProductos, pedidoLoad.preciosProductos, pedidoLoad.precio, pedidoLoad.entregado);
 }
 else {
@@ -181,11 +193,11 @@ function mostrarProductos(productosDiv, arhivoHTML) {
         productosDiv.appendChild(divCategoria);
         productos.forEach(el => {
             if (el.categoria == el1) {
-
                 const tarjetaProd = document.createElement("div");
                 tarjetaProd.classList.add("tarjetaProd");
+                tarjetaProd.setAttribute("id", "idProd-" + el.id);
                 tarjetaProd.innerHTML = ` 
-                <h2 id="prodTitulo">${el.nombre}:#${el.id}</h2>
+                <h2 id="prodTitulo-${el.id}">${el.nombre}</h2>
                 <img class="tarjetaProdImg" src="${el.imgURL}" alt="Imagen de ${el.nombre}">
                 <p id="prodDesc">${el.descripcion}<br>Precio:  $${el.precio}<br>
                 IVA (23%):  $${Math.round(el.precio * 0.23)}<br>
@@ -196,7 +208,7 @@ function mostrarProductos(productosDiv, arhivoHTML) {
                 }
                 else if (arhivoHTML == "bajaProducto.html") {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
-                    <button class="bajaBtn btn btn-primary" type="submit">Borrar Producto</button></p>
+                    <button class="bajaBtn btn btn-primary" id="bajaBtn-${el.id} type="submit">Borrar Producto</button></p>
                     `;
                 }
                 else if (arhivoHTML == "realizarPedido.html" && pedido.cantidadDe(el)) {
@@ -204,15 +216,15 @@ function mostrarProductos(productosDiv, arhivoHTML) {
 
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
                     <p id="prodCant">Cantidad: ${pedido.cantidadDe(el)}</p>
-                    <button class="agregarBtn btn btn-primary" id="agregarBtn" type="submit">Agregar</button>
-                    <button class="quitarBtn btn btn-primary" type="submit">Quitar</button></p>
+                    <button class="agregarBtn btn btn-primary" id="agregarBtn-${el.id}" type="submit">Agregar</button>
+                    <button class="quitarBtn btn btn-primary" id="quitarBtn-${el.id} type="submit">Quitar</button></p>
                     `;
                 }
                 else {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
                     <p id="prodCant">Cantidad: 0</p>
-                    <button class="agregarBtn btn btn-primary" id="agregarBtn" type="submit">Agregar</button>
-                    <button class="quitarBtn btn btn-primary" type="submit">Quitar</button></p>
+                    <button class="agregarBtn btn btn-primary" id="agregarBtn-${el.id}" type="submit">Agregar</button>
+                    <button class="quitarBtn btn btn-primary" id="quitarBtn-${el.id}"| type="submit">Quitar</button></p>
                     `;
                 }
                 productosDiv.appendChild(tarjetaProd);
@@ -224,33 +236,103 @@ function mostrarProductos(productosDiv, arhivoHTML) {
 
 //FUNCION QUE MUESTRA LOS PEDIDOS
 function mostrarPedidos(productosDiv, arhivoHTML) {
-    productosDiv.innerHTML = '<h1 id="h1VerPedidos">Listado de Pedidos</h1>';
-    pedidos.forEach(el1 => {
-        const tarjetaPedido = document.createElement("div");
-        tarjetaPedido.classList.add("pedidosDiv");
-        tarjetaPedido.innerHTML = `<h2 class="h2Pedido">Pedido #"${el1.id}:"</h2><p><br>${el1.detalle()}------------------<br>Subtotal: $${el1.precio}
-                <br>IVA(23%): $${Math.round(el1.Iva())}<br>TOTAL: $${Math.round(el1.precio * 1.23)}<br>------------------</p>`;
-        productosDiv.appendChild(tarjetaPedido);
-    })
+    productosDiv.innerHTML = '';
+    let hayAlgo = false;
+    if (pedidos.length > 0) {
+        pedidos.forEach(el1 => {
+            if (!el1.entregado) {
+                hayAlgo = true;
+                const tarjetaPedido = document.createElement("div");
+                tarjetaPedido.classList.add("pedidosCard");
+                tarjetaPedido.setAttribute("id", "idPedido-" + el1.id)
+                tarjetaPedido.innerHTML = `<h2 class="h2Pedido"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam-fill" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.01-.003.268-.108a.75.75 0 0 1 .558 0l.269.108.01.003 6.97 2.789ZM10.404 2 4.25 4.461 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339L8 5.961 5.596 5l6.154-2.461L10.404 2Z"/>
+      </svg>Pedido #${el1.id}:</h2><p><br>${el1.detalle()}
+        Estado: ${el1.yaEntregado()}<br>------------------<br>Subtotal: $${el1.precio}
+                <br>IVA(23%): $${Math.round(el1.Iva())}<br>TOTAL: $${Math.round(el1.precio * 1.23)}<br>------------------`;
+                if (arhivoHTML == "verPedidos.html") {
+                    tarjetaPedido.innerHTML += `</p>`;
+                }
+                else {
+                    tarjetaPedido.innerHTML += `
+            <button class="entregarBtn btn btn-primary" id="entregarBtn-${el1.id}" type="submit">Entregar</button>
+            <button class="cancelarBtn btn btn-primary" id="cancelarBtn-${el1.id}"| type="submit">Cancelar</button></p>
+            `;
+                }
+                productosDiv.appendChild(tarjetaPedido);
+            }
+        })
+        if (!hayAlgo) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Sin Pedidos registrados',
+                html: `No hay Pedidos pendientes de gestión<br>
+    <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
+            }).then(function () {
+                location.reload();
+            });
+        }
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Sin Pedidos registrados',
+            html: `No hay Pedidos pendientes de gestión<br>
+    <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
+        }).then(function () {
+            location.reload();
+        });
+    }
 }
 
 //CONVERTIR ARRAY DE PEDIDOS DESDE LOCALSTORAGE A OBJETOS DEL TIPO 'PEDIDO'
 function convertirPedidos(pedidosInput) {
-    let pedidos = [];
+    let pedidosReturn = [];
     let productosPedido = [];
     if (pedidosInput.length > 0) {
-        for (let i = 0; i < pedidosLoad.length; i++) {
+        //SE RECORRE EL ARRAY INPUT DE PEDIDOS SI NO ESTÁ VACÍO
+        for (let i = 0; i < pedidosInput.length; i++) {
             //HAY UN ARRAY DE PRODUCTOS EN CADA PEDIDO, LO CONVERTIMOS A OBJETOS DEL TIPO 'PRODUCTO'
-            for (let z = 0; z < pedidosLoad[i].productos.length; z++) {
-                productosPedido[z] = convertirProducto(pedidosLoad[i].productos[z]);
+            for (let z = 0; z < pedidosInput[i].productos.length; z++) {
+                productosPedido[z] = convertirProducto(pedidosInput[i].productos[z]);
+
             }
-            let p1 = new Pedido(pedidosLoad[i].id, pedidosLoad[i].fecha, pedidosLoad[i].hora, productosPedido,
-                pedidosLoad[i].cantidadProductos, pedidosLoad[i].preciosProductos, pedidosLoad[i].precio,
-                pedidosLoad[i].entregado);
-            pedidos[i] = p1;
+            const p1 = new Pedido(pedidosInput[i].id, pedidosInput[i].fecha, pedidosInput[i].hora, productosPedido,
+                pedidosInput[i].cantidadProductos, pedidosInput[i].preciosProductos, pedidosInput[i].precio,
+                pedidosInput[i].entregado);
+            pedidosReturn[i] = p1;
+            productosPedido = [];
         }
     }
-    return pedidos;
+    return pedidosReturn;
+}
+
+//FUNCIÓN DE ENTREGA DE PEDIDO, TOMANDO COMO PARÁMETRO UN ID
+function entregarPedido(idPedido) {
+    let retorno = false;
+    pedidos.forEach((p) => {
+        if (p.id == idPedido) {
+            p.entregado = true;
+            retorno = true;
+        }
+    })
+}
+
+//FUNCIÓN DE CANCELAR DE PEDIDO, TOMANDO COMO PARÁMETRO UN ID
+function cancelarPedido(idPedido) {
+    indexPed = pedidos.findIndex(e => e.id == idPedido);
+    pedidos.splice(indexPed, 1);
+    localStorage.removeItem("pedidos");
+    localStorage.setItem("pedidos", pedidos);
+}
+
+function convertirProductos(inputProductos) {
+    let productos = [];
+    let cont = 0;
+    inputProductos.forEach(e => {
+        productos[cont] = convertirProducto(e);
+        cont++;
+    });
+    return productos;
 }
 
 //AGREGAR FECHA A PEDIDO
@@ -351,6 +433,8 @@ function quitarProductoDePedido(pedido, producto) {
     return retorno;
 }
 
+
+
 //BUSCA UN ID LIBRE DE PRODUCTO
 function idLibreProducto(productos) {
     let idLibreProducto;
@@ -389,20 +473,51 @@ function calcularPrecioPedido(pedido) {
     return precioPedido;
 }
 
-//SE CARGA LISTER PARA LA CESTA DEL NAV
+//FUNCION DE CARGA LISTER PARA LA CESTA DEL NAV
 
 function cestaNav(arhivoHTML) {
     const btnArriba2 = document.getElementById("cestaBtnNav");
+    let rutaStr = "";
     btnArriba2.addEventListener("click", () => {
         if (!pedido.esVacio()) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Cesta de Compra',
-                html: `Cesta de Compra:<br>${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
-            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------`,
-            });
+            if (arhivoHTML == "index.html") {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cesta de Compra',
+                    showCancelButton: true,
+                    confirmButtonColor: '#12a505',
+                    cancelButtonColor: '#ff1e00',
+                    cancelButtonText: 'Volver',
+                    confirmButtonText: 'Confirmar Compra',
+                    html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
+            <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        terminarPedido();
+                    } 
+                })
+            }
+            else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cesta de Compra',
+                    showCancelButton: true,
+                    confirmButtonColor: '#12a505',
+                    cancelButtonColor: '#ff1e00',
+                    cancelButtonText: 'Volver',
+                    confirmButtonText: 'Confirmar Compra',
+                    html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+                       <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
+                       <br>------------------<br>
+            <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        terminarPedido();
+                    }
+                })
+            }
         } else {
-            let rutaStr = "";
             if (arhivoHTML == "index.html") {
                 rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>";
             } else {
@@ -425,7 +540,7 @@ function cestaNav(arhivoHTML) {
     });
 }
 
-//SE CARGA LISTENER PARA LOS BOTONES DEL COSTADO
+//FUNCION PARA LISTENER DE BOTONES DEL COSTADO
 function panelCostado() {
     const btnArriba = document.getElementById("cestaBtn");
     btnArriba.addEventListener("click", () => {
@@ -433,8 +548,9 @@ function panelCostado() {
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
-                html: `Cesta de Compra:<br>${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
-            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------`,
+                html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
+            <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}<br>------------------<br>
+            <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
             });
         } else {
             Swal.fire({
@@ -451,6 +567,25 @@ function panelCostado() {
             title: 'Funcionalidad Whatsapp',
             text: 'Se implementará próximamente esta funcionalidad',
         });
+    });
+}
+
+function terminarPedido() {
+    pedido.fecha = fechaActual();
+    pedido.hora = horaActual();
+    pedido.precio = calcularPrecioPedido(pedido);
+    pedidos.push(pedido);
+    localStorage.removeItem("pedidos");
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+    //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
+    localStorage.removeItem("pedido");
+    Swal.fire({
+        icon: 'success',
+        title: 'Pedido Realizado',
+        html: `Su pedido #${pedido.id} ha sido realizado con ÉXITO!<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
+        <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
+    }).then(function () {
+        location.reload();
     });
 }
 
@@ -477,22 +612,19 @@ else if (arhivoHTML == "bajaProducto.html") {
     cestaNav(arhivoHTML);
     panelCostado(arhivoHTML);
     mostrarProductos(productosDiv, arhivoHTML);
-    let productosBajaBtn = document.getElementsByClassName("btn");
+    let productosBajaBtn = document.getElementsByClassName("bajaBtn");
     for (let i = 0; i < productosBajaBtn.length; i++) {
         productosBajaBtn[i].addEventListener("click", () => {
-            //EXTRAEMOS EL DIV DEL ELEMENTO PADRE PARA CONOCER EL ID DEL PRODUCTO A BORRAR
-            const idProdDiv = productosBajaBtn[i].parentElement;
-            let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
-            idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
-            const idProd = parseInt((idProdDivStr[0].slice(0, Infinity)));
+            //EXTRAEMOS EL ID DEL PRODUCTO A BORRAR
+            let idProd = parseInt(productosBajaBtn[i].id.split("bajaBtn-")[1]);
             let prodObj = encontrarProductoPorId(idProd, productos);
             //PEDIMOS CONFIRMACIÓN PARA BORRAR EL PRODUCTO
             Swal.fire({
-                title: `Seguro que desea BORRAR ${prodObj.nombre}?`,
+                title: `BORRAR ${prodObj.nombre}?`,
                 text: "Luego de eliminado, el producto puede ser creado nuevamente de todos modos (Alta de Producto)",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#2ab41d',
+                confirmButtonColor: '#12a505',
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Sí, BORRARLO'
@@ -555,134 +687,246 @@ else if (arhivoHTML == "altaProducto.html") {
 
 //VER PEDIDOS HTML
 else if (arhivoHTML == "verPedidos.html") {
-    const pedidosDiv = document.getElementById("pedidosDiv");
-    cestaNav(arhivoHTML);
-    panelCostado();
-    mostrarPedidos(pedidosDiv, arhivoHTML);
+    if (pedidos.length > 0) {
+        const pedidosDiv = document.getElementById("pedidosDiv");
+        cestaNav(arhivoHTML);
+        panelCostado();
+        mostrarPedidos(pedidosDiv, arhivoHTML);
+    }
+    else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Sin Pedidos registrados',
+            html: `No se han registrado Pedidos aún<br>
+    <a href="./realizarPedido.html" >REALIZAR UN PEDIDO AHORA</a><br>`,
+        }).then(function () {
+            location.reload();
+        });
+    }
+
 }
+
 
 //REALIZAR PEDIDO HTML
 else if (arhivoHTML == "realizarPedido.html") {
     cestaNav(arhivoHTML);
     panelCostado();
     mostrarProductos(productosDiv, arhivoHTML, pedido);
-    let productosAgregarBtn = document.getElementsByClassName("btn");
+    //BOTONES DE AGREGAR PRODUCTO
+    let productosAgregarBtn = document.getElementsByClassName("agregarBtn");
     for (let i = 0; i < productosAgregarBtn.length; i++) {
         productosAgregarBtn[i].addEventListener("click", () => {
             let prodObj;
-            const btnValor = productosAgregarBtn[i].innerHTML.split(">").slice(-1);
+            const btnValor = productosAgregarBtn[i].innerText
             if ((btnValor == "Quitar") || (btnValor == "Agregar")) {
                 const idProdDiv = productosAgregarBtn[i].parentElement;
-                let idProdDivStr = idProdDiv.querySelector("#prodTitulo");
                 const prodCant = idProdDiv.querySelector("#prodCant");
-                idProdDivStr = idProdDivStr.innerHTML.split("#").slice(1, 2);
                 let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
-                idProd = parseInt((idProdDivStr[0].slice(0, 1)));
+                idProd = parseInt(productosAgregarBtn[i].id.split("agregarBtn-")[1]);
                 //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
                 prodObj = encontrarProductoPorId(idProd, productos);
-                if (btnValor == "Quitar") {
-                    //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
-                    const resultado = quitarProductoDePedido(pedido, prodObj);
-                    localStorage.setItem("pedido", JSON.stringify(pedido));
-                    if (resultado != "nada") {
-                        prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);
-                        Toastify({
-                            text: `Cantidad -1 de ${prodObj.nombre}`,
-                            duration: 2000,
-                            newWindow: true,
-                            gravity: "bottom",
-                            position: "right",
-                            stopOnFocus: true,
-                            style: {
-                                background: "linear-gradient(to right, #9c1706, #ff1e00)",
-                            },
-                            // onClick: function(){} // Callback after click
-                        }).showToast();
-                    }
-                    else {
-                        Toastify({
-                            text: `No hay ${prodObj.nombre} en el carrito`,
-                            duration: 1000,
-                            newWindow: true,
-                            gravity: "bottom",
-                            position: "right",
-                            stopOnFocus: true,
-                            style: {
-                                background: "linear-gradient(to right, #9c1706, #ff1e00)",
-                            },
-                            // onClick: function(){} // Callback after click
-                        }).showToast();
-                    }
-                }
-                else if (btnValor == "Agregar") {
-                    //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
-                    agregarProductoAPedido(pedido, prodObj, 1);
-                    localStorage.setItem("pedido", JSON.stringify(pedido));
-                    prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
-                    Toastify({
-                        text: `Cantidad +1 de ${prodObj.nombre}`,
-                        duration: 1000,
-                        newWindow: true,
-                        gravity: "bottom",
-                        position: "right",
-                        stopOnFocus: true,
-                        style: {
-                            background: "linear-gradient(to right, #0b8300, #15ff00)",
-                        },
-                        // onClick: function(){} // Callback after click
-                    }).showToast();
-                }
-
-            }
-            else if ((btnValor == "Finalizar Pedido")) {
-                //SE TERMINA DE ARMAR EL OBJETO PEDIDO Y SE AGREGA AL ARRAY Y AL LOCALSTORAGE
-                if (!pedido.esVacio()) {
-                    pedido.fecha = fechaActual();
-                    pedido.hora = horaActual();
-                    pedido.precio = calcularPrecioPedido(pedido);
-                    pedidos.push(pedido);
-                    localStorage.setItem("pedidos", JSON.stringify(pedidos));
-                    //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
-                    delete pedido;
-                    localStorage.removeItem("pedido");
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Pedido Realizado',
-                        html: `Su pedido #${pedido.id} ha sido realizado con ÉXITO!<br>Detalle:<br>${pedido.detalle()}<br>Subtotal: $${pedido.precio}
-                        <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}`,
-                    }).then(function () {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error: Pedido Vacío',
-                        text: 'El Pedido no se puede realizar, dado que está VACÍO',
-                    });
-                }
-            }
-            else {
-                //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
-                const pedidoVacio = pedido.esVacio();
-                if (!pedidoVacio) {
-                    delete pedido;
-                    localStorage.removeItem("pedido");
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Pedido Cancelado',
-                        text: 'Se ha CANCELADO el Pedido',
-                    }).then(function () {
-                        location.reload();
-                    });
-                }
-                else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error: Pedido VACÍO',
-                        text: 'Pedido VACÍO, no es posible CANCELARLO',
-                    })
-                }
+                //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
+                agregarProductoAPedido(pedido, prodObj, 1);
+                localStorage.setItem("pedido", JSON.stringify(pedido));
+                prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-right',
+                    iconColor: 'white',
+                    customClass: {
+                        popup: 'colored-toast'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: false
+                })
+                Toast.fire({
+                    icon: 'success',
+                    title: `+1 ${prodObj.nombre} en la Cesta`
+                })
             }
         })
+    }
+
+    //BOTONES DE QUITAR PRODUCTO
+
+    let productosQuitarBtn = document.getElementsByClassName("quitarBtn");
+    for (let i = 0; i < productosQuitarBtn.length; i++) {
+        productosQuitarBtn[i].addEventListener("click", () => {
+            let prodObj;
+            const idProdDiv = productosQuitarBtn[i].parentElement;
+            const prodCant = idProdDiv.querySelector("#prodCant");
+            let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
+            idProd = parseInt(productosQuitarBtn[i].id.split("quitarBtn-")[1]);
+            //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
+            prodObj = encontrarProductoPorId(idProd, productos);
+            //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
+            const resultado = quitarProductoDePedido(pedido, prodObj);
+            localStorage.setItem("pedido", JSON.stringify(pedido));
+            if (resultado != "nada") {
+                prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-right',
+                    iconColor: 'white',
+                    customClass: {
+                        popup: 'colored-toast'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: false
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: `-1 ${prodObj.nombre} en la Cesta`
+                })
+            }
+            else {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-right',
+                    iconColor: 'white',
+                    customClass: {
+                        popup: 'colored-toast'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: false
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: `Sin ${prodObj.nombre} en la Cesta`
+                })
+            }
+
+        })
+
+    }
+
+    //BOTON DE CANCELAR PEDIDO
+    let productosCancelarBtn = document.getElementById("cancelarBtn");
+    productosCancelarBtn.addEventListener("click", () => {
+        //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
+        const pedidoVacio = pedido.esVacio();
+        if (!pedidoVacio) {
+            delete pedido;
+            localStorage.removeItem("pedido");
+            Swal.fire({
+                icon: 'success',
+                title: 'Pedido Cancelado',
+                text: 'Se ha CANCELADO el Pedido',
+            }).then(function () {
+                location.reload();
+            });
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error: Pedido VACÍO',
+                text: 'Pedido VACÍO, no es posible CANCELARLO',
+            })
+        }
+
+    })
+    //BOTON DE FINALIZAR PEDIDO
+    let productosFinalizarBtn = document.getElementById("finalizarBtn");
+    productosFinalizarBtn.addEventListener("click", () => {
+        //SE TERMINA DE ARMAR EL OBJETO PEDIDO Y SE AGREGA AL ARRAY Y AL LOCALSTORAGE
+        if (!pedido.esVacio()) {
+            terminarPedido();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error: Pedido Vacío',
+                text: 'El Pedido no se puede realizar, dado que está VACÍO',
+            });
+        }
+    })
+
+
+}
+
+//GESTIONAR PEDIDOS HTML
+else if (arhivoHTML == "gestionarPedidos.html") {
+    if (pedidos.length > 0) {
+        const pedidosDiv = document.getElementById("pedidosDiv");
+        cestaNav(arhivoHTML);
+        panelCostado();
+        mostrarPedidos(pedidosDiv, arhivoHTML);
+        //BOTONES DE ENTREGAR PEDIDO
+        const entregarBtn = document.getElementsByClassName("entregarBtn");
+        for (let i = 0; i < entregarBtn.length; i++) {
+            entregarBtn[i].addEventListener("click", () => {
+                //EXTRAEMOS EL ID DEL PEDIDO A ENTREGAR
+                let idPedido = parseInt(entregarBtn[i].id.split("entregarBtn-")[1]);
+                //PEDIMOS CONFIRMACIÓN PARA ENTREGAR EL PEDIDO
+                Swal.fire({
+                    title: `ENTREGAR Pedido #${pedidos[i].id}?`,
+                    text: "Luego de ENTREGADO, el Pedido NO podrá ser CANCELADO",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#12a505',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Sí, BORRARLO'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        entregarPedido(idPedido);
+                        localStorage.removeItem("pedidos");
+                        localStorage.setItem("pedidos", JSON.stringify(pedidos));
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Pedido #${idPedido} ENTREGADO`,
+                            text: `El pedido #${idPedido} fue entregado con éxito!`
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                })
+            })
+        }
+
+        //BOTONES DE CANCELAR PEDIDO
+        const cancelarBtn = document.getElementsByClassName("cancelarBtn");
+        for (let i = 0; i < cancelarBtn.length; i++) {
+            cancelarBtn[i].addEventListener("click", () => {
+                //EXTRAEMOS EL ID DEL PEDIDO A ENTREGAR
+                let idPedido = parseInt(cancelarBtn[i].id.split("cancelarBtn-")[1]);
+                //PEDIMOS CONFIRMACIÓN PARA ENTREGAR EL PEDIDO
+                Swal.fire({
+                    title: `CANCELAR Pedido #${pedidos[i].id}?`,
+                    text: "Luego de CANCELADO, el Pedido será eliminado permanentemente",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#12a505',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Sí, CANCELARLO'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        cancelarPedido(idPedido);
+                        localStorage.removeItem("pedidos");
+                        localStorage.setItem("pedidos", JSON.stringify(pedidos));
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Pedido #${idPedido} CANCELADO`,
+                            text: `El pedido #${idPedido} fue cancelado con éxito!`
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                })
+            })
+        }
+    }
+    else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Sin Pedidos registrados',
+            html: `No hay Pedidos pendientes de gestión<br>
+    <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
+        }).then(function () {
+            location.reload();
+        });
     }
 }
