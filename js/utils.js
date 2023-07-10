@@ -18,7 +18,7 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
             <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
             <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
-                    (result.isConfirmed) ? terminarPedido() : null;
+                    (result.isConfirmed) ? terminarPedido(pedido,pedidos) : null;
 
                 })
             }
