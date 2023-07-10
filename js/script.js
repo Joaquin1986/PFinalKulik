@@ -43,9 +43,7 @@ class Pedido {
         let indiceProd;
         //SE BUSCA EL INDICE DEL PRODUCTO
         for (let i = 0; i < this.productos.length; i++) {
-            if (Producto.id == this.productos[i].id) {
-                indiceProd = i;
-            }
+            (Producto.id == this.productos[i].id) ? indiceProd = i : indiceProd = -1;
         }
         //SE DEVUELVE LA CANTIDAD DE PRODUCTOS CON ESE MISMO INDICE
         return parseInt(this.cantidadProductos[indiceProd]);
@@ -57,11 +55,7 @@ class Pedido {
         const suma = this.cantidadProductos.reduce(
             (acumulador, valorActual) => acumulador + valorActual, 0
         );
-        if (suma < 1) {
-            esVacio = true;
-        } else {
-            esVacio = false;
-        }
+        (suma < 1) ? esVacio = true : esVacio = false;
         return esVacio;
     }
 
@@ -77,12 +71,7 @@ class Pedido {
 
     yaEntregado() {
         let status;
-        if (this.entregado) {
-            status = "Ya entregado"
-        }
-        else {
-            status = "Pendiente de entrega"
-        }
+        (this.entregado) ? status = "Ya entregado" : status = "Pendiente de entrega";
         return status;
     }
 }
@@ -166,19 +155,15 @@ function borrarProductoConfirmacion(mensaje) {
 //SE VALIDA FORMULARIO DE ALTA
 function validarFormAltaTexto(formInputs) {
     let valido = true;
-    for (let i = 0; i < formInputs.length; i++) {
-        if (!formInputs[i].value) {
-            valido = false;
-        }
+    for (let i = 1; i < formInputs.length; i++) {
+        (!formInputs[i].value) ? valido = false : n
     }
     return valido;
 }
 
 function validarFormAltaNumber(formInputs) {
     let valido = true;
-    if (!parseInt(formInputs[2].value)) {
-        valido = false;
-    }
+    (!parseInt(formInputs[3].value)) ? valido = false : null;
     return valido;
 }
 
@@ -313,10 +298,7 @@ function convertirPedidos(pedidosInput) {
 function entregarPedido(idPedido) {
     let retorno = false;
     pedidos.forEach((p) => {
-        if (p.id == idPedido) {
-            p.entregado = true;
-            retorno = true;
-        }
+        (p.id == idPedido) ? p.entregado = true : null;
     })
 }
 
@@ -366,12 +348,7 @@ function convertirProducto(productoInput) {
 //DEVUELVE 'SI' O 'NO' SI EL PRODUCTO ESTA ENTREGADO O NO, RESPECTIVAMENTE
 function productoEntregado(producto) {
     let entregado;
-    if (producto.entregado) {
-        entregado = "Si";
-    }
-    else {
-        entregado = "No";
-    }
+    (producto.entregado) ? entregado = "Si" : entregado = "No";
     return entregado;
 }
 
@@ -496,9 +473,8 @@ function cestaNav(arhivoHTML) {
             <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
             <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        terminarPedido();
-                    }
+                    (result.isConfirmed) ? terminarPedido() : null;
+
                 })
             }
             else {
@@ -515,17 +491,11 @@ function cestaNav(arhivoHTML) {
                        <br>------------------<br>
             <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        terminarPedido();
-                    }
+                    (result.isConfirmed) ? terminarPedido() : null;
                 })
             }
         } else {
-            if (arhivoHTML == "index.html") {
-                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>";
-            } else {
-                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./realizarPedido.html>Click aquí para comprar</a>";
-            }
+            (arhivoHTML == "index.html") ? rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>" : rutaStr = "La Cesta de Compra está VACÍA<br><a href=./realizarPedido.html>Click aquí para comprar</a>";
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
@@ -562,9 +532,7 @@ function panelCostado() {
             <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
             <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        terminarPedido();
-                    }
+                    (result.isConfirmed) ? terminarPedido() : null;
                 })
             }
             else {
@@ -581,23 +549,26 @@ function panelCostado() {
                        <br>------------------<br>
             <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        terminarPedido();
-                    }
+                    (result.isConfirmed) ? terminarPedido() : null;
+
                 })
             }
         } else {
-            if (arhivoHTML == "index.html") {
-                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>";
-            } else {
-                rutaStr = "La Cesta de Compra está VACÍA<br><a href=./realizarPedido.html>Click aquí para comprar</a>";
-            }
+            (arhivoHTML == "index.html") ? rutaStr = "La Cesta de Compra está VACÍA<br><a href=./pages/realizarPedido.html>Click aquí para comprar</a>" : rutaStr = "La Cesta de Compra está VACÍA<br><a href=./realizarPedido.html>Click aquí para comprar</a>";
             Swal.fire({
                 icon: 'info',
                 title: 'Cesta de Compra',
                 html: `${rutaStr}`,
             });
         }
+    });
+    const btnBuscar = document.getElementById("whatsappBtn");
+    btnBuscar.addEventListener("click", () => {
+        Swal.fire({
+            icon: 'info',
+            title: 'Funcionalidad de Whatsapp',
+            text: 'Se implementará próximamente esta funcionalidad',
+        });
     });
 }
 
@@ -682,12 +653,13 @@ else if (arhivoHTML == "altaProducto.html") {
     productoAltaBtn.addEventListener("click", () => {
         const divForm = document.querySelectorAll(".form-control");
         const catProducto = document.getElementById("categProducto");
+        console.log("Validación FORM: " + validarFormAltaNumber(divForm))
         if (validarFormAltaTexto(divForm)) {
             //SE VALIDA QUE EL PRECIO NO SEA NAN
             if (validarFormAltaNumber(divForm)) {
                 //SE EJECUTA EL ALTA TRAS VALIDAR QUE NO HAYAN INPUTS EN BLANCO
-                const prod1 = new Producto(idLibreProducto(productos), divForm[0].value, divForm[1].value,
-                    catProducto.value, divForm[2].value, divForm[3].value);
+                const prod1 = new Producto(idLibreProducto(productos), divForm[1].value, divForm[2].value,
+                    catProducto.value, divForm[3].value, divForm[4].value);
                 productos.push(prod1);
                 localStorage.setItem("productos", JSON.stringify(productos));
                 Swal.fire({
