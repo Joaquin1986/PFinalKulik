@@ -1,7 +1,8 @@
 import { cargaAlmacenamiento, arhivoHTML, categorias, productos, pedido, pedidos } from "./almacenamiento.js";
-import { cestaNav, panelCostado, mostrarProductos, encontrarProductoPorId } from "./utils.js";
+import { cestaNav, panelCostado, mostrarProductos, encontrarProductoPorId, cantProdsCesta } from "./utils.js";
 
 cargaAlmacenamiento();
+cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido, pedidos);
 panelCostado(arhivoHTML, pedido, pedidos);
 mostrarProductos(productosDiv, arhivoHTML, categorias, productos, pedido);

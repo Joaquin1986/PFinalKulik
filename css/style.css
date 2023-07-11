@@ -80,6 +80,17 @@ a:hover {
     background-color: #fd4d12 !important;
 }
 
+#cantProductos{
+    color: white !important;
+    font-size: 24px !important;
+    margin-top: 32px;
+    margin-right: 4px;
+    
+}
+#cantProductos:hover {
+    color: #fdc968 !important;
+}
+
 #cestaBtnNav {
     max-width: 35px;
     color: white;

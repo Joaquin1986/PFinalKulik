@@ -1,9 +1,10 @@
 import { cargaAlmacenamiento, pedido, arhivoHTML, pedidos} from "./almacenamiento.js";
-import { cestaNav,panelCostado,mostrarPedidos} from "./utils.js";
+import { cestaNav,panelCostado,mostrarPedidos, cantProdsCesta} from "./utils.js";
 
+cargaAlmacenamiento();
+cantProdsCesta(pedido);
 cestaNav(arhivoHTML,pedido,pedidos);
 panelCostado(arhivoHTML,pedido,pedidos);
-cargaAlmacenamiento();
 if (pedidos.length > 0) {
     const pedidosDiv = document.getElementById("pedidosDiv");
     cestaNav(arhivoHTML,pedido);

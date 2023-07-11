@@ -1,7 +1,8 @@
 import { cargaAlmacenamiento, pedido, arhivoHTML, pedidos} from "./almacenamiento.js";
-import { cestaNav,panelCostado,mostrarPedidos,cancelarPedido, entregarPedido} from "./utils.js";
+import { cestaNav,panelCostado,mostrarPedidos,cancelarPedido, entregarPedido, cantProdsCesta} from "./utils.js";
 
 cargaAlmacenamiento()
+cantProdsCesta(pedido);
 cestaNav(arhivoHTML,pedido,pedidos);
 panelCostado(arhivoHTML,pedido,pedidos);
 if (pedidos.length > 0) {

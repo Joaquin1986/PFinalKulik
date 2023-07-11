@@ -6,12 +6,14 @@ import {
     encontrarProductoPorId,
     agregarProductoAPedido,
     quitarProductoDePedido,
-    terminarPedido
+    terminarPedido,
+    cantProdsCesta
 } from "./utils.js";
 
 cargaAlmacenamiento();
-cestaNav(arhivoHTML,pedido,pedidos);
-panelCostado(arhivoHTML,pedido,pedidos);
+cantProdsCesta(pedido);
+cestaNav(arhivoHTML, pedido, pedidos);
+panelCostado(arhivoHTML, pedido, pedidos);
 mostrarProductos(productosDiv, arhivoHTML, categorias, productos, pedido);
 //BOTONES DE AGREGAR PRODUCTO
 let productosAgregarBtn = document.getElementsByClassName("agregarBtn");
@@ -19,33 +21,32 @@ for (let i = 0; i < productosAgregarBtn.length; i++) {
     productosAgregarBtn[i].addEventListener("click", () => {
         let prodObj;
         const btnValor = productosAgregarBtn[i].innerText
-        if ((btnValor == "Quitar") || (btnValor == "Agregar")) {
-            const idProdDiv = productosAgregarBtn[i].parentElement;
-            const prodCant = idProdDiv.querySelector("#prodCant");
-            let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
-            const idProd = parseInt(productosAgregarBtn[i].id.split("agregarBtn-")[1]);
-            //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
-            prodObj = encontrarProductoPorId(idProd, productos);
-            //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
-            agregarProductoAPedido(pedido, prodObj, 1);
-            localStorage.setItem("pedido", JSON.stringify(pedido));
-            prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-right',
-                iconColor: 'white',
-                customClass: {
-                    popup: 'colored-toast'
-                },
-                showConfirmButton: false,
-                timer: 1500,
-                timerProgressBar: false
-            })
-            Toast.fire({
-                icon: 'success',
-                title: `+1 ${prodObj.nombre} en la Cesta`
-            })
-        }
+        const idProdDiv = productosAgregarBtn[i].parentElement;
+        const prodCant = idProdDiv.querySelector("#prodCant");
+        let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
+        const idProd = parseInt(productosAgregarBtn[i].id.split("agregarBtn-")[1]);
+        //SE BUSCA EL PRODUCTO POR SU ID Y SE AGREGA AL PEDIDO
+        prodObj = encontrarProductoPorId(idProd, productos);
+        //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
+        agregarProductoAPedido(pedido, prodObj, 1);
+        cantProdsCesta(pedido);
+        localStorage.setItem("pedido", JSON.stringify(pedido));
+        prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: false
+        })
+        Toast.fire({
+            icon: 'success',
+            title: `+1 ${prodObj.nombre} en la Cesta`
+        })
     })
 }
 
@@ -63,6 +64,7 @@ for (let i = 0; i < productosQuitarBtn.length; i++) {
         prodObj = encontrarProductoPorId(idProd, productos);
         //SE QUITA PRODUCTO DEL PEDIDO ACTUAL 
         const resultado = quitarProductoDePedido(pedido, prodObj);
+        cantProdsCesta(pedido);
         localStorage.setItem("pedido", JSON.stringify(pedido));
         if (resultado != "nada") {
             prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);

@@ -1,6 +1,6 @@
 import { Producto } from "./clases.js";
 import { cargaAlmacenamiento, arhivoHTML,productos,pedido,categorias} from "./almacenamiento.js";
-import { cestaNav,idLibreProducto } from "./utils.js";
+import { cestaNav,idLibreProducto,cantProdsCesta } from "./utils.js";
 
 //SE VALIDA FORMULARIO DE ALTA
 function validarFormAltaTexto(formInputs) {
@@ -18,6 +18,7 @@ function validarFormAltaNumber(formInputs) {
 }
 
 cargaAlmacenamiento();
+cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido);
 let productoAltaBtn = document.getElementById("btnAltaProd");
 productoAltaBtn.addEventListener("click", () => {
