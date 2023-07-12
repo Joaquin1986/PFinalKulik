@@ -1,6 +1,8 @@
 import { Producto } from "./clases.js   ";
 
-export function cantProdsCesta(pedido){
+//FUNCIONES DEDICADAS A LOS PRODUCTOS DE LA APP
+
+export function cantProdsCesta(pedido) {
     const pCantProds = document.getElementById("cantProductos");
     let totalProds = 0;
     pedido.cantidadProductos.forEach(cantProd => {
@@ -23,11 +25,14 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
                     cancelButtonColor: '#ff1e00',
                     cancelButtonText: 'Volver',
                     confirmButtonText: 'Confirmar Compra',
+                    showDenyButton: true,
+                    denyButtonText: 'Borrar Cesto',
                     html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
             <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
             <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
                     (result.isConfirmed) ? terminarPedido(pedido, pedidos) : null;
+                    (result.isDenied) ? borrarCesto(pedido) : null;
 
                 })
             }
@@ -40,12 +45,15 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
                     cancelButtonColor: '#ff1e00',
                     cancelButtonText: 'Volver',
                     confirmButtonText: 'Confirmar Compra',
+                    showDenyButton: true,
+                    denyButtonText: 'Borrar Cesto',
                     html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
                        <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
                        <br>------------------<br>
             <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
                     (result.isConfirmed) && terminarPedido(pedido, pedidos);
+                    (result.isDenied) ? borrarCesto(pedido) : null;
                 })
             }
         } else {
@@ -83,11 +91,15 @@ export function panelCostado(arhivoHTML, pedido, pedidos) {
                     cancelButtonColor: '#ff1e00',
                     cancelButtonText: 'Volver',
                     confirmButtonText: 'Confirmar Compra',
+                    showDenyButton: true,
+                    denyButtonText: 'Borrar Cesto',
                     html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
             <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
             <br>------------------<br><a href=./pages/realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
-                    (result.isConfirmed) && terminarPedido(pedido, pedidos);
+                    (result.isConfirmed) ? terminarPedido(pedido, pedidos) : null;
+                    (result.isDenied) ? borrarCesto(pedido) : null;
+
                 })
             }
             else {
@@ -99,13 +111,15 @@ export function panelCostado(arhivoHTML, pedido, pedidos) {
                     cancelButtonColor: '#ff1e00',
                     cancelButtonText: 'Volver',
                     confirmButtonText: 'Confirmar Compra',
+                    showDenyButton: true,
+                    denyButtonText: 'Borrar Cesto',
                     html: `${pedido.detalle()}------------------<br>Subtotal: $${pedido.precio}
                        <br>IVA(23%): $${Math.round(pedido.Iva())}<br>TOTAL: $${Math.round(pedido.precio * 1.23)}
                        <br>------------------<br>
             <a href=./realizarPedido.html>EDITAR PEDIDO ACTUAL</a><br>`,
                 }).then((result) => {
                     (result.isConfirmed) && terminarPedido(pedido, pedidos);
-
+                    (result.isDenied) ? borrarCesto(pedido) : null;
                 })
             }
         } else {
@@ -220,6 +234,59 @@ function convertirProducto(productoInput) {
     return new Producto(productoInput.id, productoInput.nombre, productoInput.descripcion, productoInput.categoria, productoInput.precio);
 }
 
+//FUNCIONES DEDICADAS A LAS CATEGORÍAS DE LA APP
+
+//LLENA LOS COMBOS CON CADA CATEGORÍA DEL ARRAY
+export function llenarComboCategorias(categorias) {
+    let i = 0;
+    const comboCat = document.getElementById("categProducto");
+    categorias.forEach(cat => {
+        const catOpt = document.createElement("option");
+        catOpt.label = `${categorias[i]}`;
+        catOpt.value = `${categorias[i]}`;
+        comboCat.appendChild(catOpt);
+        i++;
+    })
+}
+
+//VERIFICA SI YA EXISTE LA CATEGORÍA EN EL ARRAY
+export function yaExisteCategoria(categoria, categorias) {
+    let existe = false;
+    let i = 0;
+    categorias.forEach(() => {
+        categorias[i] == categoria ? existe = true : null;
+        i++;
+    })
+    return existe;
+}
+
+//VERIFICA SI YA EXISTE LA CATEGORÍA EN EL ARRAY
+export function categoriaVacia(categoria, productos) {
+    let vacia = true;
+    let i = 0;
+    productos.forEach(() => {
+        String(productos[i].categoria) === (String(categoria)) ? vacia = false : null;
+        i++;
+    })
+    return vacia;
+}
+
+//BORRAR LA CATEGORÍA QUE LE PASAMOS POR PARÁMETRO
+export function borrarCategoria(categoria, categorias) {
+    const indice = categorias.findIndex(cat => cat == categoria);
+    categorias.splice(indice, 1);
+    localStorage.setItem("categorias", JSON.stringify(categorias));
+    Swal.fire({
+        icon: 'success',
+        title: 'Categoría Borrada',
+        html: `La Categoría "${categoria}" ha sido BORRADA`,
+    }).then(function () {
+        location.reload();
+    })
+}
+
+//FUNCIONES DEDICADAS A LOS PEDIDOS DE LA APP
+
 //AGREGAR PRODUCTO A PEDIDO
 export function agregarProductoAPedido(pedido, producto, cantidad) {
     let precioProducto, retorno;
@@ -300,6 +367,29 @@ export function terminarPedido(pedido, pedidos) {
     }).then(function () {
         location.reload();
     });
+}
+
+//FUNCIÓN PARA FINALIZAR EL PEDIDO ACTUAL Y AGREGARLO AL ARRAY DE PEDIDOS
+export function borrarCesto(pedido) {
+    //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
+    const pedidoVacio = pedido.esVacio();
+    if (!pedidoVacio) {
+        localStorage.removeItem("pedido");
+        Swal.fire({
+            icon: 'success',
+            title: 'Pedido Cancelado',
+            text: 'Se ha CANCELADO el Pedido',
+        }).then(function () {
+            location.reload();
+        });
+    }
+    else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error: Pedido VACÍO',
+            text: 'Pedido VACÍO, no es posible CANCELARLO',
+        })
+    }
 }
 
 //FUNCION QUE DEVUELVE HORA ACTUAL

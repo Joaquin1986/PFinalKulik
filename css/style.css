@@ -47,6 +47,11 @@ a:hover {
     color: #ffefd9 !important;
 }
 
+#h2Titulo {
+    text-align: center;
+    margin-top: 20px;
+}
+
 /* SETEOS DE NAVBAR */
 #nav {
     background-color: #fd4d12 !important;
@@ -62,6 +67,11 @@ a:hover {
     margin-left: 70px;
 }
 
+.nav-item {
+    vertical-align: middle;
+
+}
+
 .nav-item a {
     color: #e4e4e4 !important;
     transition: 0.4s;
@@ -69,6 +79,10 @@ a:hover {
 
 .nav-item a:hover {
     color: #fdc968 !important;
+}
+
+.nav-item a:focus {
+    background-color: #fd4d12 !important;
 }
 
 .dropdown-menu {
@@ -80,13 +94,14 @@ a:hover {
     background-color: #fd4d12 !important;
 }
 
-#cantProductos{
+#cantProductos {
     color: white !important;
     font-size: 24px !important;
     margin-top: 32px;
     margin-right: 4px;
-    
+
 }
+
 #cantProductos:hover {
     color: #fdc968 !important;
 }
@@ -102,6 +117,24 @@ a:hover {
     color: #fdc968;
     max-width: 39px;
     cursor: pointer;
+}
+
+.swal2-deny {
+    background-color: #ff1f01 !important;
+}
+
+.swal2-deny:hover {
+    background-color: #fc3015 !important;
+    filter: brightness(120%);
+}
+
+.swal2-cancel {
+    background-color: #797979 !important;
+}
+
+.swal2-cancel:hover {
+    background-color: #858585 !important;
+    filter: brightness(120%);
 }
 
 #buscarTxt {
@@ -131,6 +164,7 @@ a:hover {
 #cestaBtn,
 #whatsappBtn {
     transition: 0.5s;
+    z-index: 90;
 }
 
 #arribaBtn:hover,
@@ -266,6 +300,7 @@ footer h3 {
     margin-top: 50px;
     margin-left: 100px;
     padding-bottom: 9px;
+    margin-bottom: 50px;
 }
 
 .formularioAlta textarea {
@@ -303,6 +338,59 @@ footer h3 {
 .formularioAlta .btn.btn-primary:active {
     filter: brightness(125%);
 
+}
+
+/* ESTILOS PUNTUALES DE CATEGORÍAS */
+
+.categoriasDiv {
+    margin-top: 50px;
+    margin-left: 70px;
+}
+
+.categoriasDiv span,
+.categoriasDiv input,
+.categoriasDiv select,
+.categoriasDiv textarea {
+    border-color: #9b9b9b !important;
+}
+
+.categoriasDiv span {
+    background-color: #ff4000;
+    color: #ffffff !important;
+    transition: 0.5s;
+}
+
+.categoriasDiv span:hover {
+    filter: brightness(150%);
+}
+
+
+#btnBorrarCat {
+    margin-bottom: 30px;
+    margin-top: 10px;
+    background-color: #ff1e00;
+    border-color: #9c1706;
+    color: #ffffff;
+    transition: 0.5s;
+    margin-bottom: 40px;
+    font-size: 20px;
+}
+
+#btnBorrarCat:hover {
+    filter: brightness(150%);
+}
+
+#btnAltaCat {
+    margin-bottom: 70px;
+    margin-top: 10px;
+    background-color: #12a505 !important;
+    border-color: #096400 !important;
+    transition: 0.5s;
+    color: #ffffff;
+}
+
+#btnAltaCat:hover {
+    filter: brightness(150%);
 }
 
 
@@ -513,4 +601,13 @@ footer h3 {
     color: white;
 }
 
+@media (max-width: 767px) {
+    .imgLogo {
+        margin-left: 0px;
+    }
 
+    .formularioAlta {
+        margin-left: 0px;
+        padding-bottom: 9px;
+    }
+}

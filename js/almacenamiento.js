@@ -14,7 +14,7 @@ export let pedido = new Pedido();
 export const arhivoHTML = location.href.split("/").slice(-1);
 
 // SE DEFINEN ARRAYS GENERALES DE LA APP
-export const categorias = ["Meditación", "Ayurveda (Medicina y Cocina)", "Vestimenta Hindú"];
+export const categorias = JSON.parse(localStorage.getItem("categorias")) || ["Meditación", "Ayurveda (Medicina y Cocina)", "Vestimenta Hindú"];
 export const productos = [];
 const pedidosLoad = JSON.parse(localStorage.getItem("pedidos")) || [];
 export const pedidos = convertirPedidos(pedidosLoad);

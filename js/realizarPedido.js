@@ -7,13 +7,15 @@ import {
     agregarProductoAPedido,
     quitarProductoDePedido,
     terminarPedido,
-    cantProdsCesta
+    cantProdsCesta,
+    borrarCesto
 } from "./utils.js";
 
 cargaAlmacenamiento();
 cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido, pedidos);
 panelCostado(arhivoHTML, pedido, pedidos);
+const productosDiv = document.getElementById("productosDiv");
 mostrarProductos(productosDiv, arhivoHTML, categorias, productos, pedido);
 //BOTONES DE AGREGAR PRODUCTO
 let productosAgregarBtn = document.getElementsByClassName("agregarBtn");
@@ -109,27 +111,9 @@ for (let i = 0; i < productosQuitarBtn.length; i++) {
 //BOTON DE CANCELAR PEDIDO
 let productosCancelarBtn = document.getElementById("cancelarBtn");
 productosCancelarBtn.addEventListener("click", () => {
-    //SE LIMPIA EL PEDIDO ACTUAL PARA COMENZAR UNO NUEVO
-    const pedidoVacio = pedido.esVacio();
-    if (!pedidoVacio) {
-        localStorage.removeItem("pedido");
-        Swal.fire({
-            icon: 'success',
-            title: 'Pedido Cancelado',
-            text: 'Se ha CANCELADO el Pedido',
-        }).then(function () {
-            location.reload();
-        });
-    }
-    else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error: Pedido VACÍO',
-            text: 'Pedido VACÍO, no es posible CANCELARLO',
-        })
-    }
-
+    borrarCesto(pedido);
 })
+
 //BOTON DE FINALIZAR PEDIDO
 let productosFinalizarBtn = document.getElementById("finalizarBtn");
 productosFinalizarBtn.addEventListener("click", () => {
