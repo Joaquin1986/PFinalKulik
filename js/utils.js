@@ -1,4 +1,5 @@
 import { Producto } from "./clases.js   ";
+import { pedido, productos } from "./almacenamiento.js";
 
 //FUNCIONES DEDICADAS A LOS PRODUCTOS DE LA APP
 
@@ -67,14 +68,23 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
     });
     const btnBuscar = document.getElementById("btnEnviar");
     btnBuscar.addEventListener("click", () => {
-        Swal.fire({
-            icon: 'info',
-            title: 'Funcionalidad de Búsqueda',
-            text: 'Se implementará próximamente esta funcionalidad',
-        });
+        const prodSeleccionado = document.querySelector("#autoComplete").value;
+        mostrarProducto(prodSeleccionado);
     });
 }
 
+/*FUNCIÓN QUE DEVUELVE UN ARRAY DE NOMBRES DE PRODUCTOS PARA 
+INSERTARLOS COMO SRC PARA AUTOCOMPLETAR EL CAMPO DE BÚSQUEDA*/
+
+export function productosListaSrc(productos) {
+    let arrRetorno = [];
+    let i = 0;
+    productos.forEach(p => {
+        arrRetorno[i] = p.nombre
+        i++
+    })
+    return arrRetorno;
+}
 
 //FUNCION PARA LISTENER DE BOTONES DEL COSTADO
 export function panelCostado(arhivoHTML, pedido, pedidos) {
@@ -139,6 +149,94 @@ export function panelCostado(arhivoHTML, pedido, pedidos) {
             text: 'Se implementará próximamente esta funcionalidad',
         });
     });
+}
+
+
+//PRESENTA UNA CARD EN PANTALLA CON EL PRODUCTO SELECCIONADO
+export function mostrarProducto(nombreProducto) {
+    //BUSCAR EN PEDIDOS.PRODUCTOS, SINO EN PRODUCTOS, SINO NO EXISTE
+    const idProd1 = encontrarProductoPorNombreEnPedidos(nombreProducto, pedido);
+    const idProd2 = encontrarProductoPorNombreEnProductos(nombreProducto, productos);
+    if (idProd1 != -1 || (idProd1 == -1 && idProd2 != -1)) {
+        //PRODUCTO YA EXISTE EN EL PEDIDO, SE BRINDA LA POSIBILIDAD DE MODIFICAR LA CANTIDAD
+        let prod1 = new Producto();
+        let cantidadProducto = 0;
+        idProd1 != -1 ? prod1 = pedido.productos[idProd1] : prod1 = productos[idProd2];
+        idProd1 != -1 ? cantidadProducto = pedido.cantidadProductos[idProd1] : cantidadProducto = 0;
+        Swal.fire({
+            html:
+                `<div class="contSwalProd" id="containerSwal">
+            <div class="tarjetaProd" id="Prod-Encontrado"> 
+            <h2 id|="prodTitulo-Encontrado">${prod1.nombre}</h2>
+            <img class="tarjetaProdImg" src="${prod1.imgURL}" alt="Imagen de ${prod1.nombre}">
+            <p id="prodDesc">${prod1.descripcion}<br>Precio:  $${prod1.precio}<br>
+            IVA (23%):  $${(prod1.precio * 0.23)}<br>
+            Precio total:  $${(prod1.precio * 1.23)}
+            </p>
+                <p id="prodCant">Cantidad: ${cantidadProducto}</p>
+                <button class="productoEncontradoAgregarBtn btn btn-primary" id="productoEncontradoAgregarBtn" type="submit">Agregar</button>
+                <button class="productoEncontradoQuitarBtn btn btn-primary" id="productoEncontradoQuitarBtn" |="" type="submit">Quitar</button><p></p>
+                </div> </div>`,
+            showCloseButton: true,
+            showCancelButton: false,
+            showConfirmButton: false
+        })
+        //BOTON DE AGREGAR PRODUCTO
+        const productoAgregarBtn = document.getElementById("productoEncontradoAgregarBtn");
+        productoAgregarBtn.addEventListener("click", () => {
+            //SE VINCULA AL DIV DE CANTIDAD EN EL DOM
+            const idProdDiv = productoAgregarBtn.parentElement;
+            const prodCant = idProdDiv.querySelector("#prodCant");
+            let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
+            //SE AGREGA EL PRODUCTO AL PEDIDO ACTUAL
+            agregarProductoAPedido(pedido, prod1, 1);
+            cantProdsCesta(pedido);
+            localStorage.setItem("pedido", JSON.stringify(pedido));
+            prodCant.innerText = "Cantidad: " + (prodCantNumber + 1);
+        })
+
+        //BOTON DE BAJA PRODUCTO
+        const productoQuitarBtn = document.getElementById("productoEncontradoQuitarBtn");
+        productoQuitarBtn.addEventListener("click", () => {
+            //SE VINCULA AL DIV DE CANTIDAD EN EL DOM
+            const idProdDiv = productoQuitarBtn.parentElement;
+            const prodCant = idProdDiv.querySelector("#prodCant");
+            let prodCantNumber = parseInt(prodCant.innerHTML.split(": ").slice(1, 2));
+            //SE QUITA EL PRODUCTO DEL PEDIDO ACTUAL
+            const resultado = quitarProductoDePedido(pedido, prod1);
+            cantProdsCesta(pedido);
+            localStorage.setItem("pedido", JSON.stringify(pedido));
+            if (resultado != "nada") {
+                prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);
+            }
+            else {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-right',
+                    iconColor: 'white',
+                    customClass: {
+                        popup: 'colored-toast'
+                    },
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: false
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: `Sin ${prod1.nombre} en la Cesta`
+                })
+            }
+
+        })
+    }
+    else {
+        //PRODUCTO INGRESADO NO EXISTE EN LA BASE DE DATOS
+        Swal.fire({
+            icon: 'error',
+            title: 'Error: Producto no existente',
+            text: 'El producto ingresado NO existe en la base',
+        })
+    }
 }
 
 //FUNCION QUE MUESTRA LOS PRODUCTOS DE ACUERDO AL SITIO EN EL QUE ES CARGADO (ARCHIVO HTML)
@@ -222,16 +320,30 @@ export function idLibrePedido(pedidos) {
     return idLibrePedido;
 }
 
-//ENCONTRAR PRODUCTO POR ID
+//ENCONTRAR PRO DUCTO POR ID
 export function encontrarProductoPorId(idProducto, productos) {
-    const productoEncontrado = productos.find(element => element.id === idProducto);
+    let productoEncontrado = new Producto();
+    productoEncontrado = productos.find(element => element.id === idProducto);
     return convertirProducto(productoEncontrado);
 }
+
+//ENCONTRAR PRODUCTO POR NOMBRE EN EL PEDIDO ACTUAL PEDIDO
+function encontrarProductoPorNombreEnPedidos(nombreProducto, pedido) {
+    const idProdEnncontrado = pedido.productos.findIndex(element => element.nombre === nombreProducto);
+    return idProdEnncontrado;
+}
+
+//ENCONTRAR PRODUCTO POR NOMBRE EN EL ARRAY DE PRODUCTOS
+function encontrarProductoPorNombreEnProductos(nombreProducto, productos) {
+    const idProdEnncontrado = productos.findIndex(element => element.nombre === nombreProducto);
+    return idProdEnncontrado;
+}
+
 
 
 //CONVERTIR OBJETO GENÉRICO DESDE LOCALSTORAGE A OBJETO DEL TIPO 'PRODUCTO'
 function convertirProducto(productoInput) {
-    return new Producto(productoInput.id, productoInput.nombre, productoInput.descripcion, productoInput.categoria, productoInput.precio);
+    return new Producto(productoInput.id, productoInput.nombre, productoInput.descripcion, productoInput.categoria, productoInput.precio, productoInput.imgURL);
 }
 
 //FUNCIONES DEDICADAS A LAS CATEGORÍAS DE LA APP

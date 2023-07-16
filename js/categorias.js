@@ -1,5 +1,6 @@
 import { cargaAlmacenamiento, categorias, pedido, productos } from "./almacenamiento.js";
 import { categoriaVacia, cestaNav, llenarComboCategorias, yaExisteCategoria, borrarCategoria } from "./utils.js";
+import {autocompletarTxt} from "./buscar.js";
 
 
 //CREA UNA ALERTA POR NOMBRE DE CATEGORÍA VACÍO EN FORM
@@ -45,6 +46,7 @@ function crearCategoria(nombreCat) {
 cargaAlmacenamiento();
 cestaNav(pedido);
 llenarComboCategorias(categorias);
+autocompletarTxt();
 const btnAltaCat = document.getElementById("btnAltaCat");
 const btnBorrarCat = document.getElementById("btnBorrarCat");
 const inputCat = document.getElementsByClassName("form-control");

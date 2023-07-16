@@ -146,17 +146,23 @@ a:hover {
     border-color: #fdb52e;
 }
 
+#Prod-Encontrado{
+    margin-left: 100px;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+}
+
 #btnEnviar {
-    margin-right: 118px;
-    background-color: #ebebeb;
-    border-color: #979797;
-    color: #6d6d6d;
+    min-width: 33px;
+    min-height: 33px;
+    color: white;
+    margin-right: 110px;
+    transition: 0.5s;
 }
 
 #btnEnviar:hover {
-    background-color: #fdc968;
-    border-color: #fab941;
-    color: #464646;
+    color: #fdc968;
+    cursor: pointer;
 }
 
 /* SETEO DE BOTONOES DEL COSTADO */
@@ -292,6 +298,18 @@ footer h3 {
     max-width: 200px;
 
 }
+
+.productoEncontradoAgregarBtn {
+    background-color: #12a505 !important;
+    border-color: #096400 !important;
+    transition: 0.5s;
+    color: #ffffff;
+}
+
+.productoEncontradoAgregarBtn:hover {
+    filter: brightness(150%);
+}
+
 
 
 /* ESTILOS PUNTUALES DE ALTA O BAJA DE PRODUCTO */

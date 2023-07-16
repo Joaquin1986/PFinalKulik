@@ -121,5 +121,5 @@ function convertirProductos(inputProductos) {
 
 //CONVERTIR OBJETO GENÉRICO DESDE LOCALSTORAGE A OBJETO DEL TIPO 'PRODUCTO'
 function convertirProducto(productoInput) {
-    return new Producto(productoInput.id, productoInput.nombre, productoInput.descripcion, productoInput.categoria, productoInput.precio);
+    return new Producto(productoInput.id, productoInput.nombre, productoInput.descripcion, productoInput.categoria, productoInput.precio, productoInput.imgURL);
 }

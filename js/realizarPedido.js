@@ -10,11 +10,13 @@ import {
     cantProdsCesta,
     borrarCesto
 } from "./utils.js";
+import {autocompletarTxt} from "./buscar.js";
 
 cargaAlmacenamiento();
 cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido, pedidos);
 panelCostado(arhivoHTML, pedido, pedidos);
+autocompletarTxt();
 const productosDiv = document.getElementById("productosDiv");
 mostrarProductos(productosDiv, arhivoHTML, categorias, productos, pedido);
 //BOTONES DE AGREGAR PRODUCTO
@@ -70,21 +72,6 @@ for (let i = 0; i < productosQuitarBtn.length; i++) {
         localStorage.setItem("pedido", JSON.stringify(pedido));
         if (resultado != "nada") {
             prodCant.innerText = "Cantidad: " + (prodCantNumber - 1);
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-right',
-                iconColor: 'white',
-                customClass: {
-                    popup: 'colored-toast'
-                },
-                showConfirmButton: false,
-                timer: 1500,
-                timerProgressBar: false
-            })
-            Toast.fire({
-                icon: 'error',
-                title: `-1 ${prodObj.nombre} en la Cesta`
-            })
         }
         else {
             const Toast = Swal.mixin({
