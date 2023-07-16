@@ -69,7 +69,7 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
     const btnBuscar = document.getElementById("btnEnviar");
     btnBuscar.addEventListener("click", () => {
         const prodSeleccionado = document.querySelector("#autoComplete").value;
-        mostrarProducto(prodSeleccionado);
+        mostrarProducto(prodSeleccionado, arhivoHTML);
     });
 }
 
@@ -153,7 +153,7 @@ export function panelCostado(arhivoHTML, pedido, pedidos) {
 
 
 //PRESENTA UNA CARD EN PANTALLA CON EL PRODUCTO SELECCIONADO
-export function mostrarProducto(nombreProducto) {
+export function mostrarProducto(nombreProducto, arhivoHTML) {
     //BUSCAR EN PEDIDOS.PRODUCTOS, SINO EN PRODUCTOS, SINO NO EXISTE
     const idProd1 = encontrarProductoPorNombreEnPedidos(nombreProducto, pedido);
     const idProd2 = encontrarProductoPorNombreEnProductos(nombreProducto, productos);
@@ -161,17 +161,23 @@ export function mostrarProducto(nombreProducto) {
         //PRODUCTO YA EXISTE EN EL PEDIDO, SE BRINDA LA POSIBILIDAD DE MODIFICAR LA CANTIDAD
         let prod1 = new Producto();
         let cantidadProducto = 0;
+        let imgUrlPath = "";
         idProd1 != -1 ? prod1 = pedido.productos[idProd1] : prod1 = productos[idProd2];
         idProd1 != -1 ? cantidadProducto = pedido.cantidadProductos[idProd1] : cantidadProducto = 0;
+        const path = prod1.imgURL.split("../").slice(-1);
+        arhivoHTML[0] != "index.html" && arhivoHTML[0] != "" ? imgUrlPath = "../" + path : imgUrlPath = "./" + path;   
+        console.log (arhivoHTML)
+        console.log (arhivoHTML[0])
+        console.log (imgUrlPath)
         Swal.fire({
             html:
                 `<div class="contSwalProd" id="containerSwal">
             <div class="tarjetaProd" id="Prod-Encontrado"> 
             <h2 id|="prodTitulo-Encontrado">${prod1.nombre}</h2>
-            <img class="tarjetaProdImg" src="${prod1.imgURL}" alt="Imagen de ${prod1.nombre}">
-            <p id="prodDesc">${prod1.descripcion}<br>Precio:  $${prod1.precio}<br>
-            IVA (23%):  $${(prod1.precio * 0.23)}<br>
-            Precio total:  $${(prod1.precio * 1.23)}
+            <img class="tarjetaProdImg" src="${imgUrlPath}" alt="Imagen de ${prod1.nombre}">
+            <p id="prodDesc">${prod1.descripcion}<br>Precio:  $${Math.round(prod1.precio)}<br>
+            IVA (23%):  $${Math.round(prod1.precio * 0.23)}<br>
+            Precio total:  $${(prod1.precioIVA())}
             </p>
                 <p id="prodCant">Cantidad: ${cantidadProducto}</p>
                 <button class="productoEncontradoAgregarBtn btn btn-primary" id="productoEncontradoAgregarBtn" type="submit">Agregar</button>
