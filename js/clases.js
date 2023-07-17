@@ -39,12 +39,14 @@ export class Pedido {
 
     cantidadDe(prod) {
         let indiceProd;
+        let cantidad = 0;
         //SE BUSCA EL INDICE DEL PRODUCTO
         for (let i = 0; i < this.productos.length; i++) {
-           (prod.id == this.productos[i].id)? indiceProd = i:null;
+            (prod.id == this.productos[i].id) ? indiceProd = i : null;
         }
         //SE DEVUELVE LA CANTIDAD DE PRODUCTOS CON ESE MISMO INDICE
-        return parseInt(this.cantidadProductos[indiceProd]);
+        isNaN(parseInt(this.cantidadProductos[indiceProd])) ? cantidad = 0 : cantidad = parseInt(this.cantidadProductos[indiceProd]);
+        return cantidad;
     }
 
     esVacio() {

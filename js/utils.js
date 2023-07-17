@@ -151,7 +151,6 @@ export function panelCostado(arhivoHTML, pedido, pedidos) {
     });
 }
 
-
 //PRESENTA UNA CARD EN PANTALLA CON EL PRODUCTO SELECCIONADO
 export function mostrarProducto(nombreProducto, arhivoHTML) {
     //BUSCAR EN PEDIDOS.PRODUCTOS, SINO EN PRODUCTOS, SINO NO EXISTE
@@ -165,10 +164,7 @@ export function mostrarProducto(nombreProducto, arhivoHTML) {
         idProd1 != -1 ? prod1 = pedido.productos[idProd1] : prod1 = productos[idProd2];
         idProd1 != -1 ? cantidadProducto = pedido.cantidadProductos[idProd1] : cantidadProducto = 0;
         const path = prod1.imgURL.split("../").slice(-1);
-        arhivoHTML[0] != "index.html" && arhivoHTML[0] != "" ? imgUrlPath = "../" + path : imgUrlPath = "./" + path;   
-        console.log (arhivoHTML)
-        console.log (arhivoHTML[0])
-        console.log (imgUrlPath)
+        arhivoHTML[0] != "index.html" && arhivoHTML[0] != "" ? imgUrlPath = "../" + path : imgUrlPath = "./" + path;
         Swal.fire({
             html:
                 `<div class="contSwalProd" id="containerSwal">
@@ -186,6 +182,11 @@ export function mostrarProducto(nombreProducto, arhivoHTML) {
             showCloseButton: true,
             showCancelButton: false,
             showConfirmButton: false
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss && (arhivoHTML[0] = "realizarPedido.html")) {
+                actualizarCantidades(productos, pedido);
+            }
         })
         //BOTON DE AGREGAR PRODUCTO
         const productoAgregarBtn = document.getElementById("productoEncontradoAgregarBtn");
@@ -230,7 +231,9 @@ export function mostrarProducto(nombreProducto, arhivoHTML) {
                 Toast.fire({
                     icon: 'error',
                     title: `Sin ${prod1.nombre} en la Cesta`
-                })
+                }).then(function () {
+                    actualizarCantidades(productos, pedido);
+                });
             }
 
         })
@@ -279,14 +282,14 @@ export function mostrarProductos(productosDiv, arhivoHTML, categorias, productos
                     //SE BUSCA EL NUMERO DE INDICE DEL PRODUCTO
 
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
-                    <p id="prodCant">Cantidad: ${pedido.cantidadDe(el)}</p>
+                    <p id="prodCant-${el.id}" class="prodCantidades">Cantidad: ${pedido.cantidadDe(el)}</p>
                     <button class="agregarBtn btn btn-primary" id="agregarBtn-${el.id}" type="submit">Agregar</button>
                     <button class="quitarBtn btn btn-primary" id="quitarBtn-${el.id} type="submit">Quitar</button></p>
                     `;
                 }
                 else {
                     tarjetaProd.innerHTML = tarjetaProd.innerHTML + `
-                    <p id="prodCant">Cantidad: 0</p>
+                    <p id="prodCant-${el.id}" class="prodCantidades">Cantidad: 0</p>
                     <button class="agregarBtn btn btn-primary" id="agregarBtn-${el.id}" type="submit">Agregar</button>
                     <button class="quitarBtn btn btn-primary" id="quitarBtn-${el.id}"| type="submit">Quitar</button></p>
                     `;
@@ -296,6 +299,16 @@ export function mostrarProductos(productosDiv, arhivoHTML, categorias, productos
         }
         )
     })
+}
+
+//ACTUALIZA LAS CANTIDADES EN EL DOM EN LA PÁGINA DE REALIZAR PEDIDOS
+function actualizarCantidades(productos, pedido) {
+    const inputs = document.getElementsByClassName("prodCantidades");
+    for (let i = 0; i < inputs.length; i++) {
+        const idProd = inputs[i].id.split("prodCant-")[1];
+        const cantProd = pedido.cantidadDe(convertirProducto(productos[idProd - 1]));
+        inputs[i].innerText = "Cantidad: " + cantProd;
+    }
 }
 
 //BUSCA UN ID LIBRE DE PRODUCTO
