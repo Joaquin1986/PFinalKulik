@@ -146,7 +146,7 @@ a:hover {
     border-color: #fdb52e;
 }
 
-#Prod-Encontrado{
+#Prod-Encontrado {
     margin-left: 100px;
     margin-bottom: 0px !important;
     margin-top: 0px !important;
@@ -164,6 +164,21 @@ a:hover {
     color: #fdc968;
     cursor: pointer;
 }
+
+#liRecetas {
+    color: #e4e4e4 !important;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 5px;
+}
+
+
+#liRecetas:hover {
+    color: #fdc968 !important;
+    cursor: pointer;
+}
+
 
 /* SETEO DE BOTONOES DEL COSTADO */
 #arribaBtn,
@@ -618,6 +633,86 @@ footer h3 {
 .colored-toast .swal2-html-container {
     color: white;
 }
+
+/* SETEOS DE RECETAS */
+
+#recetasDiv {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    justify-content: center;
+
+}
+
+.tarjetaReceta {
+    text-align: center;
+    max-width: 450px;
+    margin-top: 20px;
+    padding-bottom: 25px;
+    border-radius: 30px;
+    margin-left: -30px;
+}
+
+.tarjetaReceta h2 {
+    font-size: 20px;
+    background-color: #2b2b2b;
+    color: white !important;
+    max-width: 300px;
+    border-radius: 80px;
+    margin-left: 30px;
+}
+
+.tarjetaReceta:hover {
+    filter: brightness(130%);
+    cursor: pointer;
+}
+
+.tarjetaReceta img {
+    border-radius: 200px;
+    max-width: 370px;
+    transition: 0.5s;
+    filter: grayscale(30%) blur(.65px);
+    border-style: dashed;
+
+}
+
+.tarjetaReceta img:hover {
+    max-width: 400px;
+    filter: grayscale(0%) blur(0px);
+}
+
+.tarjetaRecetaImg {
+    max-width: 400px;
+}
+
+.contSwalDetalleReceta {
+    background-color: #d43c00;
+    border-radius: 30px;
+}
+
+.contSwalDetalleReceta:hover {
+    filter: brightness(120%);
+}
+
+.contSwalDetalleReceta h2,
+.contSwalDetalleReceta p {
+    color: white !important;
+}
+
+.swal2-close {
+    color: #2b2b2b !important;
+    transition: 0.4s;
+}
+
+.swal2-close:hover {
+    color: #5e5e5e !important;
+    border-style: solid;
+}
+
+
+/* MEDIAQUERIES */
 
 @media (max-width: 767px) {
     .imgLogo {
