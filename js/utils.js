@@ -66,11 +66,21 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
             });
         }
     });
+
     const btnBuscar = document.getElementById("btnEnviar");
     btnBuscar.addEventListener("click", () => {
+        obtenerResultado();
+    });
+
+    const inputBusqueda = document.getElementById("autoComplete");
+    inputBusqueda.addEventListener("keydown", (e) => {
+        e.key === "Enter"?  obtenerResultado() : null;
+    });
+
+    function obtenerResultado(){
         const prodSeleccionado = document.querySelector("#autoComplete").value;
         mostrarProducto(prodSeleccionado, arhivoHTML);
-    });
+    }
 }
 
 /*FUNCIÓN QUE DEVUELVE UN ARRAY DE NOMBRES DE PRODUCTOS PARA 
@@ -141,8 +151,8 @@ export function panelCostado(arhivoHTML, pedido, pedidos) {
             });
         }
     });
-    const btnBuscar = document.getElementById("whatsappBtn");
-    btnBuscar.addEventListener("click", () => {
+    const btnWsp = document.getElementById("whatsappBtn");
+    btnWsp.addEventListener("click", () => {
         Swal.fire({
             icon: 'info',
             title: 'Funcionalidad de Whatsapp',
@@ -621,12 +631,13 @@ export function precargaPagina(arhivoHTML, body, pathArchivoJS) {
 
 function bodyBasicoMain(arhivoHTML, body, pathArchivoJS) {
     let rutaRelativaIndex, rutaRelativaResto;
-    if (arhivoHTML[0] == "index.html"){
+    console.log (arhivoHTML)
+    if (arhivoHTML[0] == "index.html" || arhivoHTML[0] == "") {
         //SE ASOCIAN LAS VARIABLES DE ACUERDO AL ARCHIVO INDEX
         rutaRelativaIndex = "./";
         rutaRelativaResto = "./pages/"
 
-    }else{
+    } else {
         ///SE ASOCIAN LAS VARIABLES DE ACUERDO AL RESTO DEL SITIO
         rutaRelativaIndex = "../";
         rutaRelativaResto = "./"
