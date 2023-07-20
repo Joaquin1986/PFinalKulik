@@ -722,6 +722,13 @@ footer h3 {
     font-size: 22px !important;
 }
 
+#player{
+    min-width: 455px;
+    max-width: 455px;
+    min-height: 270px;
+    max-height: 270px;
+}
+
 
 /* MEDIAQUERIES */
 

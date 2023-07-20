@@ -631,7 +631,6 @@ export function precargaPagina(arhivoHTML, body, pathArchivoJS) {
 
 function bodyBasicoMain(arhivoHTML, body, pathArchivoJS) {
     let rutaRelativaIndex, rutaRelativaResto;
-    console.log (arhivoHTML)
     if (arhivoHTML[0] == "index.html" || arhivoHTML[0] == "") {
         //SE ASOCIAN LAS VARIABLES DE ACUERDO AL ARCHIVO INDEX
         rutaRelativaIndex = "./";

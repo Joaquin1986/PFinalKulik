@@ -7,14 +7,14 @@ export function botonRecetas(pathArchivoJS) {
     const btnRecetas = document.getElementById("liRecetas");
     btnRecetas.addEventListener("click", () => {
         const pagina = document.querySelector("body");
-        precargaPagina(arhivoHTML,pagina, pathArchivoJS);
+        precargaPagina(arhivoHTML, pagina, pathArchivoJS);
         mostrarRecetas();
         cargaAlmacenamiento();
         cantProdsCesta(pedido);
         cestaNav(arhivoHTML, pedido, pedidos);
         panelCostado(arhivoHTML, pedido, pedidos);
         autocompletarTxt();
-        
+
     })
 }
 
@@ -39,7 +39,8 @@ function mostrarRecetas() {
                 <img class="tarjetaRecImg" src="${element.strMealThumb}" alt="Imagen de ${element.strMeal}">         
                 `;
                 divRecetas.appendChild(tarjetaReceta);
-                tarjetaReceta.addEventListener("click", () => {
+                tarjetaReceta.addEventListener("click", (e) => {
+                    e.preventDefault();
                     let respuesta2;
                     //SE HACE UN NUEVO FETCH CON EL PLATO ELEGIDO
                     fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + element.idMeal, requestOptions)
@@ -47,8 +48,9 @@ function mostrarRecetas() {
                         .then(result => {
                             //SE TRABAJA LA RESPUESTA DEL FETCH PARA PRESENTAR LA CARD DE LA RECETA
                             respuesta2 = (JSON.parse(result));
-                            const claves = Object.keys(respuesta2.meals[0]);
                             const valores = Object.values(respuesta2.meals[0]);
+                            const arrYoutube = respuesta2.meals[0].strYoutube.split("?v=");
+                            const urlYoutube=arrYoutube[1]
                             let cantidades = "";
                             for (let i = 9; i < 29; i++) {
                                 valores[i] != "" && valores[i + 20] != "" ? cantidades += valores[i] + " - " + valores[i + 20] + "<br>" : null;
@@ -67,6 +69,8 @@ function mostrarRecetas() {
                                   <p>${respuesta2.meals[0].strInstructions}</p>
                                   </div> 
                                   <div class="videoReceta" id="videoReceta-${element.idMeal}">
+                                  <iframe id="player" type="text/html"
+                                  src="http://www.youtube.com/embed/${urlYoutube}?enablejsapi=1&origin=https://joaquin1986.github.io" frameborder="0"></iframe>
                                   <a href="${respuesta2.meals[0].strYoutube}" target="blank"><p id="linkReceta" >Link al Video de Preparación</p></a>
                                   </div>                                  
                                 </div>`,
