@@ -70,7 +70,7 @@ function mostrarRecetas() {
                                   </div> 
                                   <div class="videoReceta" id="videoReceta-${element.idMeal}">
                                   <iframe id="player" type="text/html"
-                                  src="http://www.youtube.com/embed/${urlYoutube}?enablejsapi=1&origin=https://joaquin1986.github.io" frameborder="0"></iframe>
+                                  src="https://www.youtube.com/embed/${urlYoutube}?enablejsapi=1&origin=https://joaquin1986.github.io" frameborder="0"></iframe>
                                   <a href="${respuesta2.meals[0].strYoutube}" target="blank"><p id="linkReceta" >Link al Video de Preparación</p></a>
                                   </div>                                  
                                 </div>`,
