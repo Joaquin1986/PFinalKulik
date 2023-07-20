@@ -613,19 +613,31 @@ export function entregarPedido(idPedido, pedidos) {
     })
 }
 
-export function precargaPagina(body, pathArchivoJS) {
-    body    .innerHTML = "";
-    bodyBasicoMain(body, pathArchivoJS);
+export function precargaPagina(arhivoHTML, body, pathArchivoJS) {
+    body.innerHTML = "";
+    bodyBasicoMain(arhivoHTML, body, pathArchivoJS);
 }
 
 
-function bodyBasicoMain(body, pathArchivoJS) {
+function bodyBasicoMain(arhivoHTML, body, pathArchivoJS) {
+    let rutaRelativaIndex, rutaRelativaResto;
+    if (arhivoHTML[0] == "index.html"){
+        //SE ASOCIAN LAS VARIABLES DE ACUERDO AL ARCHIVO INDEX
+        rutaRelativaIndex = "./";
+        rutaRelativaResto = "./pages/"
+
+    }else{
+        ///SE ASOCIAN LAS VARIABLES DE ACUERDO AL RESTO DEL SITIO
+        rutaRelativaIndex = "../";
+        rutaRelativaResto = "./"
+    }
+    //SE LIMPIA EL DOM Y SE REARMA EL HTML BÁSICO
     body.innerHTML = `
     <!-- NAVBAR O MENU DEL SITIO -->
     <header>
         <nav class="navbar navbar-expand-lg" id="nav">
             <div class="container-fluid">
-                <a class="navbar-brand" href="./index.html"><img src="./img/logo.jpg" alt="Logo de Agarapana"
+                <a class="navbar-brand" href="${rutaRelativaIndex}index.html"><img src="${rutaRelativaIndex}img/logo.jpg" alt="Logo de Agarapana"
                         class="imgLogo"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                     aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -634,7 +646,7 @@ function bodyBasicoMain(body, pathArchivoJS) {
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="./index.html  ">Inicio</a>
+                            <a class="nav-link active" aria-current="page" href="${rutaRelativaIndex}index.html  ">Inicio</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -642,17 +654,17 @@ function bodyBasicoMain(body, pathArchivoJS) {
                                 Productos
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="./pages/verProductos.html">Ver Productos</a></li>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}verProductos.html">Ver Productos</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="./pages/altaProducto.html">Alta de Producto</a></li>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}altaProducto.html">Alta de Producto</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="./pages/bajaProducto.html">Baja de Producto</a></li>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}bajaProducto.html">Baja de Producto</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item" href="./pages/categorias.html">Categorías</a></li>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}categorias.html">Categorías</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -665,15 +677,15 @@ function bodyBasicoMain(body, pathArchivoJS) {
                                 Pedidos
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="./pages/verPedidos.html">Ver Pedidos</a></li>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}verPedidos.html">Ver Pedidos</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="./pages/realizarPedido.html">Realizar Pedido</a></li>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}realizarPedido.html">Realizar Pedido</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="./pages/gestionarPedidos.html">Gestionar Pedidos</a>
+                                <li><a class="dropdown-item" href="${rutaRelativaResto}gestionarPedidos.html">Gestionar Pedidos</a>
                                 </li>
                             </ul>
                         </li>

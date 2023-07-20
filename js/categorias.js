@@ -1,6 +1,7 @@
 import { cargaAlmacenamiento, categorias, pedido, productos } from "./almacenamiento.js";
 import { categoriaVacia, cestaNav, llenarComboCategorias, yaExisteCategoria, borrarCategoria } from "./utils.js";
 import {autocompletarTxt} from "./buscar.js";
+import { botonRecetas } from "./recetas.js";
 
 
 //CREA UNA ALERTA POR NOMBRE DE CATEGORÍA VACÍO EN FORM
@@ -47,6 +48,7 @@ cargaAlmacenamiento();
 cestaNav(pedido);
 llenarComboCategorias(categorias);
 autocompletarTxt();
+botonRecetas("../js/categorias.js");
 const btnAltaCat = document.getElementById("btnAltaCat");
 const btnBorrarCat = document.getElementById("btnBorrarCat");
 const inputCat = document.getElementsByClassName("form-control");

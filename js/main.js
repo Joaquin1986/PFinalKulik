@@ -7,4 +7,4 @@ cargaAlmacenamiento();
 cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido, pedidos);
 autocompletarTxt();
-botonRecetas();
+botonRecetas(arhivoHTML, "./js/main.js");

@@ -1,12 +1,14 @@
 import { cargaAlmacenamiento, pedido, arhivoHTML, pedidos} from "./almacenamiento.js";
 import { cestaNav,panelCostado,mostrarPedidos,cancelarPedido, entregarPedido, cantProdsCesta} from "./utils.js";
 import {autocompletarTxt} from "./buscar.js";
+import { botonRecetas } from "./recetas.js";
 
 cargaAlmacenamiento()
 cantProdsCesta(pedido);
 cestaNav(arhivoHTML,pedido,pedidos);
 panelCostado(arhivoHTML,pedido,pedidos);
 autocompletarTxt();
+botonRecetas("../js/gestionarPedidos.js");
 if (pedidos.length > 0) {
     const pedidosDiv = document.getElementById("pedidosDiv");
     cestaNav(arhivoHTML);

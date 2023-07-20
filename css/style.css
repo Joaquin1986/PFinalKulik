@@ -711,6 +711,17 @@ footer h3 {
     border-style: solid;
 }
 
+#linkReceta{
+    transition: 0.5s;
+    color:#fdc968 !important;
+
+}
+
+#linkReceta:hover{
+    color:#f8b63b !important;
+    font-size: 22px !important;
+}
+
 
 /* MEDIAQUERIES */
 

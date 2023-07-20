@@ -11,12 +11,14 @@ import {
     borrarCesto
 } from "./utils.js";
 import { autocompletarTxt } from "./buscar.js";
+import { botonRecetas } from "./recetas.js";
 
 cargaAlmacenamiento();
 cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido, pedidos);
 panelCostado(arhivoHTML, pedido, pedidos);
 autocompletarTxt();
+botonRecetas("../js/realizarPedido.js");
 const productosDiv = document.getElementById("productosDiv");
 mostrarProductos(productosDiv, arhivoHTML, categorias, productos, pedido);
 //BOTONES DE AGREGAR PRODUCTO

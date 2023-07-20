@@ -3,19 +3,18 @@ import { autocompletarTxt } from "./buscar.js";
 import { cestaNav, cantProdsCesta, panelCostado } from "./utils.js";
 import { precargaPagina } from "./utils.js";
 
-export function botonRecetas() {
+export function botonRecetas(pathArchivoJS) {
     const btnRecetas = document.getElementById("liRecetas");
     btnRecetas.addEventListener("click", () => {
         const pagina = document.querySelector("body");
-        precargaPagina(pagina, "./js/main.js");
+        precargaPagina(arhivoHTML,pagina, pathArchivoJS);
         mostrarRecetas();
         cargaAlmacenamiento();
         cantProdsCesta(pedido);
         cestaNav(arhivoHTML, pedido, pedidos);
         panelCostado(arhivoHTML, pedido, pedidos);
         autocompletarTxt();
-
-
+        
     })
 }
 
@@ -54,10 +53,6 @@ function mostrarRecetas() {
                             for (let i = 9; i < 29; i++) {
                                 valores[i] != "" && valores[i + 20] != "" ? cantidades += valores[i] + " - " + valores[i + 20] + "<br>" : null;
                             }
-                            //SE ARMA LA URL DE YOUTUBE EN MODO 'EMBED' EN VEZ DE 'WATCH' PARA QUE NO DE ERROR
-                            let idVideo = respuesta2.meals[0].strYoutube;
-                            idVideo = idVideo.split("?v=");
-                            let urlYoutube = "https://www.youtube.com/embed/" + idVideo;
                             //SE ABRE UN SWEET ALERT CON EL DETALLE DE LA RECETA DEL PLATO
                             Swal.fire({
                                 html:
@@ -72,7 +67,7 @@ function mostrarRecetas() {
                                   <p>${respuesta2.meals[0].strInstructions}</p>
                                   </div> 
                                   <div class="videoReceta" id="videoReceta-${element.idMeal}">
-                                  <iframe src="${urlYoutube}" title="YouTube video player" frameborder="0" allow="accelerometer; gyroscope; web-share" allowfullscreen></iframe>
+                                  <a href="${respuesta2.meals[0].strYoutube}" target="blank"><p id="linkReceta" >Link al Video de Preparación</p></a>
                                   </div>                                  
                                 </div>`,
                                 showCloseButton: true,
@@ -101,15 +96,3 @@ function mostrarRecetas() {
         });
 
 }
-
-function mostrarIngredientes(respuesta) {
-    const divIngredientes = document.getElementById("cantidadesReceta");
-    const pIngredientes = document.createElement("div");
-    pIngredientes.classList.add("parrafoIngredientesReceta");
-    // for (let i =1 ; i <= 20; i++){
-
-    // }
-}
-
-
-

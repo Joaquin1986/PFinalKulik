@@ -1,12 +1,14 @@
 import { cargaAlmacenamiento, arhivoHTML, categorias, productos, pedido, pedidos } from "./almacenamiento.js";
 import { cestaNav, panelCostado, mostrarProductos, encontrarProductoPorId, cantProdsCesta } from "./utils.js";
 import {autocompletarTxt} from "./buscar.js";
+import { botonRecetas } from "./recetas.js";
 
 cargaAlmacenamiento();
 cantProdsCesta(pedido);
 cestaNav(arhivoHTML, pedido, pedidos);
 panelCostado(arhivoHTML, pedido, pedidos);
 autocompletarTxt();
+botonRecetas("../js/bajaProducto.js");
 mostrarProductos(productosDiv, arhivoHTML, categorias, productos, pedido);
 let productosBajaBtn = document.getElementsByClassName("bajaBtn");
 for (let i = 0; i < productosBajaBtn.length; i++) {
