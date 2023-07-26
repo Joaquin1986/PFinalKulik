@@ -74,10 +74,10 @@ export function cestaNav(arhivoHTML, pedido, pedidos) {
 
     const inputBusqueda = document.getElementById("autoComplete");
     inputBusqueda.addEventListener("keydown", (e) => {
-        e.key === "Enter"?  obtenerResultado() : null;
+        e.key === "Enter" ? obtenerResultado() : null;
     });
 
-    function obtenerResultado(){
+    function obtenerResultado() {
         const prodSeleccionado = document.querySelector("#autoComplete").value;
         mostrarProducto(prodSeleccionado, arhivoHTML);
     }
@@ -318,8 +318,8 @@ function actualizarCantidades(productos, pedido) {
         const idProd = inputs[i].id.split("prodCant-")[1];
         const cantProd = pedido.cantidadDe(convertirProducto(productos[idProd - 1]));
         inputs[i].innerText = "Cantidad: " + cantProd;
-        console.log (inputs[i].id + " || " + idProd)
-        console.log ("CANT PROD " + pedido.cantidadDe(productos[idProd - 1]))
+        console.log(inputs[i].id + " || " + idProd)
+        console.log("CANT PROD " + pedido.cantidadDe(productos[idProd - 1]))
     }
 }
 
@@ -365,7 +365,7 @@ function encontrarProductoPorNombreEnPedidos(nombreProducto, pedido) {
 }
 
 //ENCONTRAR PRODUCTO POR NOMBRE EN EL ARRAY DE PRODUCTOS
-function encontrarProductoPorNombreEnProductos(nombreProducto, productos) { 
+function encontrarProductoPorNombreEnProductos(nombreProducto, productos) {
     const idProdEnncontrado = productos.findIndex(element => element.nombre === nombreProducto);
     return idProdEnncontrado;
 }
@@ -604,7 +604,7 @@ export function mostrarPedidos(productosDiv, arhivoHTML, pedidos) {
             html: `No hay Pedidos pendientes de gestión<br>
     <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
         }).then(function () {
-            history.back();
+            window.location.href = "../index.html";
         });
 
     }

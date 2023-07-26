@@ -89,6 +89,6 @@ else {
         
 <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
     }).then(function () {
-        history.back();
+        window.location.href = "../index.html";
     });
 }
