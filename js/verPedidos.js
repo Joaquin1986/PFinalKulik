@@ -19,9 +19,10 @@ else {
     Swal.fire({
         icon: 'info',
         title: 'Sin Pedidos registrados',
+        confirmButtonText: 'Volver',
         html: `No se han registrado Pedidos aún<br>
 <a href="./realizarPedido.html" >REALIZAR UN PEDIDO AHORA</a><br>`,
     }).then(function () {
-        location.reload();
+        history.back();
     });
 }

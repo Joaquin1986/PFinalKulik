@@ -84,9 +84,11 @@ else {
     Swal.fire({
         icon: 'info',
         title: 'Sin Pedidos registrados',
+        confirmButtonText: 'Volver',
         html: `No hay Pedidos pendientes de gestión<br>
+        
 <a href=./realizarPedido.html>REALIZAR UN PEDIDO AHORA</a><br>`,
     }).then(function () {
-        location.reload();
+        history.back();
     });
 }
