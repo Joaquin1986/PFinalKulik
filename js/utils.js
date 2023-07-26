@@ -318,6 +318,8 @@ function actualizarCantidades(productos, pedido) {
         const idProd = inputs[i].id.split("prodCant-")[1];
         const cantProd = pedido.cantidadDe(convertirProducto(productos[idProd - 1]));
         inputs[i].innerText = "Cantidad: " + cantProd;
+        console.log (inputs[i].id + " || " + idProd)
+        console.log ("CANT PROD " + pedido.cantidadDe(productos[idProd - 1]))
     }
 }
 
@@ -363,7 +365,7 @@ function encontrarProductoPorNombreEnPedidos(nombreProducto, pedido) {
 }
 
 //ENCONTRAR PRODUCTO POR NOMBRE EN EL ARRAY DE PRODUCTOS
-function encontrarProductoPorNombreEnProductos(nombreProducto, productos) {
+function encontrarProductoPorNombreEnProductos(nombreProducto, productos) { 
     const idProdEnncontrado = productos.findIndex(element => element.nombre === nombreProducto);
     return idProdEnncontrado;
 }

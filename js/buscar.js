@@ -5,7 +5,7 @@ export function autocompletarTxt() {
     const prodSrc = productosListaSrc(productos);
     const autoCompleteJS = new autoComplete({
         selector: "#autoComplete",
-        placeHolder: "Ingrese producto a buscar",   
+        placeHolder: "Buscar producto...",   
         data: {
             src: prodSrc,
             cache: true,
